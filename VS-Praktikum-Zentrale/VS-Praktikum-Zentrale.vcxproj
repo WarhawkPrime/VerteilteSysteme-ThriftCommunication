@@ -75,9 +75,19 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClCompile Include="http_socket.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="udp_server.cpp" />
+    <ClCompile Include="udp_socket.cpp" />
   </ItemGroup>
-  <ItemDefinitionGroup />
+  <ItemGroup>
+    <ClInclude Include="udp_server.h" />
+    <ClInclude Include="http_socket.h" />
+    <ClInclude Include="udp_socket.h" />
+  </ItemGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile />
+  </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>
