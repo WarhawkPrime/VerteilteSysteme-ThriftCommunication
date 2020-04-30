@@ -1,10 +1,11 @@
+
 #include <iostream>
+#include <unistd.h>
+
+#include "SensorManagement.h"
 
 int main() {
+	
 
 
-	std::cout << "Hello World!" << std::endl;
-	int a;
-	std::cin >> a;
-	return 0;
 }
