@@ -8,6 +8,9 @@
     <ClCompile Include="Sensor.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="UDPclient.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="header">
@@ -22,6 +25,9 @@
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="Sensor.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="UDPclient.h">
       <Filter>header</Filter>
     </ClInclude>
   </ItemGroup>

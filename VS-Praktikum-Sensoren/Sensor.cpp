@@ -6,9 +6,14 @@ Sensor::Sensor()
 
 }
 
+Sensor::~Sensor()
+{
+
+}
+
 Sensor::Sensor(double lowEnd, double highEnd, std::string type) : type {type}
 {
-	this->setType(type);
+	this->type = type;
 	this->data = randomValue(lowEnd, highEnd);
 	this->now = getTime();
 }

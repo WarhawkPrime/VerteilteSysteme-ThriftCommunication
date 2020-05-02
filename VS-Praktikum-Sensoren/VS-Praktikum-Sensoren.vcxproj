@@ -78,10 +78,12 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Sensor.cpp" />
     <ClCompile Include="SensorManagement.cpp" />
+    <ClCompile Include="UDPclient.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Sensor.h" />
     <ClInclude Include="SensorManagement.h" />
+    <ClInclude Include="UDPclient.h" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
