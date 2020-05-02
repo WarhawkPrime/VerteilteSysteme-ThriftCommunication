@@ -1,13 +1,18 @@
+#pragma once
 
 #include <iostream>
 #include <ctime>
 #include <random>
+
+//#include "UDPclient.h"
 
 
 class Sensor
 {
 public:
 	Sensor();
+	~Sensor();
+
 	Sensor(double lowEnd, double highEnd, std::string type);
 
 	double randomValue(double lowEnd, double highEnd);
