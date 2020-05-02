@@ -14,6 +14,10 @@
 
 #define MAX_BUFFER 1024
 #define PORT "40000"
+#define R_OK 10
+#define R_FAIL 20
+#define R_ERR 30
+#define R_RETURN 40
 
 // Class that contains all server functionality to send and receive data from the sensors
 class UDP_server {

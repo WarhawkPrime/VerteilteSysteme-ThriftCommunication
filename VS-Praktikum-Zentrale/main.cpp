@@ -18,7 +18,12 @@ int main(int argc, char *argv[]) {
 	}
 
 	UDP_server *srvr = new UDP_server();
-	srvr->initialize();
+	bool result = srvr->initialize();
+
+	while (result != R_OK) {
+		usleep(5000);
+		result = srvr->initialize();
+	}
 
 
 	return 0;

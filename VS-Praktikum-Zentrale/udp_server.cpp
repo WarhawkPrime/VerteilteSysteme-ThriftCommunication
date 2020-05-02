@@ -8,7 +8,6 @@ UDP_server::UDP_server()
 	this->status = 0;
 	from = &sensors;
 	memset(&hints, 0, sizeof(hints)); // struct needs to be empty
-	initialize();
 }
 
 
@@ -49,7 +48,7 @@ int UDP_server::processRequests()
 
 		std::cout << "Error! Couldn't bind to addresses!" << std::endl;
 		std::cout << "Exiting....." << std::endl;
-		return 0;
+		return R_ERR;
 	}
 
 	// results is no longer needed here
@@ -61,7 +60,7 @@ int UDP_server::processRequests()
 	if ((numBytesReceived = recvfrom(sockfd, buffer, MAX_BUFFER-1, 0, (struct sockaddr*) &from, &address_length)) == -1) {
 
 		std::cout << "Error! recvfrom() failed!" << std::endl;
-		return 0;
+		return R_ERR;
 	}
 
 	printf("Received a packet from %s\n", inet_ntop(from->ss_family, get_address((struct sockaddr*) & from), s, sizeof(s)));
@@ -70,7 +69,7 @@ int UDP_server::processRequests()
 
 	close(sockfd);
 
-	return 0;
+	return R_OK;
 
 }
 
@@ -80,7 +79,7 @@ int UDP_server::block()
 {
 
 
-	return 0;
+	return R_OK;
 }
 
 
@@ -96,12 +95,10 @@ int UDP_server::initialize()
 		
 		std::cout << "Error! Couldn't populate struct!" << std::endl;
 		// error.log();
-		return 0;
+		return R_FAIL;
 
 	}
 
-	processRequests();
 
-
-	return 0;
+	return processRequests();
 }
