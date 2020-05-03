@@ -26,11 +26,9 @@ void UDPclient::fillServerInfo()
 
 void UDPclient::createSocket()
 {
-	for (rp = res; rp != NULL; rp = rp->ai_next) {
+		rp = res;
 
-		sockfd =  socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);	//sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP); 
-
-	}
+		sockfd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);	//sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP); 
 
 	if (sockfd < 0) {
 		perror("Could not create socket");
@@ -51,9 +49,9 @@ void UDPclient::bindSocket()
 
 void UDPclient::connectSocket()
 {
-	if ( connect(sockfd, rp->ai_addr, rp->ai_addrlen) != -1)
+	int con = connect(sockfd, res->ai_addr, res->ai_addrlen);
 
-	if (connect < 0) {
+	if (con < 0) {
 		perror("Could not connect to socket");
 		exit(EXIT_FAILURE);
 	}
@@ -62,7 +60,7 @@ void UDPclient::connectSocket()
 		std::cerr << "Could not connect to address" << std::endl;
 	}
 
-	freeaddrinfo(res);	//wird nicht länger gebraucht
+	//freeaddrinfo(res);	//wird nicht länger gebraucht
 }
 
 
