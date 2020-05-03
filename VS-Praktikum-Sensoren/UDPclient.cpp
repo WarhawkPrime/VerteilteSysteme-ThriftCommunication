@@ -12,29 +12,33 @@ UDPclient::~UDPclient()
 
 void UDPclient::fillServerInfo()
 {
-	memset(&info, 0, sizeof info);
+	memset(&hints, 0, sizeof (struct addrinfo));
 
-	info.ai_family = AF_UNSPEC;			//ipv4 or ipv6
-	info.ai_socktype = SOCK_DGRAM;		//datagram (udp) socket
-	info.ai_flags = AI_PASSIVE;			//bind to ip of the host the programm is running on
-	info.ai_protocol = IPPROTO_UDP;
+	hints.ai_family = AF_UNSPEC;			//ipv4 or ipv6
+	hints.ai_socktype = SOCK_DGRAM;		//datagram (udp) socket
+	hints.ai_flags = AI_PASSIVE;			//bind to ip of the host the programm is running on
+	hints.ai_protocol = IPPROTO_UDP;
 	//bei spezifischer Adresse: AI_PASSIVE entfernen und bei getaddrinfo null durch die gewünschte adresse ersetzen
 
-	getaddrinfo(NULL, CPORT, &info, &res);
+	getaddrinfo(NULL, CPORT, &hints, &res);
 }
 
 
 void UDPclient::createSocket()
 {
-	sockfd = (res->ai_family, res->ai_socktype, res->ai_protocol);	//sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP); möglich aber 
-	
+	for (rp = res; rp != NULL; rp = rp->ai_next) {
+
+		sockfd =  socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);	//sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP); 
+
+	}
+
 	if (sockfd < 0) {
 		perror("Could not create socket");
 		exit(EXIT_FAILURE);
 	}
 }
 
-
+//unnötig für client
 void UDPclient::bindSocket()
 {
 	bind(sockfd, res->ai_addr, res->ai_addrlen);
@@ -47,12 +51,18 @@ void UDPclient::bindSocket()
 
 void UDPclient::connectSocket()
 {
-	connect(sockfd, res->ai_addr, res->ai_addrlen);
+	if ( connect(sockfd, rp->ai_addr, rp->ai_addrlen) != -1)
 
 	if (connect < 0) {
 		perror("Could not connect to socket");
 		exit(EXIT_FAILURE);
 	}
+
+	if (rp == NULL) {
+		std::cerr << "Could not connect to address" << std::endl;
+	}
+
+	freeaddrinfo(res);	//wird nicht länger gebraucht
 }
 
 
@@ -69,7 +79,7 @@ void UDPclient::sendMsgTo()
 
 	memset(&to, 0, sizeof(to));
 
-	to.sin_family = AF_INET;
+	to.sin_family = AF_UNSPEC;
 	to.sin_port = htons(IPORT);
 	to.sin_addr.s_addr = INADDR_ANY;
 

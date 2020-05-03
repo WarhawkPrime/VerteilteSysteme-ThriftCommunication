@@ -27,7 +27,7 @@ closesocket()
 #include <unistd.h>
 #include <string.h>
 
-
+#define BUF_SIZE 500
 #define CPORT	"40000"
 #define IPORT	40000
 
@@ -37,9 +37,10 @@ class UDPclient
 	//struct sockaddr_in servaddr;
 	//struct sockaddr_in cliaddr;
 
-	struct addrinfo info;
-	struct addrinfo *res;
 	struct sockaddr_in to;
+
+	struct addrinfo hints;
+	struct addrinfo *res, *rp;
 
 public:
 	UDPclient();
@@ -56,15 +57,17 @@ public:
 	//getter
 	int getSockfd() const { return sockfd;  }
 	char* getBuffer() { return buffer; }
+	ssize_t getLen() { return len; }
 
 	char* getMessage() { return message; }	//späterer Austausch davon?
 
 private:
 	int sockfd;				//file description
-	char buffer[1028];		//buffer für die Übertragung
+	char buffer[BUF_SIZE];		//buffer für die Übertragung
 	char* message;			//Nachricht als char*, hier evtl austauschen zur CSV datei
 	int send;
 	int recv;
-	unsigned int lenght;
+	size_t len;
+	ssize_t nread;
 };
 
