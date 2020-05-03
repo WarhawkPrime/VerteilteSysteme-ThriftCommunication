@@ -1,6 +1,7 @@
 #pragma once
 #include <errno.h>
 #include <string.h>
+#include <sstream>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/types.h>
@@ -34,14 +35,14 @@ class UDP_server {
 		char* msg; // Required?
 		int destfd; // Filedescriptor to save the received data
 		char s[INET6_ADDRSTRLEN];
+		char* srv_name;
 		
 
 	public:
 	// Server functions
-		UDP_server(); // Initialize server
+		UDP_server(); 
 		int processRequests();
-		int block();
-		int initialize();
+		int initialize(); // Initialize server
 
 
 

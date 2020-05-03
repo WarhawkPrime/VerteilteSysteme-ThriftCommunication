@@ -6,8 +6,9 @@ UDP_server::UDP_server()
 {
 	this->sockfd = 0;
 	this->status = 0;
+	this->srv_name = "localhost";
 	from = &sensors;
-	memset(&hints, 0, sizeof(hints)); // struct needs to be empty
+	
 }
 
 
@@ -25,7 +26,6 @@ void* get_address(struct sockaddr* sock_addr) {
 // Handle all incoming telemetry
 int UDP_server::processRequests()
 {
-
 	for (temp = results; temp != NULL; temp = temp->ai_next) {
 
 		// Create the socket
@@ -34,10 +34,10 @@ int UDP_server::processRequests()
 		if (sockfd = socket(temp->ai_family, temp->ai_socktype, temp->ai_protocol) == -1)
 			continue;
 
-			// Check if bind() works, then continue with next sensor address
+		// Check if bind() works, then continue with next sensor address
 		if (bind(sockfd, temp->ai_addr, temp->ai_addrlen) == 0)
 			break;
-			
+
 		// Close the file descriptor
 		close(sockfd);
 
@@ -54,39 +54,39 @@ int UDP_server::processRequests()
 	// results is no longer needed here
 	freeaddrinfo(results);
 
+	// Execute recvfrom endlessly
+	for (;;) {
 
-	address_length = sizeof(sensors);
-	// Handle all incoming messages and save them
-	if ((numBytesReceived = recvfrom(sockfd, buffer, MAX_BUFFER-1, 0, (struct sockaddr*) &from, &address_length)) == -1) {
+		address_length = sizeof(sensors);
+		// Handle all incoming messages and save them
+		if ((numBytesReceived = recvfrom(sockfd, buffer, MAX_BUFFER, 0, (struct sockaddr*) & from, &address_length)) == -1) {
+			continue;
+		}
+		int recMsg; 
+		recMsg = read(sockfd, buffer, MAX_BUFFER);
+		buffer[recMsg] = '\0';
 
-		std::cout << "Error! recvfrom() failed!" << std::endl;
-		return R_ERR;
+		//std::stringstream ss(buffer);
+
+		for (int i = 0; i < numBytesReceived; i++) {
+			std::cout << buffer[i];
+		}
+		
+
+		
+
 	}
-
-	printf("Received a packet from %s\n", inet_ntop(from->ss_family, get_address((struct sockaddr*) & from), s, sizeof(s)));
-	printf("The packet is %d bytes long\n", numBytesReceived);
-	buffer[numBytesReceived] = '\0';
-
-	close(sockfd);
-
-	return R_OK;
-
-}
-
-
-// Not needed ?
-int UDP_server::block()
-{
-
-
+	
 	return R_OK;
 }
+
 
 
 // Get all sensor addresses
 int UDP_server::initialize()
 {
-	hints.ai_family = AF_INET; // IPv4
+	memset(&hints, 0, sizeof(hints)); // struct needs to be empty
+	hints.ai_family = AF_UNSPEC; // Either IPv4 or IPv6
 	hints.ai_socktype = SOCK_DGRAM; // Initialize a datagram socket
 	hints.ai_flags = AI_PASSIVE;
 	hints.ai_protocol = IPPROTO_UDP;
@@ -100,5 +100,8 @@ int UDP_server::initialize()
 	}
 
 
-	return processRequests();
+
+	processRequests();
+
+	return 0;
 }
