@@ -18,7 +18,7 @@ int main() {
 	udpc.bindSocket();
 	udpc.connectSocket();
 
-	while (i != 0) 
+	while (true) 
 	{
 	udpc.sendMsgTo();
 	usleep(5000);
