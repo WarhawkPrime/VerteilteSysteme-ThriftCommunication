@@ -7,7 +7,7 @@ UDP_server::UDP_server()
 	this->sockfd = 0;
 	this->status = 0;
 	this->srv_name = "localhost";
-	from = &sensors;
+	
 	
 }
 
@@ -54,26 +54,33 @@ int UDP_server::processRequests()
 	// results is no longer needed here
 	freeaddrinfo(results);
 
+	from = &sensors;
+
 	// Execute recvfrom endlessly
 	for (;;) {
 
-		address_length = sizeof(sensors);
+		address_length = sizeof(struct sockaddr_storage);
 		// Handle all incoming messages and save them
 		if ((numBytesReceived = recvfrom(sockfd, buffer, MAX_BUFFER, 0, (struct sockaddr*) & from, &address_length)) == -1) {
+			std::cout << "Failed request." << std::endl;
 			continue;
 		}
-		int recMsg; 
-		recMsg = read(sockfd, buffer, MAX_BUFFER);
-		buffer[recMsg] = '\0';
 
-		//std::stringstream ss(buffer);
+		char host[NI_MAXHOST], service[NI_MAXSERV];
 
-		for (int i = 0; i < numBytesReceived; i++) {
-			std::cout << buffer[i];
+		status = getnameinfo((struct sockaddr*) & from, address_length, host, NI_MAXHOST, service, NI_MAXSERV, NI_NUMERICSERV);
+
+		if (status == 0) {
+			std::cout << "Received " << numBytesReceived << " bytes from " << host << ":" << service << std::endl;
+			std::cout << "Message: " << printf("%s", buffer) << std::endl;
 		}
-		
+		else {
+			std::cout << "Error in getnameinfo()!" << std::endl;
+		}
 
-		
+		if (sendto(sockfd, buffer, numBytesReceived, 0, (struct sockaddr*) & from, address_length) != numBytesReceived)
+			std::cout << "Error sending response!" << std::endl;
+	
 
 	}
 	

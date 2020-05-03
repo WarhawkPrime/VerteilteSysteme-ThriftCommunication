@@ -13,7 +13,7 @@
 #include <signal.h>
 #include <iostream>
 
-#define MAX_BUFFER 1024
+#define MAX_BUFFER 500
 #define PORT "40000"
 #define R_OK 10
 #define R_FAIL 20
