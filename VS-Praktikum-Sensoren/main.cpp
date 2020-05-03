@@ -10,18 +10,22 @@
 int main() {
 	//SensorManagement sm;
 	//sm.userDialog();
-
+	int i;
 	std::cout << "Bei eingabe von einer Zahl wird das Programm beendet" << std::endl;
 	UDPclient udpc;
 	udpc.fillServerInfo();
 	udpc.createSocket();
 	udpc.bindSocket();
 	udpc.connectSocket();
+
+	while (i != 0) 
+	{
 	udpc.sendMsgTo();
+	usleep(5000);
+	}
 	udpc.closeSocket();
 
 	//nicht notwendig, hält aber die Konsole länger offen
-	int i;
 	std::cout << "Bei eingabe von einer Zahl wird das Programm beendet" << std::endl;
 	std::cin >> i;
 }
