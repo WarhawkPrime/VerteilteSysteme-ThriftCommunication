@@ -7,8 +7,8 @@ SensorManagement::SensorManagement()
 
 SensorManagement::~SensorManagement()
 {
-	delete sensor;
-	sensor = NULL;
+	//delete sensor;
+	//sensor = NULL;
 }
 
 void SensorManagement::createTemperatureSensor() 

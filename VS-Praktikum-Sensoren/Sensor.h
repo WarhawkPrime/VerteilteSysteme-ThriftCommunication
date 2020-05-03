@@ -11,7 +11,6 @@ class Sensor
 {
 public:
 	Sensor();
-	~Sensor();
 
 	Sensor(double lowEnd, double highEnd, std::string type);
 

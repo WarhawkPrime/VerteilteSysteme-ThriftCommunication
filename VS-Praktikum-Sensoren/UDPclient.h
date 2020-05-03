@@ -34,11 +34,12 @@ closesocket()
 
 class UDPclient
 {
-	struct sockaddr_in servaddr;
-	struct sockaddr_in cliaddr;
+	//struct sockaddr_in servaddr;
+	//struct sockaddr_in cliaddr;
 
 	struct addrinfo info;
-	struct addrinfo* res;
+	struct addrinfo *res;
+	struct sockaddr_in to;
 
 public:
 	UDPclient();

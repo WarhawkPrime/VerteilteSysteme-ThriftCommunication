@@ -6,11 +6,6 @@ Sensor::Sensor()
 
 }
 
-Sensor::~Sensor()
-{
-
-}
-
 Sensor::Sensor(double lowEnd, double highEnd, std::string type) : type {type}
 {
 	this->type = type;

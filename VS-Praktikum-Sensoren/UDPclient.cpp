@@ -63,13 +63,23 @@ void UDPclient::sendMsgTo()
 	int bytes_sent;
 
 	len = strlen(msg);
-	
+
 	//int send(int sockfd, const void *msg, int len, int flags);
 	//bytes_sent = send(sockfd, msg, len, 0);
 
-	//int sendto(int sockfd, const void *msg, int len, unsigned int flags, const struct sockaddr *to, socklen_t tolen);
-	//int sendto(sockfd, msg, len, 0,  )
+	memset(&to, 0, sizeof(to));
 
+	to.sin_family = AF_INET;
+	to.sin_port = htons(IPORT);
+	to.sin_addr.s_addr = INADDR_ANY;
+
+	//int sendto(int sockfd, const void *msg, int len, unsigned int flags, const struct sockaddr *to, socklen_t tolen);
+	sendto(sockfd,(const char *) msg, len, 0,(const struct sockaddr *) &to, sizeof(to));
+
+	if (sendto < 0) {
+		perror("Could not connect to socket");
+		exit(EXIT_FAILURE);
+	}
 }
 
 void UDPclient::recMsgFr()

@@ -7,16 +7,17 @@
 
 //todo: UDP client schnittstelle, regelmäßige sendung der Daten bis der Sensor abgeschaltet wird
 
-
 int main() {
-	SensorManagement sm;
+	//SensorManagement sm;
 	//sm.userDialog();
 
+	std::cout << "Bei eingabe von einer Zahl wird das Programm beendet" << std::endl;
 	UDPclient udpc;
 	udpc.fillServerInfo();
 	udpc.createSocket();
 	udpc.bindSocket();
 	udpc.connectSocket();
+	udpc.sendMsgTo();
 	udpc.closeSocket();
 
 	//nicht notwendig, hält aber die Konsole länger offen
