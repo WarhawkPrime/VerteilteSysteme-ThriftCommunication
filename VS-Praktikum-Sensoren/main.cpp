@@ -18,11 +18,8 @@ int main() {
 	udpc.bindSocket();
 	udpc.connectSocket();
 
-	while (true) 
-	{
 	udpc.sendMsgTo();
 	usleep(5000);
-	}
 	udpc.closeSocket();
 
 	//nicht notwendig, hält aber die Konsole länger offen
