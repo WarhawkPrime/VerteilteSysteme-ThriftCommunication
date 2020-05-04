@@ -13,7 +13,7 @@
 #include <signal.h>
 #include <iostream>
 
-#define MAX_BUFFER 500
+#define MAX_BUFFER 1024
 #define PORT "40000"
 #define R_OK 10
 #define R_FAIL 20
@@ -30,7 +30,6 @@ class UDP_server {
 		int numBytesReceived;
 		struct addrinfo hints, *results, *temp; // Contains a linked list of results 
 		struct sockaddr_storage sensors, *from; // Struct for IP addresses and ports of sensors
-		char buffer[MAX_BUFFER]; // Message buffer
 		socklen_t address_length; // address length required for recvfrom()
 		char* msg; // Required?
 		int destfd; // Filedescriptor to save the received data

@@ -60,26 +60,49 @@ int UDP_server::processRequests()
 	for (;;) {
 
 		address_length = sizeof(struct sockaddr_storage);
+		char host[NI_MAXHOST], service[NI_MAXSERV], buffer[MAX_BUFFER];
 		// Handle all incoming messages and save them
 		if ((numBytesReceived = recvfrom(sockfd, buffer, MAX_BUFFER, 0, (struct sockaddr*) & from, &address_length)) == -1) {
 			std::cout << "Failed request." << std::endl;
 			continue;
 		}
 
-		char host[NI_MAXHOST], service[NI_MAXSERV];
+
+		
+
+		
+		
 
 		status = getnameinfo((struct sockaddr*) & from, address_length, host, NI_MAXHOST, service, NI_MAXSERV, NI_NUMERICSERV);
 
 		if (status == 0) {
 			std::cout << "Received " << numBytesReceived << " bytes from " << host << ":" << service << std::endl;
-			std::cout << "Message: " << printf("%s", buffer) << std::endl;
+
+			if (numBytesReceived >= MAX_BUFFER) {
+				std::cout << "Buffer not large enough!" << std::endl;
+			}
+			else {
+				
+				if (buffer == NULL) {
+					std::cout << "buffer is NULL" << std::endl;
+				}
+				else {
+					buffer[numBytesReceived] = '\0';
+					std::string data(buffer, numBytesReceived);
+
+
+					std::cout << "Message: " << data << std::endl;
+					//printf("%s", buffer);
+				}
+				
+			}
 		}
 		else {
 			std::cout << "Error in getnameinfo()!" << std::endl;
 		}
 
-		if (sendto(sockfd, buffer, numBytesReceived, 0, (struct sockaddr*) & from, address_length) != numBytesReceived)
-			std::cout << "Error sending response!" << std::endl;
+		//if (sendto(sockfd, buffer, numBytesReceived, 0, (struct sockaddr*) & from, address_length) != numBytesReceived)
+			//std::cout << "Error sending response!" << std::endl;
 	
 
 	}
@@ -93,10 +116,13 @@ int UDP_server::processRequests()
 int UDP_server::initialize()
 {
 	memset(&hints, 0, sizeof(hints)); // struct needs to be empty
-	hints.ai_family = AF_UNSPEC; // Either IPv4 or IPv6
+	hints.ai_family = AF_INET6; // Either IPv4 or IPv6
 	hints.ai_socktype = SOCK_DGRAM; // Initialize a datagram socket
 	hints.ai_flags = AI_PASSIVE;
-	hints.ai_protocol = IPPROTO_UDP;
+	hints.ai_protocol = 0;
+	hints.ai_canonname = NULL;
+	hints.ai_addr = NULL;
+	hints.ai_next = NULL;
 
 	if ((status = getaddrinfo(NULL, PORT, &hints, &results)) != 0) {
 		
