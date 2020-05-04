@@ -116,7 +116,7 @@ int UDP_server::processRequests()
 int UDP_server::initialize()
 {
 	memset(&hints, 0, sizeof(hints)); // struct needs to be empty
-	hints.ai_family = AF_INET6; // Either IPv4 or IPv6
+	hints.ai_family = AF_UNSPEC; // Either IPv4 or IPv6
 	hints.ai_socktype = SOCK_DGRAM; // Initialize a datagram socket
 	hints.ai_flags = AI_PASSIVE;
 	hints.ai_protocol = 0;
