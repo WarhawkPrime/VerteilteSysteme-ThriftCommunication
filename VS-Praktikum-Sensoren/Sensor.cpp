@@ -12,6 +12,8 @@ Sensor::Sensor(double lowEnd, double highEnd, std::string type) : type {type}
 	udpc.createSocket();
 	udpc.bindSocket();
 
+	this->type = type;
+
 	repeater(lowEnd, highEnd);
 }
 
@@ -31,13 +33,14 @@ double Sensor::randomValue(double lowEnd, double highEnd)
 
 void Sensor::repeater(double lowEnd, double highEnd)
 {
-
-		this->type = type;
+	while (true)
+	{
+		std::thread t1();
+	}
 		this->data = randomValue(lowEnd, highEnd);
 		this->now = getTime();
 
 		udpc.sendMsgTo(buildMessage());
-
 }
 
 char* Sensor::buildMessage()
