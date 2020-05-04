@@ -14,16 +14,16 @@ void UDPclient::fillServerInfo()
 {
 	memset(&hints, 0, sizeof (struct addrinfo));
 
-	hints.ai_family = AF_UNSPEC;			//ipv4 or ipv6
+	hints.ai_family = AF_INET6;			//ipv4 or ipv6
 	hints.ai_socktype = SOCK_DGRAM;		//datagram (udp) socket
 	hints.ai_flags = AI_PASSIVE;			//bind to ip of the host the programm is running on
-	hints.ai_protocol = IPPROTO_UDP;
+	hints.ai_protocol = 0;
 	//bei spezifischer Adresse: AI_PASSIVE entfernen und bei getaddrinfo null durch die gewünschte adresse ersetzen
 
 	getaddrinfo(NULL, CPORT, &hints, &res);
 	rp = res;
 
-	servaddr.sin_family = AF_INET;
+	servaddr.sin_family = AF_INET6;
 	servaddr.sin_port = htons(IPORT);		//stores numbers in memory in Network byte order -> most significant byte first (big endian)
 	servaddr.sin_addr.s_addr = INADDR_ANY;
 	memset(servaddr.sin_zero, 0, sizeof(servaddr.sin_zero));
@@ -66,7 +66,7 @@ void UDPclient::sendMsgTo()
 	char* msg = "Hello World from the other side";
 	int len;
 	int bytes_sent = 0;
-	len = strlen(msg);
+	len = strlen(msg) +1;
 
 		bytes_sent = sendto(sockfd, buffer, len, 0, (struct sockaddr*) & servaddr, addrSize);
 
