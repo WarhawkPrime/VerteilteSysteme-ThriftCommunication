@@ -20,7 +20,9 @@ int main() {
 	udpc.fillServerInfo();
 	udpc.createSocket();
 	udpc.bindSocket();
+	std::cout << "vor msg" << std::endl;
 	udpc.sendMsgTo();
+	std::cout << "nach msg" << std::endl;
 	udpc.closeSocket();
 
 	//nicht notwendig, hält aber die Konsole länger offen

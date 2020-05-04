@@ -68,17 +68,12 @@ void UDPclient::sendMsgTo()
 	int bytes_sent = 0;
 	len = strlen(msg);
 
-	while (true)
-	{
 		bytes_sent = sendto(sockfd, buffer, len, 0, (struct sockaddr*) & servaddr, addrSize);
 
 		if (bytes_sent < 0) {
 			perror("Could not connect to socket");
 			exit(EXIT_FAILURE);
 		}
-
-		usleep (50000);
-	}
 }
 
 void UDPclient::recMsgFr()
