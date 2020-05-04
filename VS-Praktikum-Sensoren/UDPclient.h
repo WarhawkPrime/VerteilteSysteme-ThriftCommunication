@@ -34,7 +34,7 @@ closesocket()
 
 class UDPclient
 {
-	//struct sockaddr_in servaddr;
+	struct sockaddr_in servaddr;
 	//struct sockaddr_in cliaddr;
 
 	struct sockaddr_in to;
@@ -47,17 +47,18 @@ public:
 	~UDPclient();
 
 	void fillServerInfo();
-	void createSocket();
-	void bindSocket();
-	void connectSocket();
-	void sendMsgTo();
+	void createSocket();		//create the socket
+	void bindSocket();			//bind the socket to an address-unnecessary for a client
+	void connectSocket();		//connect to a server
+	void sendMsgTo();			//send repeatingly until we have or receive data
 	void recMsgFr();
-	void closeSocket();
+	void closeSocket();			//close to release the data
 
 	//getter
 	int getSockfd() const { return sockfd;  }
 	char* getBuffer() { return buffer; }
 	ssize_t getLen() { return len; }
+	socklen_t getAddrSize() { return addrSize; }
 
 	char* getMessage() { return message; }	//späterer Austausch davon?
 
@@ -69,5 +70,6 @@ private:
 	int recv;
 	size_t len;
 	ssize_t nread;
+	socklen_t addrSize;
 };
 

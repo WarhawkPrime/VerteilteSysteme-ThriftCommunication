@@ -13,12 +13,13 @@ int main() {
 
 	int i;
 	std::cout << "Bei eingabe von einer Zahl wird das Programm beendet" << std::endl;
+
+
 	UDPclient udpc;
+
 	udpc.fillServerInfo();
 	udpc.createSocket();
-	//udpc.bindSocket();
-	udpc.connectSocket();
-
+	udpc.bindSocket();
 	udpc.sendMsgTo();
 	udpc.closeSocket();
 
