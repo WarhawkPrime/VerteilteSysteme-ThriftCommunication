@@ -14,7 +14,7 @@ void UDPclient::fillServerInfo()
 {
 	memset(&hints, 0, sizeof (struct addrinfo));
 
-	hints.ai_family = AF_INET6;			//ipv4 or ipv6
+	hints.ai_family = AF_UNSPEC;			//ipv4 or ipv6
 	hints.ai_socktype = SOCK_DGRAM;		//datagram (udp) socket
 	hints.ai_flags = AI_PASSIVE;			//bind to ip of the host the programm is running on
 	hints.ai_protocol = 0;
