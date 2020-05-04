@@ -7,8 +7,8 @@ SensorManagement::SensorManagement()
 
 SensorManagement::~SensorManagement()
 {
-	//delete sensor;
-	//sensor = NULL;
+	delete sensor;
+	sensor = NULL;
 }
 
 void SensorManagement::createTemperatureSensor() 
@@ -38,7 +38,7 @@ void SensorManagement::createHumiditySensor()
 
 void SensorManagement::userDialog() 
 {
-	int input = 1;
+	int input = 0;
 	std::cout << "Bitte Aktion eingeben" << std::endl;
 	std::cout << "1 : Neuen Temperatur-Sensor erstellen" << std::endl;
 	std::cout << "2 : Neuen Helligkeits-Sensor erstellen" << std::endl;
@@ -46,21 +46,19 @@ void SensorManagement::userDialog()
 	std::cout << "4 : Neuen Luftfeuchtigkeits-Sensor erstellen" << std::endl;
 	std::cout << "0 : Programm beenden" << std::endl;
 
-	while (input = !0) {
-		std::cin >> input;
-		switch (input)
-		{
-		default: return;
-			break;
-		case 1:
-			createTemperatureSensor(); std::cout << "erstellt"; break;
-		case 2:
-			createBrightnessSensor(); break;
-		case 3:
-			createWindSensor(); break;
-		case 4:
-			createHumiditySensor(); break;
-		}
+	std::cin >> input;
+	switch (input)
+	{
+	default: return;
+		break;
+	case 1:
+		std::cout << "Temperatursensor erstellt"; createTemperatureSensor(); break;
+	case 2:
+		std::cout << "Helligkeitssensor erstellt"; createBrightnessSensor(); break;
+	case 3:
+		std::cout << "Windgeschwindigkeitssensor erstellt"; createWindSensor(); break;
+	case 4:
+		std::cout << "Luftfeuchtigkeitssensor erstellt"; createHumiditySensor(); break;
 	}
 	return;
 }

@@ -26,6 +26,7 @@ void UDPclient::fillServerInfo()
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_port = htons(IPORT);		//stores numbers in memory in Network byte order -> most significant byte first (big endian)
 	servaddr.sin_addr.s_addr = INADDR_ANY;
+
 	memset(servaddr.sin_zero, 0, sizeof(servaddr.sin_zero));
 	addrSize = sizeof(servaddr);
 }
@@ -57,15 +58,11 @@ void UDPclient::bindSocket()
 
 
 
-void UDPclient::sendMsgTo()
+void UDPclient::sendMsgTo(char *msg)
 {
-	//int send(int fd, void *buffer, size_t n, int flags); -> sends n bytes from *buffer to socket fd -> -1 on error
-
-	//int sendto(int sockfd, const void *msg, int len, unsigned int flags, const struct sockaddr *to, socklen_t tolen);
-
-	char* msg = "Hello World from the other side\0";
 	size_t len;
 	int bytes_sent = 0;
+
 	len = strlen(msg);
 
 		bytes_sent = sendto(sockfd, msg, len, 0, (struct sockaddr*) & servaddr, addrSize);
@@ -84,15 +81,13 @@ void UDPclient::recMsgFr()
 void UDPclient::closeSocket()
 {
 	int c = 0;
-	//close(sockfd);
+
 	c = close(sockfd);
 
 	if (c < 0) {
 		perror("Could not close socket");
 		exit(EXIT_FAILURE);
 	}
-
-	//shutdown(sockfd, 2);
 }
 
 

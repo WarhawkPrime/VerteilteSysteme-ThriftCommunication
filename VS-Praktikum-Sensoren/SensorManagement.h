@@ -16,7 +16,6 @@ public:
 	~SensorManagement();
 
 	void userDialog();
-
 	void createTemperatureSensor();
 	void createBrightnessSensor();
 	void createWindSensor();

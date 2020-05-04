@@ -50,22 +50,19 @@ public:
 	void createSocket();		//create the socket
 	void bindSocket();			//bind the socket to an address-unnecessary for a client
 	void connectSocket();		//connect to a server
-	void sendMsgTo();			//send repeatingly until we have or receive data
+	void sendMsgTo(char *msg);			//send repeatingly until we have or receive data
 	void recMsgFr();
 	void closeSocket();			//close to release the data
 
-	//getter
+	//========== Getter & Setter ==========
 	int getSockfd() const { return sockfd;  }
 	char* getBuffer() { return buffer; }
 	ssize_t getLen() { return len; }
 	socklen_t getAddrSize() { return addrSize; }
 
-	char* getMessage() { return message; }	//späterer Austausch davon?
-
 private:
 	int sockfd;				//file description
 	char buffer[BUF_SIZE];		//buffer für die Übertragung
-	char* message;			//Nachricht als char*, hier evtl austauschen zur CSV datei
 	int send;
 	int recv;
 	size_t len;
