@@ -23,7 +23,7 @@ void UDPclient::fillServerInfo()
 	getaddrinfo(NULL, CPORT, &hints, &res);
 	rp = res;
 
-	servaddr.sin_family = AF_INET6;
+	servaddr.sin_family = AF_INET;
 	servaddr.sin_port = htons(IPORT);		//stores numbers in memory in Network byte order -> most significant byte first (big endian)
 	servaddr.sin_addr.s_addr = INADDR_ANY;
 	memset(servaddr.sin_zero, 0, sizeof(servaddr.sin_zero));
@@ -63,12 +63,12 @@ void UDPclient::sendMsgTo()
 
 	//int sendto(int sockfd, const void *msg, int len, unsigned int flags, const struct sockaddr *to, socklen_t tolen);
 
-	char* msg = "Hello World from the other side";
-	int len;
+	char* msg = "Hello World from the other side\0";
+	size_t len;
 	int bytes_sent = 0;
-	len = strlen(msg) +1;
+	len = strlen(msg);
 
-		bytes_sent = sendto(sockfd, buffer, len, 0, (struct sockaddr*) & servaddr, addrSize);
+		bytes_sent = sendto(sockfd, msg, len, 0, (struct sockaddr*) & servaddr, addrSize);
 
 		if (bytes_sent < 0) {
 			perror("Could not connect to socket");
