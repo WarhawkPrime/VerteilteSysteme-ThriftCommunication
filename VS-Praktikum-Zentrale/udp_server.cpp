@@ -89,7 +89,7 @@ int UDP_server::processRequests()
 				else {
 					buffer[numBytesReceived] = '\0';
 					std::string data(buffer, numBytesReceived);
-
+					
 
 					std::cout << "Message: " << data << std::endl;
 					//printf("%s", buffer);
