@@ -68,11 +68,6 @@ int UDP_server::processRequests()
 		}
 
 
-		
-
-		
-		
-
 		status = getnameinfo((struct sockaddr*) & from, address_length, host, NI_MAXHOST, service, NI_MAXSERV, NI_NUMERICSERV);
 
 		if (status == 0) {
