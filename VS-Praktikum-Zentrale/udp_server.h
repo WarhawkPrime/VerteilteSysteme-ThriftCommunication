@@ -12,6 +12,8 @@
 #include <sys/wait.h>
 #include <signal.h>
 #include <iostream>
+#include "telemetry_data.h"
+#include <fstream>
 
 #define MAX_BUFFER 1024
 #define PORT "40000"
@@ -31,18 +33,17 @@ class UDP_server {
 		struct addrinfo hints, *results, *temp; // Contains a linked list of results 
 		struct sockaddr_storage sensors, *from; // Struct for IP addresses and ports of sensors
 		socklen_t address_length; // address length required for recvfrom()
-		char* msg; // Required?
 		int destfd; // Filedescriptor to save the received data
 		char s[INET6_ADDRSTRLEN];
 		char* srv_name;
+		TelemetryData* data;
 		
 
 	public:
-	// Server functions
+		// Server functions
 		UDP_server(); 
+		~UDP_server();
 		int processRequests();
 		int initialize(); // Initialize server
-
-
 
 };

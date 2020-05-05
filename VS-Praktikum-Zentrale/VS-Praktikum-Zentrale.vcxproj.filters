@@ -21,6 +21,9 @@
     <ClCompile Include="udp_server.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="telemetry_data.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="udp_socket.h">
@@ -30,6 +33,9 @@
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="udp_server.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="telemetry_data.h">
       <Filter>header</Filter>
     </ClInclude>
   </ItemGroup>

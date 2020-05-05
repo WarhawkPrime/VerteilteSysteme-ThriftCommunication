@@ -4,14 +4,9 @@
 
 int main(int argc, char *argv[]) {
 
-	//Variables
-	int portId;
-	int a;
-
-
+	// Start server
 	UDP_server *srvr = new UDP_server();
 	srvr->initialize();
-
 
 	return 0;
 }
