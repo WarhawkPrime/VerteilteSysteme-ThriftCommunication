@@ -7,7 +7,6 @@ SensorManagement::SensorManagement()
 
 SensorManagement::~SensorManagement()
 {
-	delete sensor;
 	sensor = NULL;
 }
 
@@ -81,6 +80,8 @@ void SensorManagement::user_dialog()
 	case 4:
 		std::cout << "Luftfeuchtigkeitssensor erstellt"; 
 		create_humiditySensor(modus); break;
+	case 0:
+		break;
 	}
 	return;
 }
