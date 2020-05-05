@@ -78,10 +78,12 @@
   <ItemGroup>
     <ClCompile Include="http_socket.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="telemetry_data.cpp" />
     <ClCompile Include="udp_server.cpp" />
     <ClCompile Include="udp_socket.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="telemetry_data.h" />
     <ClInclude Include="udp_server.h" />
     <ClInclude Include="http_socket.h" />
     <ClInclude Include="udp_socket.h" />

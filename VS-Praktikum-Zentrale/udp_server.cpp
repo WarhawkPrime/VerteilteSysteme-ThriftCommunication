@@ -1,18 +1,26 @@
 #include "udp_server.h"
 
 
-//
+// Cosntructor
 UDP_server::UDP_server()
 {
 	this->sockfd = 0;
 	this->status = 0;
 	this->srv_name = "localhost";
-	
+	this->data = new TelemetryData();
 	
 }
 
 
-// Return the ip address
+// Destructor
+UDP_server::~UDP_server() {
+
+	delete this->data;
+
+
+}
+
+// Return the correct ip address
 void* get_address(struct sockaddr* sock_addr) {
 
 	if (sock_addr->sa_family == AF_INET) {
@@ -82,12 +90,32 @@ int UDP_server::processRequests()
 					std::cout << "buffer is NULL" << std::endl;
 				}
 				else {
+					// Terminate received string
 					buffer[numBytesReceived] = '\0';
 					std::string data(buffer, numBytesReceived);
-					
-
+					data.insert(0, host);
 					std::cout << "Message: " << data << std::endl;
-					//printf("%s", buffer);
+					std::cout << host << ":" << service << std::endl;
+					// Save data
+					std::ofstream historyFile;
+					char addressBuffer[MAX_BUFFER];
+					int bufSize = sizeof(addressBuffer);
+					historyFile.open("TelemetryData.txt", std::ios::in | std::ios::app);
+
+					
+					int peer = getpeername(sockfd, (struct sockaddr*) &addressBuffer, (socklen_t*) &bufSize);
+					if (peer == -1) {
+						std::cout << "Error in getpeername()." << std::endl;
+					}
+					else if (bufSize > sizeof(addressBuffer)) {
+						// Given buffer was too small, address has been truncated
+						std::cout << "Error! Address was truncated, buffer too small." << std::endl;
+					}
+					
+					std::string addressString(addressBuffer, bufSize);
+					std::cout << "Sensor address: " << addressString << std::endl;
+
+
 				}
 				
 			}
