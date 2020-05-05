@@ -8,7 +8,7 @@ UDP_server::UDP_server()
 	this->status = 0;
 	this->srv_name = "localhost";
 	this->data = new TelemetryData();
-	
+	this->unique_id = 0; // To-Do: Read last written id and continue from there
 }
 
 
@@ -92,29 +92,58 @@ int UDP_server::processRequests()
 				else {
 					// Terminate received string
 					buffer[numBytesReceived] = '\0';
-					std::string data(buffer, numBytesReceived);
-					data.insert(0, host);
-					std::cout << "Message: " << data << std::endl;
-					std::cout << host << ":" << service << std::endl;
+
 					// Save data
-					std::ofstream historyFile;
-					char addressBuffer[MAX_BUFFER];
-					int bufSize = sizeof(addressBuffer);
-					historyFile.open("TelemetryData.txt", std::ios::in | std::ios::app);
+					std::ifstream historyFile;
+					std::ofstream outFile;
+					std::string lineString;
 
 					
-					int peer = getpeername(sockfd, (struct sockaddr*) &addressBuffer, (socklen_t*) &bufSize);
-					if (peer == -1) {
-						std::cout << "Error in getpeername()." << std::endl;
-					}
-					else if (bufSize > sizeof(addressBuffer)) {
-						// Given buffer was too small, address has been truncated
-						std::cout << "Error! Address was truncated, buffer too small." << std::endl;
-					}
-					
-					std::string addressString(addressBuffer, bufSize);
-					std::cout << "Sensor address: " << addressString << std::endl;
+					historyFile.open("TelemetryData.txt", std::ios::in);
 
+					if (historyFile.is_open()) {
+						
+
+						while (std::getline(historyFile, lineString, '\n')) {
+
+							std::stringstream ss(lineString);
+							std::string s;
+							int counter = 0;
+
+							while (std::getline(ss, s, ';')) {
+
+								if (counter == 0) {
+									std::istringstream(s) >> unique_id;
+									break;
+								}
+								counter++;
+
+							}
+
+						}
+
+						unique_id++;
+
+						// Construct string of data to write
+						std::string data(buffer, numBytesReceived);
+						data.insert(0, ";");
+						data.insert(0, host);
+						data.insert(0, ";");
+						data.insert(0, std::to_string(unique_id));
+						historyFile.close();
+
+						outFile.open("TelemetryData.txt", std::ios::out | std::ios::app);
+						if (outFile.is_open())
+							outFile << data;
+						else
+							std::cout << "Couldn't write to file!" << std::endl;
+
+						outFile.close();
+						
+					}
+					else {
+						std::cout << "Error! Couldn't open file." << std::endl;
+					}
 
 				}
 				
@@ -123,10 +152,6 @@ int UDP_server::processRequests()
 		else {
 			std::cout << "Error in getnameinfo()!" << std::endl;
 		}
-
-		//if (sendto(sockfd, buffer, numBytesReceived, 0, (struct sockaddr*) & from, address_length) != numBytesReceived)
-			//std::cout << "Error sending response!" << std::endl;
-	
 
 	}
 	

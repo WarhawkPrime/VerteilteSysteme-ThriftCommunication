@@ -14,6 +14,7 @@
 #include <iostream>
 #include "telemetry_data.h"
 #include <fstream>
+#include <sstream>
 
 #define MAX_BUFFER 1024
 #define PORT "40000"
@@ -37,7 +38,7 @@ class UDP_server {
 		char s[INET6_ADDRSTRLEN];
 		char* srv_name;
 		TelemetryData* data;
-		
+		long unique_id;
 
 	public:
 		// Server functions
