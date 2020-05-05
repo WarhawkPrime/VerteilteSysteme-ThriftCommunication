@@ -11,6 +11,9 @@
     <ClCompile Include="UDPclient.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="header">
@@ -28,6 +31,9 @@
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="UDPclient.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
       <Filter>header</Filter>
     </ClInclude>
   </ItemGroup>

@@ -10,7 +10,7 @@ UDPclient::~UDPclient()
 
 }
 
-void UDPclient::fillServerInfo()
+void UDPclient::fill_serverInfo()
 {
 	memset(&hints, 0, sizeof (struct addrinfo));
 
@@ -32,7 +32,7 @@ void UDPclient::fillServerInfo()
 }
 
 
-void UDPclient::createSocket()
+void UDPclient::create_socket()
 {
 	//int socket(int domain, int type, int protocol); -> -1 on error
 	sockfd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);	//sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP); 
@@ -44,7 +44,7 @@ void UDPclient::createSocket()
 }
 
 
-void UDPclient::bindSocket()
+void UDPclient::bind_socket()
 {
 	int b = 0;
 	//int bind(ind fd, struct sockaddr *local_addr, socklen_t addr_lenght); -> 0 on success, -1 on error
@@ -58,7 +58,7 @@ void UDPclient::bindSocket()
 
 
 
-void UDPclient::sendMsgTo(char *msg)
+void UDPclient::send_msg_to(char *msg)
 {
 	size_t len;
 	int bytes_sent = 0;
@@ -73,12 +73,12 @@ void UDPclient::sendMsgTo(char *msg)
 		}
 }
 
-void UDPclient::recMsgFr()
+void UDPclient::rec_msg_fr()
 {
 
 }
 
-void UDPclient::closeSocket()
+void UDPclient::close_socket()
 {
 	int c = 0;
 
@@ -92,7 +92,7 @@ void UDPclient::closeSocket()
 
 
 //unnötig für udp
-void UDPclient::connectSocket()
+void UDPclient::connect_socket()
 {
 	if (connect(sockfd, res->ai_addr, res->ai_addrlen) < 0) {
 		perror("Could not connect to socket");
