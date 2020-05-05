@@ -92,24 +92,54 @@ int UDP_server::processRequests()
 				else {
 					// Terminate received string
 					buffer[numBytesReceived] = '\0';
-					
-					// Save data
-					std::ofstream historyFile;
-					historyFile.open("TelemetryData.txt", std::ios::in | std::ios::app);
 
-					// Construct string of data to write
-					std::string data(buffer, numBytesReceived);
-					data.insert(0, ";");
-					data.insert(0, host);
-					data.insert(0, ";");
-					data.insert(0, std::to_string(unique_id));
-					unique_id++;
-				
+					// Save data
+					std::ifstream historyFile;
+					std::ofstream outFile;
+					std::string lineString;
+
+					
+					historyFile.open("TelemetryData.txt", std::ios::in);
 
 					if (historyFile.is_open()) {
+						
 
-						historyFile << data;
+						while (std::getline(historyFile, lineString, '\n')) {
+
+							std::stringstream ss(lineString);
+							std::string s;
+							int counter = 0;
+
+							while (std::getline(ss, s, ';')) {
+
+								if (counter == 0) {
+									std::istringstream(s) >> unique_id;
+									break;
+								}
+								counter++;
+
+							}
+
+						}
+
+						unique_id++;
+
+						// Construct string of data to write
+						std::string data(buffer, numBytesReceived);
+						data.insert(0, ";");
+						data.insert(0, host);
+						data.insert(0, ";");
+						data.insert(0, std::to_string(unique_id));
 						historyFile.close();
+
+						outFile.open("TelemetryData.txt", std::ios::out | std::ios::app);
+						if (outFile.is_open())
+							outFile << data;
+						else
+							std::cout << "Couldn't write to file!" << std::endl;
+
+						outFile.close();
+						
 					}
 					else {
 						std::cout << "Error! Couldn't open file." << std::endl;

@@ -14,6 +14,7 @@
 #include <iostream>
 #include "telemetry_data.h"
 #include <fstream>
+#include <sstream>
 
 #define MAX_BUFFER 1024
 #define PORT "40000"
