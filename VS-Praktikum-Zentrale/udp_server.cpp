@@ -8,7 +8,7 @@ UDP_server::UDP_server()
 	this->status = 0;
 	this->srv_name = "localhost";
 	this->data = new TelemetryData();
-	
+	this->unique_id = 0; // To-Do: Read last written id and continue from there
 }
 
 
@@ -99,27 +99,21 @@ int UDP_server::processRequests()
 
 					// Construct string of data to write
 					std::string data(buffer, numBytesReceived);
-					int id = 0;
-					data.insert(0, service);
 					data.insert(0, ";");
 					data.insert(0, host);
 					data.insert(0, ";");
-					data.insert(0, std::to_string(id));
-					id++;
-					std::cout << "Message: " << data << std::endl;
-					std::cout << "Last character: " << data.back();
-					
+					data.insert(0, std::to_string(unique_id));
+					unique_id++;
+				
+
 					if (historyFile.is_open()) {
 
 						historyFile << data;
-
+						historyFile.close();
 					}
 					else {
 						std::cout << "Error! Couldn't open file." << std::endl;
 					}
-					
-
-
 
 				}
 				

@@ -37,7 +37,7 @@ class UDP_server {
 		char s[INET6_ADDRSTRLEN];
 		char* srv_name;
 		TelemetryData* data;
-		
+		long unique_id;
 
 	public:
 		// Server functions

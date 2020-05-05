@@ -74,7 +74,6 @@ char* Sensor::build_message()
 
 	//datum
 	std::string date_s = get_date();
-	date_s = date_s + ";";
 	s_msg = s_msg + date_s;
 
 	//umwandlung zum char*
