@@ -92,28 +92,33 @@ int UDP_server::processRequests()
 				else {
 					// Terminate received string
 					buffer[numBytesReceived] = '\0';
-					std::string data(buffer, numBytesReceived);
-					data.insert(0, host);
-					std::cout << "Message: " << data << std::endl;
-					std::cout << host << ":" << service << std::endl;
+					
 					// Save data
 					std::ofstream historyFile;
-					char addressBuffer[MAX_BUFFER];
-					int bufSize = sizeof(addressBuffer);
 					historyFile.open("TelemetryData.txt", std::ios::in | std::ios::app);
 
+					// Construct string of data to write
+					std::string data(buffer, numBytesReceived);
+					int id = 0;
+					data.insert(0, service);
+					data.insert(0, ";");
+					data.insert(0, host);
+					data.insert(0, ";");
+					data.insert(0, std::to_string(id));
+					id++;
+					std::cout << "Message: " << data << std::endl;
+					std::cout << "Last character: " << data.back();
 					
-					int peer = getpeername(sockfd, (struct sockaddr*) &addressBuffer, (socklen_t*) &bufSize);
-					if (peer == -1) {
-						std::cout << "Error in getpeername()." << std::endl;
+					if (historyFile.is_open()) {
+
+						historyFile << data;
+
 					}
-					else if (bufSize > sizeof(addressBuffer)) {
-						// Given buffer was too small, address has been truncated
-						std::cout << "Error! Address was truncated, buffer too small." << std::endl;
+					else {
+						std::cout << "Error! Couldn't open file." << std::endl;
 					}
 					
-					std::string addressString(addressBuffer, bufSize);
-					std::cout << "Sensor address: " << addressString << std::endl;
+
 
 
 				}
@@ -123,10 +128,6 @@ int UDP_server::processRequests()
 		else {
 			std::cout << "Error in getnameinfo()!" << std::endl;
 		}
-
-		//if (sendto(sockfd, buffer, numBytesReceived, 0, (struct sockaddr*) & from, address_length) != numBytesReceived)
-			//std::cout << "Error sending response!" << std::endl;
-	
 
 	}
 	
