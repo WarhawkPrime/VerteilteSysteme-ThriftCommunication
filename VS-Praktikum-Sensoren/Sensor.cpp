@@ -30,7 +30,7 @@ void Sensor::repeater(double lowEnd, double highEnd, int modus)
 		int input = 0;
 		while (input == 0)
 		{
-			std::cout << "0 drücken um Nachricht zu senden, eine andere Zahl um das Programm zu beenden" << std::endl;
+			std::cout << "0 druecken um Nachricht zu senden, eine andere Zahl um das Programm zu beenden" << std::endl;
 			std::cin >> input;
 			this->data = random_value(lowEnd, highEnd);
 			this->now = getTime();
@@ -54,24 +54,28 @@ void Sensor::repeater(double lowEnd, double highEnd, int modus)
 
 char* Sensor::build_message()
 {
-	char* message = "42";
-	std::string s_msg = "42";
+	char* message = "0";
+	std::string s_msg = "0";
 
 	//add port and type
 	std::string port = udpc.get_port();
 	port = port + ";";
-	type = type + ";";
+	std::string type_s = get_type();
+	type_s= type_s + ";";
 	s_msg = port + type;
+	std::cout << "port and type:_"<<s_msg << std::endl;
 
 	//messwerte
 	std::string data_s = std::to_string(get_data());
 	data_s = data_s + ";";
-	s_msg += data_s;
+	s_msg = s_msg + data_s;
+	std::cout << "messwerte_" << s_msg << std::endl;
+
 
 	//datum
 	std::string date_s = get_date();
-	date_s += ";";
-	s_msg += date_s;
+	date_s = date_s + ";";
+	s_msg = s_msg + date_s;
 
 	//umwandlung zum char*
 	int s = udpc.get_buffer_size();

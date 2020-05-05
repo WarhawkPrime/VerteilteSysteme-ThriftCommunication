@@ -67,6 +67,8 @@ void UDPclient::send_msg_to(char *msg)
 
 		bytes_sent = sendto(sockfd, msg, len, 0, (struct sockaddr*) & servaddr, addrSize);
 
+		msg = NULL;
+
 		if (bytes_sent < 0) {
 			perror("Could not connect to socket");
 			exit(EXIT_FAILURE);
