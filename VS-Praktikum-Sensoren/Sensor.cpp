@@ -42,9 +42,7 @@ void Sensor::repeater(double lowEnd, double highEnd, int modus)
 		std::cout << "Automatik gestartet" << std::endl;
 		while (true)
 		{
-			//std::cout << "test davor3" << std::endl;
 			sleep_delay();
-			//std::cout << "test danach3" << std::endl;
 
 			this->data = random_value(lowEnd, highEnd);
 			this->now = getTime();
@@ -57,29 +55,28 @@ void Sensor::repeater(double lowEnd, double highEnd, int modus)
 char* Sensor::build_message()
 {
 	char* message = "42";
-	std::string s_msg;
+	std::string s_msg = "42";
 
+	//add port and type
 	std::string port = udpc.get_port();
 	port = port + ";";
 	type = type + ";";
-
 	s_msg = port + type;
 
+	//messwerte
 	std::string data_s = std::to_string(get_data());
 	data_s = data_s + ";";
-
 	s_msg += data_s;
 
+	//datum
 	std::string date_s = get_date();
 	date_s += ";";
-
 	s_msg += date_s;
 
-
+	//umwandlung zum char*
 	int s = udpc.get_buffer_size();
 	char t[s];
 	strcpy(t, s_msg.c_str());
-
 	message = t;
 
 	return message;
