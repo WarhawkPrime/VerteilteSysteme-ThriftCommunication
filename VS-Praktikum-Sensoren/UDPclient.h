@@ -1,4 +1,5 @@
 #pragma once
+
 //aufbau:
 /*
 socket()
@@ -35,8 +36,6 @@ closesocket()
 class UDPclient
 {
 	struct sockaddr_in servaddr;
-	//struct sockaddr_in cliaddr;
-
 	struct sockaddr_in to;
 
 	struct addrinfo hints;
@@ -46,19 +45,22 @@ public:
 	UDPclient();
 	~UDPclient();
 
-	void fillServerInfo();
-	void createSocket();		//create the socket
-	void bindSocket();			//bind the socket to an address-unnecessary for a client
-	void connectSocket();		//connect to a server
-	void sendMsgTo(char *msg);			//send repeatingly until we have or receive data
-	void recMsgFr();
-	void closeSocket();			//close to release the data
+	void fill_serverInfo();
+	void create_socket();		//create the socket
+	void bind_socket();			//bind the socket to an address-unnecessary for a client
+	void connect_socket();		//connect to a server
+	void send_msg_to(char *msg);			//send repeatingly until we have or receive data
+	void rec_msg_fr();
+	void close_socket();			//close to release the data
 
 	//========== Getter & Setter ==========
-	int getSockfd() const { return sockfd;  }
-	char* getBuffer() { return buffer; }
-	ssize_t getLen() { return len; }
-	socklen_t getAddrSize() { return addrSize; }
+	int get_sockfd() const { return sockfd;  }
+	char* get_buffer() { return buffer; }
+	ssize_t get_leng() { return len; }
+	socklen_t get_addr_size() { return addrSize; }
+
+	char* get_port() const { return CPORT; }
+	int get_buffer_size() const { return BUF_SIZE; }
 
 private:
 	int sockfd;				//file description

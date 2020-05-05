@@ -15,15 +15,16 @@ public:
 	SensorManagement();
 	~SensorManagement();
 
-	void userDialog();
-	void createTemperatureSensor();
-	void createBrightnessSensor();
-	void createWindSensor();
-	void createHumiditySensor();
+	void user_dialog();
+	void create_temperatureSensor(int mod);
+	void create_brightnessSensor(int mod);
+	void create_windSensor(int mod);
+	void create_humiditySensor(int mod);
 
-	void setSensor(Sensor* newSensor) { this->sensor = newSensor; }
-	Sensor* getSensor() { return sensor; }
+	void set_sensor(Sensor* newSensor) { this->sensor = newSensor; }
+	Sensor* get_sensor() { return sensor; }
 	
 private:
 	Sensor *sensor;
+	int modus;
 };

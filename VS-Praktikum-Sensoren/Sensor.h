@@ -5,9 +5,10 @@
 #include <random>
 #include <chrono>
 #include <thread>
+#include <pthread.h>
+#include <string>
 
 #include "UDPclient.h"
-
 
 class Sensor
 {
@@ -15,25 +16,29 @@ public:
 	Sensor();
 
 	//Konstruktor um die jeweiligen Sensoren zu erstellen
-	Sensor(double lowEnd, double highEnd, std::string type);
+	Sensor(double lowEnd, double highEnd, std::string type, int modus);
 
 	//erstellt einen Zufallswert für die Daten
-	double randomValue(double lowEnd, double highEnd);
+	double random_value(double lowEnd, double highEnd);
 
 	//berechnet die aktuelle lokale Zeit
 	char* getTime();
 
 	//führt die erstellung der Daten und das senden von diesen wiederholend in einen bestimmten Zeitraum aus
-	void repeater(double lowEnd, double highEnd);
+	void repeater(double lowEnd, double highEnd, int modus);
 
-	char* buildMessage();
+	char* build_message();
+
+	void sleep_delay();
 
 	//========== Getter & Setter ==========
-	std::string getType() const { return type;}
-	void setType(std::string type) {this->type = type;}
+	std::string get_type() {return type;}
+	void set_type(std::string type) {this->type = type;}
 
-	double getData() const { return data; }
-	void setData(double data) { this->data = data; }
+	double get_data()  {return data; }
+	void set_data(double data) {this->data = data; }
+
+	char* get_date() { return now; }
 
 private:
 	std::string type;	//type des jeweiligen Sensors: Temperatur, Helligkeit, Wind, Luftfeuchtigkeit, Niederschlag
