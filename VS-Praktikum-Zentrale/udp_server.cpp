@@ -130,6 +130,7 @@ int UDP_server::processRequests()
 						data.insert(0, host);
 						data.insert(0, ";");
 						data.insert(0, std::to_string(unique_id));
+						std::cout << "Received data: " << data << std::endl;
 						historyFile.close();
 
 						outFile.open("TelemetryData.txt", std::ios::out | std::ios::app);
