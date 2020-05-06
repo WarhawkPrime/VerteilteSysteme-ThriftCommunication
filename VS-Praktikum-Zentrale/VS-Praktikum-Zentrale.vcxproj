@@ -35,9 +35,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{59bb6e14-fa26-4ba3-85f8-a7e09b033ab2}</ProjectGuid>
+    <ProjectGuid>{ed6efedd-1a0f-4095-a691-b230246ff919}</ProjectGuid>
     <Keyword>Linux</Keyword>
-    <RootNamespace>VS_Praktikum_Sensoren</RootNamespace>
+    <RootNamespace>VS_Praktikum_Zentrale</RootNamespace>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
     <ApplicationType>Linux</ApplicationType>
     <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
@@ -59,6 +59,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>Remote_GCC_1_0</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
@@ -75,19 +76,21 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClCompile Include="http_socket.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Sensor.cpp" />
-    <ClCompile Include="SensorManagement.cpp" />
-    <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="UDPclient.cpp" />
+    <ClCompile Include="telemetry_data.cpp" />
+    <ClCompile Include="udp_server.cpp" />
+    <ClCompile Include="udp_socket.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Sensor.h" />
-    <ClInclude Include="SensorManagement.h" />
-    <ClInclude Include="Timer.h" />
-    <ClInclude Include="UDPclient.h" />
+    <ClInclude Include="telemetry_data.h" />
+    <ClInclude Include="udp_server.h" />
+    <ClInclude Include="http_socket.h" />
+    <ClInclude Include="udp_socket.h" />
   </ItemGroup>
-  <ItemDefinitionGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile />
+  </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>
