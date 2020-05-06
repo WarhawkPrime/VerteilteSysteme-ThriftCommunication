@@ -62,15 +62,12 @@ char* Sensor::build_message()
 	port = port + ";";
 	std::string type_s = get_type();
 	type_s= type_s + ";";
-	s_msg = port + type;
-	std::cout << "port and type:_"<<s_msg << std::endl;
+	s_msg = port + type_s;
 
 	//messwerte
 	std::string data_s = std::to_string(get_data());
 	data_s = data_s + ";";
 	s_msg = s_msg + data_s;
-	std::cout << "messwerte_" << s_msg << std::endl;
-
 
 	//datum
 	std::string date_s = get_date();
@@ -81,6 +78,8 @@ char* Sensor::build_message()
 	char t[s];
 	strcpy(t, s_msg.c_str());
 	message = t;
+
+	std::cout << s_msg << std::endl;
 
 	return message;
 }
