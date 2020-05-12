@@ -5,7 +5,6 @@
 #include <random>
 #include <chrono>
 #include <thread>
-#include <pthread.h>
 #include <string>
 
 #include "UDPclient.h"
@@ -39,6 +38,12 @@ public:
 	void set_data(double data) {this->data = data; }
 
 	char* get_date() { return now; }
+
+	 void *sleepThread(void*) {
+		std::cout << "Clock start" << std::endl;
+		//usleep(10000000); 
+	 }	//10sec
+
 
 private:
 	std::string type;	//type des jeweiligen Sensors: Temperatur, Helligkeit, Wind, Luftfeuchtigkeit, Niederschlag

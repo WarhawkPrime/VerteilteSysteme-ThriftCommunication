@@ -23,6 +23,8 @@ public:
 
 	void set_sensor(Sensor* newSensor) { this->sensor = newSensor; }
 	Sensor* get_sensor() { return sensor; }
+
+	int testMethod() { int a = 1; int b = 1; return a + b; }
 	
 private:
 	Sensor *sensor;

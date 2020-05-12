@@ -70,16 +70,20 @@ void SensorManagement::user_dialog()
 		break;
 	case 1:
 		std::cout << "Temperatursensor erstellt"; 
-		create_temperatureSensor(modus); break;
+		create_temperatureSensor(modus); 
+		break;
 	case 2:
 		std::cout << "Helligkeitssensor erstellt"; 
-		create_brightnessSensor(modus); break;
+		create_brightnessSensor(modus); 
+		break;
 	case 3:
 		std::cout << "Windgeschwindigkeitssensor erstellt"; 
-		create_windSensor(modus); break;
+		create_windSensor(modus); 
+		break;
 	case 4:
 		std::cout << "Luftfeuchtigkeitssensor erstellt"; 
-		create_humiditySensor(modus); break;
+		create_humiditySensor(modus); 
+		break;
 	case 0:
 		break;
 	}

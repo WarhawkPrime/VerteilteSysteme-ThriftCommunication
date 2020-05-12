@@ -100,10 +100,27 @@ double Sensor::random_value(double lowEnd, double highEnd)
 
 void Sensor::sleep_delay()
 {
-	for (size_t i = 0; i < 10000000000; i++)
+
+	for (size_t i = 0; i < 10000000000; i++)	//10.000.000.000
 	{
 
 	}
+
+	/*
+	std::cout << "Clock start" << std::endl;
+	auto start = std::chrono::high_resolution_clock::now();
+	std::this_thread::sleep_for(std::chrono::seconds(10));
+
+	usleep(10000000000);
+
+	//std::thread t1(sleepThread);
+	//t1.join();
+
+	auto end = std::chrono::high_resolution_clock::now();
+	std::chrono::duration<double, std::milli> elapsed = end - start;
+	std::cout << "Waited " << elapsed.count() << " ms\n";
+	*/
+
 	//usleep(10000000);
 }
 

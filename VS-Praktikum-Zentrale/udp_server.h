@@ -24,6 +24,9 @@
 #define R_RETURN 40
 
 // Class that contains all server functionality to send and receive data from the sensors
+
+//Dies ist ein kleiner Test
+
 class UDP_server {
 
 	// Variables

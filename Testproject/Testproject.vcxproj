@@ -35,9 +35,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{59bb6e14-fa26-4ba3-85f8-a7e09b033ab2}</ProjectGuid>
+    <ProjectGuid>{6c957af0-8859-4063-a0bf-1db81cf33f10}</ProjectGuid>
     <Keyword>Linux</Keyword>
-    <RootNamespace>VS_Praktikum_Sensoren</RootNamespace>
+    <RootNamespace>Testproject</RootNamespace>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
     <ApplicationType>Linux</ApplicationType>
     <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
@@ -59,7 +59,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>WSL_1_0</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
@@ -77,16 +76,9 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Sensor.cpp" />
-    <ClCompile Include="SensorManagement.cpp" />
-    <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="UDPclient.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Sensor.h" />
-    <ClInclude Include="SensorManagement.h" />
-    <ClInclude Include="Timer.h" />
-    <ClInclude Include="UDPclient.h" />
+    <ClInclude Include="doctest.h" />
   </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
