@@ -44,6 +44,9 @@ private:
 	char* srv_name;
 	
 	long unique_id;
+	bool rec_data;
+
+
 
 public:
 	// Server functions
@@ -52,4 +55,5 @@ public:
 	int processRequests();
 	int initialize(); // Initialize server
 
+	int get_statusVar() { return status; }
 };

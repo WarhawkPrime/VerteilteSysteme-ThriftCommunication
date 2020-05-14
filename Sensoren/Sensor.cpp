@@ -24,6 +24,13 @@ void Sensor::repeater(double lowEnd, double highEnd, int modus)
 	{
 	default: return;
 		break;
+	case 0:
+	{
+		this->data = random_value(lowEnd, highEnd);
+		this->now = getTime();
+		udpc.send_msg_to(build_message());
+	};
+	break;
 	case 1:					//Manuell
 	{
 		std::cout << "Manuell gestartet" << std::endl;
@@ -49,7 +56,7 @@ void Sensor::repeater(double lowEnd, double highEnd, int modus)
 			udpc.send_msg_to(build_message());
 		};
 		break;
-	}
+	};
 }
 
 char* Sensor::build_message()
@@ -101,7 +108,7 @@ double Sensor::random_value(double lowEnd, double highEnd)
 void Sensor::sleep_delay()
 {
 
-	for (size_t i = 0; i < 10000000000; i++)	//10.000.000.000
+	for (size_t i = 0; i < 1000000000; i++)	//10.000.000.000
 	{
 
 	}

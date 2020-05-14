@@ -8,6 +8,8 @@ UDP_server::UDP_server()
 	this->srv_name = "localhost";
 	this->data = new Telemetry_data();
 	this->unique_id = 0; // To-Do: Read last written id and continue from there
+
+	this->rec_data = false;
 }
 
 
@@ -15,8 +17,6 @@ UDP_server::UDP_server()
 UDP_server::~UDP_server() {
 
 	delete this->data;
-
-
 }
 
 // Return the correct ip address
@@ -33,6 +33,7 @@ void* get_address(struct sockaddr* sock_addr) {
 // Handle all incoming telemetry
 int UDP_server::processRequests()
 {
+
 	for (temp = results; temp != NULL; temp = temp->ai_next) {
 
 		// Create the socket
@@ -154,7 +155,6 @@ int UDP_server::processRequests()
 		}
 
 	}
-
 	return R_OK;
 }
 
@@ -179,8 +179,6 @@ int UDP_server::initialize()
 		return R_FAIL;
 
 	}
-
-
 
 	processRequests();
 
