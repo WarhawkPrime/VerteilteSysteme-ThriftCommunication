@@ -30,9 +30,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Telemetry.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <Filter Include="header">
       <UniqueIdentifier>{0a296761-7519-401f-92df-fa01cf96589d}</UniqueIdentifier>
     </Filter>

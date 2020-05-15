@@ -88,9 +88,6 @@
     <ClInclude Include="Telemetry_data.h" />
     <ClInclude Include="UDP_server.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="Telemetry.txt" />
-  </ItemGroup>
   <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
