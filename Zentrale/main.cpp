@@ -1,10 +1,9 @@
 #include <cstdio>
-#include "UDP_server.h"
+#include "Skynet.h"
 
 int main()
 {
-    //Start Server
-    UDP_server* srv = new UDP_server();
-    srv->initialize();
+    Skynet* skynet = new Skynet;
+    skynet->start_skynet();
     return 0;
 }

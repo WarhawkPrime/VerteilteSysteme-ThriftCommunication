@@ -8,12 +8,24 @@
     <ClCompile Include="UDP_server.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="Skynet.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="HTTP_Server.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Telemetry_data.h">
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="UDP_server.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Skynet.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="HTTP_Server.h">
       <Filter>header</Filter>
     </ClInclude>
   </ItemGroup>

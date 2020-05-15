@@ -15,8 +15,3 @@ private:
 	UDP_server udp;
 	HTTP_Server http;
 };
-
-class Skynet
-{
-};
-

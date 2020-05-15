@@ -76,11 +76,15 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClCompile Include="HTTP_Server.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Skynet.cpp" />
     <ClCompile Include="Telemetry_data.cpp" />
     <ClCompile Include="UDP_server.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="HTTP_Server.h" />
+    <ClInclude Include="Skynet.h" />
     <ClInclude Include="Telemetry_data.h" />
     <ClInclude Include="UDP_server.h" />
   </ItemGroup>
