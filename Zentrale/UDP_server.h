@@ -15,6 +15,7 @@
 #include <fstream>
 #include <sstream>
 
+
 #include "Telemetry_data.h"
 
 #define MAX_BUFFER 1024
@@ -52,8 +53,13 @@ public:
 	// Server functions
 	UDP_server();
 	~UDP_server();
+
+	int create_socket();
+
 	int processRequests();
 	int initialize(); // Initialize server
+
+	int read_data(char buffer[NI_MAXHOST], char host[MAX_BUFFER]);
 
 	int get_statusVar() { return status; }
 };

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Sensor.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="Sensor_Management.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="UDP_Socket.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Sensor.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="Sensor_Management.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="UDP_Socket.h">
+      <Filter>header</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="header">
+      <UniqueIdentifier>{351e7edc-b385-4d79-93bd-f41fa25fdb2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{4e8d2525-718c-45e0-91fe-8b0bcf0bc599}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
