@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="Telemetry_data.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="UDP_server.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Telemetry_data.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="UDP_server.h">
+      <Filter>header</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Telemetry.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="header">
+      <UniqueIdentifier>{0a296761-7519-401f-92df-fa01cf96589d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{29595f2f-168e-47e7-9447-253017d703e5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
