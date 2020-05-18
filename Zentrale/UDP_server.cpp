@@ -165,7 +165,6 @@ int UDP_server::processRequests()
 					// Terminate received string
 					buffer[numBytesReceived] = '\0';
 
-					//TO DO: save data
 					this->read_data(buffer, host);
 					
 
@@ -207,4 +206,3 @@ int UDP_server::initialize()
 
 	return 0;
 }
-
