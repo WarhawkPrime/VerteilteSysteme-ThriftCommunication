@@ -1,4 +1,75 @@
 #pragma once
+
+//TCP-Socket PORT 80 !!!!
+
+//TO DO => implementierung von einfachem http-server der den GET Befehl korrekt verarbeiten kann
+//TO DO => http schnittstelle über eine REST-API den Zugriff auf die Sensordaten mit historie (mit jeweils eigener URI) (Unifiorm Resource Identifier)
+//REST API -> Representational State Transfer, Application Programming Interface
+
+/*
+When you don't want to use an external library, you will have to implement HTTP yourself. When you only need the basic functionality (direct download of a file, no redirects, no proxies, no cookies, no authentication, no encryption, no compression, no other shenanigans), this isn't even that hard.
+
+Create a socket, connect it to port 80 of your webserver, and send the following strings to the server:
+
+"GET /example.html HTTP/1.1\r\n"
+"Host: www.example.com\r\n"
+"\r\n"
+This requests the file www.example.com/example.html from the server you connected to.
+
+The server will respond with an own HTTP response header followed by the data (or an error description).
+*/
+
+
+/*
+
+SERVER				CLIENT
+
+socket()			socket()
+					.
+bind()				bind()
+					.
+listen()	.	.	connect()
+			.
+accept()  < .		
+
+
+				. .	send()
+recv()	<. .  .	. 
+
+
+send()	.	.
+			.	. >	recv()
+
+
+*/
+
+
+//http wird genutzt in Verbindung mit TCP
+//beispiel http
+
+//client->server
+
+//GET /test?param1=1&param2=2 HTTP/1.1\r\n		-> GET Methode mit angefragter URI
+//HOST: 123:234.123.234:80\r\n
+//User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:41.0)\r\n
+//Gecko/20100101 Firefox/41.0\r\n
+//Accept:\r\n
+//text/html,application/xhtml+xml,application/xml;q=0.9.*/*;q=0.8\r\n
+//Accept-Language: de,en-US;q=0.7,en;q=0.3\r\n
+//Accept-Encoding: gzip, deflate\
+//DNT: 1\r\n
+//Connection : keep - alive\r\n
+//Cache - Control : max - age = 0\r\n
+
+
+//==================== VORGEHEN ===============
+
+/*
+TCP Socket und Client erstellen, dann einfach mit Strings oder ähnlichem die HTTP Anfragen etc schicken
+
+*/
+
+
 class HTTP_Server
 {
 };
