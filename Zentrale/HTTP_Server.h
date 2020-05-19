@@ -45,11 +45,14 @@ send()	.	.
 
 
 //http wird genutzt in Verbindung mit TCP
+//jede Zeile im Header als Paar key : value
+//ende mit leerzeile (\r\n\r\n)
 //beispiel http
 
-//client->server
 
-//GET /test?param1=1&param2=2 HTTP/1.1\r\n		-> GET Methode mit angefragter URI
+//client->server(request)
+
+//GET /test?param1=1&param2=2 HTTP/1.1\r\n
 //HOST: 123:234.123.234:80\r\n
 //User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.10; rv:41.0)\r\n
 //Gecko/20100101 Firefox/41.0\r\n
@@ -60,6 +63,30 @@ send()	.	.
 //DNT: 1\r\n
 //Connection : keep - alive\r\n
 //Cache - Control : max - age = 0\r\n
+//\r\n\r\n
+
+//server->client(response)
+
+//HTTP/1.1 200 ok\r\n
+//Content-type: text/html\r\n
+//Content-length: 41\r\n
+//\r\n\r\n
+//<html>hello world, account created</html>
+
+//client->server(request)
+
+//GET / test ? param1 = 1 & param2 = 2 HTTP / 1.1\r\n
+//Host : 123 : 234.123.234 : 80\r\n
+//User - Agent : Mozilla / 5.0 (Macintosh; Intel Mac OS X 10.10; rv:41.0)\r\n
+//Gecko / 20100101 Firefox / 41.0\r\n
+//Accept :\r\n
+//text / html, application / xhtml + xml, application / xml; q = 0.9, */*;q=0.8\r\n
+//Accept-Language: de,en-US;q=0.7,en;q=0.3\r\n
+//Accept-Encoding: gzip, deflate\r\n
+//DNT: 1\r\n
+//Connection: keep-alive\r\n
+//Cache-Control: max-age=0\r\n
+//\r\n\r\n
 
 
 //==================== VORGEHEN ===============
@@ -68,6 +95,7 @@ send()	.	.
 TCP Socket und Client erstellen, dann einfach mit Strings oder ähnlichem die HTTP Anfragen etc schicken
 
 */
+
 
 
 class HTTP_Server
