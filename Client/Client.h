@@ -36,10 +36,29 @@
 //	accept : type/subtype [q=qvalue] zb Accept: text/plain
 //										Accept-Charset: utf-8
 
+//=============================================================================================================================================
+
+/*
+Vorgehen:
+
+Socket aufbauen
+Nachricht aufbauen mit GET Method
+Auf Nachricht des Servers warten
+Nachricht Zeile für Zeile auslesen und die Werte dann zuordnen
+
+*/
+
 
 class Client
 {
 public:
+
+	Client();
+	~Client();
+
+	void buildHeader();
+	void sendMessage();
+	void recMessage();
 
 
 private:

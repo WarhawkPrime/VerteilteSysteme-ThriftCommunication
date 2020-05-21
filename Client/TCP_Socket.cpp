@@ -46,10 +46,12 @@ void TCP_Socket::send_msg_to(char* msg)
 	int bytes_sent = 0;
 
 	len = strlen(msg);
-
+	const char* m;
+	//ssize_t send(int sockfd, const void *buf, size_t len, int flags);
 	bytes_sent = sendto(sockfd, msg, len, 0, (struct sockaddr*) & servaddr, addrSize);
 
-	msg = NULL;
+	//ssize_t send(int s, const void *msg, size_t len, int flags);
+	//ssize_t s = send(sockfd, m, strlen(m), 0);
 
 	if (bytes_sent < 0) {
 		perror("Could not connect to socket");
@@ -59,6 +61,17 @@ void TCP_Socket::send_msg_to(char* msg)
 
 void TCP_Socket::rec_msg_fr()
 {
+	ssize_t rec = 0;
+	char* msg = nullptr;
+	size_t len = 0;
+	len = strlen(msg);
+
+	//rec = recv(sockfd, msg, len, 0);
+	rec = recvfrom(sockfd, msg, len, 0, (struct sockaddr*) & servaddr, &addrSize);
+
+	//do smth with msg...
+
+	std::cout << msg << std::endl;
 
 }
 
