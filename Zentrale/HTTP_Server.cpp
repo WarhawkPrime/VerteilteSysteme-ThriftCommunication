@@ -24,7 +24,7 @@ int HTTP_Server::createConnection() {
 	}
 
 	// Bind socket
-	if (bind(sockfd, (struct sockaddr*)&server_addr, sizeof(struct sockaddr_in)) < 0) {
+	if (bind(sockfd, (struct sockaddr*) & server_addr, sizeof(server_addr)) < 0) {
 		std::cout << "Couldn't bind socket!" << std::endl;
 		return -1;
 	}
