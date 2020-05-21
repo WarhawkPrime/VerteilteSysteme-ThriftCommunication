@@ -48,7 +48,7 @@ void UDP_Socket::bind_socket()
 {
 	int b = 0;
 	//int bind(ind fd, struct sockaddr *local_addr, socklen_t addr_lenght); -> 0 on success, -1 on error
-	bind(sockfd, res->ai_addr, res->ai_addrlen);
+	b = bind(sockfd, res->ai_addr, res->ai_addrlen);
 
 	if (b < 0) {
 		perror("Could not bind the socket");
