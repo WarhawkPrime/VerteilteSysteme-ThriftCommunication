@@ -46,7 +46,7 @@ public:
 
 	void fill_serverInfo();
 	void create_socket();		//create the socket
-	void bind_socket();			//bind the socket to an address-unnecessary for a client
+	//void bind_socket();			//bind the socket to an address-unnecessary for a client
 	void connect_socket();		//connect to a server
 	void send_msg_to(char* msg);			//send repeatingly until we have or receive data
 	void rec_msg_fr();

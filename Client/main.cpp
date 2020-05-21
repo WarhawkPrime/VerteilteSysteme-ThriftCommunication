@@ -1,7 +1,9 @@
-#include <cstdio>
+#include "Client.h"
+
 
 int main()
 {
-    printf("hello from Client!\n");
+    Client client;
+    client.start();
     return 0;
 }
