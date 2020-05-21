@@ -88,6 +88,9 @@
     <ClInclude Include="Telemetry_data.h" />
     <ClInclude Include="UDP_server.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="runServerScript.txt" />
+  </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

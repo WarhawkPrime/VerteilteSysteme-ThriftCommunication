@@ -31,4 +31,10 @@
       <UniqueIdentifier>{4e8d2525-718c-45e0-91fe-8b0bcf0bc599}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="runSensorScript.txt" />
+  </ItemGroup>
 </Project>
