@@ -60,6 +60,8 @@ public:
 	void sendMessage();
 	void recMessage();
 
+	void start();
+
 
 private:
 	TCP_Socket tcp;

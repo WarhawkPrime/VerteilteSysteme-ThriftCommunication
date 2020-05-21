@@ -71,7 +71,7 @@ void TCP_Socket::rec_msg_fr()
 
 	//do smth with msg...
 
-	std::cout << msg << std::endl;
+	std::cout <<"message received: " <<  msg << std::endl;
 
 }
 
