@@ -12,9 +12,6 @@
 #include <pthread.h>
 
 
-//TO DO => start the different functions in a thread to ensure that all requests can get through
-
-
 void dosmth() {
     std::cout << "test" << std::endl;
 };
@@ -23,10 +20,13 @@ void dosmth() {
 
 int main()
 {
-    Skynet skynet;
-    skynet.start_skynet_with_udp();
+    Skynet* skynet = new Skynet();
 
-    //std::thread t1(dosmth);
-    //t1.detach();
+    std::thread t1(&Skynet::start_skynet_with_udp, skynet, "UDP-Server");
+    std::thread t2(&Skynet::start_skynet_with_http, skynet, "HTTP-Server");
+
+    t1.join();
+    t2.join();
+
     return 0;
 }

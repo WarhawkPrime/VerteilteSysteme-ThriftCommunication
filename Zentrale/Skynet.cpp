@@ -5,5 +5,5 @@ void Skynet::start_skynet_with_udp() {
 }
 
 void Skynet::start_skynet_with_http() {
-	//http.initialize();
+	http.createConnection();
 }

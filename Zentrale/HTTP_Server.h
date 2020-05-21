@@ -125,7 +125,7 @@ private:
 public:
 	HTTP_Server();
 	int createConnection(); // Generates socket and child processes, listens for incoming connections
-	int handleConnection(int newSockfd);
+	int handleConnection(int newSockfd); // Handles each connection and processes requests
 
 
 };

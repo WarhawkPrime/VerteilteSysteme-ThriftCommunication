@@ -49,7 +49,7 @@ int HTTP_Server::createConnection() {
 
 			// Child
 			if (pid == 0) {
-				
+				std::cout << "Process started" << std::endl;
 				close(sockfd);
 				handleConnection(child_sockfd);
 				exit(0);
@@ -59,21 +59,27 @@ int HTTP_Server::createConnection() {
 				close(child_sockfd);
 			}
 		}
-
 }
 
 // Receive HTTP GET requests
 int HTTP_Server::handleConnection(int sockfd) {
 
-	int num_bytes_read;
+	int num_bytes_read = 0;
+	int num_bytes_written = 0;
+	char* response = "Test response";
 	
 	if (num_bytes_read = read(sockfd, readBuffer, MAX_BUFFER) < 0) {
 		std::cout << "Couldn't read from socket!" << std::endl;
 		return -1;
 	}
-
+	std::cout << "Received Bytes: " << num_bytes_read << std::endl;
 	// Print received message
 	readBuffer[num_bytes_read] = '\0';
 	std::cout << readBuffer << std::endl;
+
+	if (num_bytes_written = write(sockfd, response, sizeof(response)) < 0) {
+		std::cout << "Failed to respond!" << std::endl;
+		return -1;
+	}
 
 }
