@@ -75,7 +75,7 @@ int HTTP_Server::handleConnection(int sockfd) {
 	std::cout << "Received Bytes: " << num_bytes_read << std::endl;
 	// Print received message
 	readBuffer[num_bytes_read] = '\0';
-	std::cout << readBuffer << std::endl;
+	//std::cout << readBuffer << std::endl;
 
 	if (num_bytes_written = write(sockfd, response, sizeof(response)) < 0) {
 		std::cout << "Failed to respond!" << std::endl;

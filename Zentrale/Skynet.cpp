@@ -1,16 +1,16 @@
 #include "Skynet.h"
 
 void Skynet::start_skynet_with_udp() {
-	udp = new UDP_server();
-	udp->initialize();
+	this->udp = new UDP_server();
+	this->udp->initialize();
 }
 
 void Skynet::start_skynet_with_http() {
-	http = new HTTP_Server();
-	http->createConnection();
+	this->http = new HTTP_Server();
+	this->http->createConnection();
 }
 
 Skynet::~Skynet() {
-	delete udp;
-	delete http;
+	delete this->udp;
+	delete this->http;
 }
