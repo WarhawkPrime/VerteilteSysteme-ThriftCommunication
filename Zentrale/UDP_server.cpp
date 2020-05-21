@@ -37,7 +37,7 @@ int UDP_server::create_socket() {
 		// Create the socket
 		// int socket(int domain, int type, int protocol): Define the type of socket you want and which protocol to use
 		// Check if socket for current address can be created
-		if (sockfd = socket(temp->ai_family, temp->ai_socktype, temp->ai_protocol) == -1)
+		if ((sockfd = socket(temp->ai_family, temp->ai_socktype, temp->ai_protocol)) == -1)
 			continue;
 
 		// Check if bind() works, then continue with next sensor address

@@ -37,4 +37,7 @@
       <UniqueIdentifier>{29595f2f-168e-47e7-9447-253017d703e5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="runServerScript.txt" />
+  </ItemGroup>
 </Project>

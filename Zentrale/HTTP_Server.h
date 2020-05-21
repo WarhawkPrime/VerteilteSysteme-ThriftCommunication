@@ -99,18 +99,34 @@ TCP Socket und Client erstellen, dann einfach mit Strings oder ähnlichem die HTT
 
 */
 
+#include <iostream>
+#include <string>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <stdlib.h>
 
+#define MAX_BUFFER 1024
 
 class HTTP_Server
 {
+private:
+
+	// Variables
+	int sockfd, child_sockfd; 
+	int port; // Specifies receiving port number
+	int pid;
+	struct sockaddr_in client_addr, server_addr;
+	socklen_t client_addr_length;
+	char readBuffer[MAX_BUFFER];
+	
+
 public:
 	HTTP_Server();
+	int createConnection(); // Generates socket and child processes, listens for incoming connections
+	int handleConnection(int newSockfd);
 
-
-
-
-
-private:
 
 };
 
