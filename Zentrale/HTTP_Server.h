@@ -24,10 +24,13 @@ The server will respond with an own HTTP response header followed by the data (o
 
 SERVER				CLIENT
 
+
+
+
 socket()			socket()
-					.
-bind()				bind()
-					.
+					
+bind()				
+					
 listen()	.	.	connect()
 			.
 accept()  < .		
@@ -100,5 +103,14 @@ TCP Socket und Client erstellen, dann einfach mit Strings oder ähnlichem die HTT
 
 class HTTP_Server
 {
+public:
+	HTTP_Server();
+
+
+
+
+
+private:
+
 };
 

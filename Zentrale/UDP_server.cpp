@@ -166,8 +166,6 @@ int UDP_server::processRequests()
 					buffer[numBytesReceived] = '\0';
 
 					this->read_data(buffer, host);
-					
-
 				}
 
 			}
