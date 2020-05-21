@@ -1,1 +1,22 @@
 #!/bin/bash
+if hash ~/projects/Zentrale/zentrale 2>/dev/null; then	
+	if sudo g++ -w \
+		main.cpp \
+		-I src \
+			./HTTP_Server.h ./HTTP_Server.cpp \
+			./Skynet.h ./Skynet.cpp \
+			./UDP_server.h ./UDP_server.cpp \
+			./Telemetry_data.h ./Telemetry_data.cpp \
+		-pthread \
+		-std=gnu++11 \
+	        -o zentrale; then
+		echo "Application built, executing...";
+		sudo  chmod +x zentrale
+		sudo ./zentrale
+	else
+		echo "Build Error, exiting..."
+	fi
+else
+	echo "Executing..."
+	sudo ./zentrale
+fi
