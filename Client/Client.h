@@ -56,7 +56,10 @@ public:
 	Client();
 	~Client();
 
-	void buildHeader();
+	void dialog();
+	void sensorDialog();
+
+	void buildHeader(std::string uri);
 	void sendMessage();
 	void recMessage();
 
