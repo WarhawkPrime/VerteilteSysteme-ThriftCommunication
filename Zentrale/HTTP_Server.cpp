@@ -3,12 +3,8 @@
 
 HTTP_Server::HTTP_Server()
 {
-	
 	this->sockfd = 0;
 	this->port = 80;
-	this->client_addr_length = sizeof(struct sockaddr_in);
-	memset(&this->server_addr, 0, sizeof(struct sockaddr_in));
-	memset(&this->readBuffer, 0, MAX_BUFFER);
 	this->server_addr.sin_family = AF_INET;
 	this->server_addr.sin_addr.s_addr = INADDR_ANY;
 	this->server_addr.sin_port = 80;
@@ -23,6 +19,7 @@ int HTTP_Server::createConnection() {
 		return -1;
 	}
 
+	memset(&this->server_addr, 0, sizeof(server_addr));
 	// Bind socket
 	if (bind(sockfd, (struct sockaddr*) & server_addr, sizeof(server_addr)) < 0) {
 		std::cout << "Couldn't bind socket!" << std::endl;
@@ -37,6 +34,8 @@ int HTTP_Server::createConnection() {
 		// Accept all incoming connections
 		while (1) {
 
+			// Set addr length to size of client_addr
+			this->client_addr_length = sizeof(struct sockaddr_in);
 			if (child_sockfd = accept(sockfd, (struct sockaddr*)&client_addr, &client_addr_length) < 0) {
 				std::cout << "Connection attempt failed!" << std::endl;
 			}
@@ -67,6 +66,7 @@ int HTTP_Server::handleConnection(int sockfd) {
 	int num_bytes_read = 0;
 	int num_bytes_written = 0;
 	char* response = "Test response";
+	memset(&this->readBuffer, 0, MAX_BUFFER);
 	
 	if (num_bytes_read = read(sockfd, readBuffer, MAX_BUFFER) < 0) {
 		std::cout << "Couldn't read from socket!" << std::endl;
