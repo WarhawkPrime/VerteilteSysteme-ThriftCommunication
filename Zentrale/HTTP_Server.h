@@ -106,6 +106,9 @@ TCP Socket und Client erstellen, dann einfach mit Strings oder ähnlichem die HTT
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <stdlib.h>
+#include <errno.h>
+#include <stdio.h>
+#include <netdb.h>
 
 #define MAX_BUFFER 1024
 
@@ -118,6 +121,7 @@ private:
 	int port; // Specifies receiving port number
 	int pid;
 	struct sockaddr_in client_addr, server_addr;
+	struct addrinfo hints;
 	socklen_t client_addr_length;
 	char readBuffer[MAX_BUFFER];
 	
