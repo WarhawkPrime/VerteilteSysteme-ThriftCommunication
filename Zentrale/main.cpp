@@ -11,27 +11,19 @@
 
 
 void dosmth(Skynet* skynet) {
-    std::cout << "test_u" << std::endl;
 
     skynet->start_skynet_with_udp();
-
-    std::cout << "test_ue" << std::endl;
 };
 
 void dosmth2(Skynet* skynet) {
-    std::cout << "test_h" << std::endl;
-
+ 
     skynet->start_skynet_with_http();
-
-    std::cout << "test_he" << std::endl;
 };
-
-
 
 int main()
 {
     Skynet* skynet = new Skynet();
-
+    //skynet->start_skynet_with_http();
     std::thread t1(dosmth, skynet);
     std::thread t2(dosmth2, skynet);
     t1.join();
