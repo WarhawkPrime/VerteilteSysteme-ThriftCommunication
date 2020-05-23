@@ -13,8 +13,8 @@ Client::~Client() {
 void const Client::start() {
 	//loop to ask the server again
 	for (;;) {
-		this->dialog();			//creation of header
-		this->send_message();
+		this->dialog();			//creation of header and sending it
+		//this->send_message();
 		this->rec_message();
 	}
 }
