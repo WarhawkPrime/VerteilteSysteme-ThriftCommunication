@@ -29,6 +29,9 @@ void UDP_Socket::fill_serverInfo()
 
 	memset(servaddr.sin_zero, 0, sizeof(servaddr.sin_zero));
 	addrSize = sizeof(servaddr);
+
+	std::cout << servaddr.sin_addr.s_addr << std::endl;
+
 }
 
 

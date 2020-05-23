@@ -15,7 +15,7 @@ void TCP_Socket::fill_serverInfo()
 	hints.ai_family = AF_UNSPEC;			//ipv4 or ipv6
 	hints.ai_socktype = SOCK_STREAM;		//stream (tcp) socket
 	hints.ai_flags = AI_PASSIVE;			//bind to ip of the host the programm is running on
-	hints.ai_protocol = 0;
+	hints.ai_protocol = IPPROTO_TCP;
 	//bei spezifischer Adresse: AI_PASSIVE entfernen und bei getaddrinfo null durch die gewünschte adresse ersetzen
 
 	getaddrinfo(NULL, CPORT, &hints, &res);
@@ -48,10 +48,10 @@ void TCP_Socket::send_msg_to(char* msg)
 	len = strlen(msg);
 	const char* m;
 	//ssize_t send(int sockfd, const void *buf, size_t len, int flags);
-	bytes_sent = sendto(sockfd, msg, len, 0, (struct sockaddr*) & servaddr, addrSize);
+	//bytes_sent = sendto(sockfd, msg, len, 0, (struct sockaddr*) & servaddr, addrSize);
 
-	//ssize_t send(int s, const void *msg, size_t len, int flags);
-	//ssize_t s = send(sockfd, m, strlen(m), 0);
+	//ssize_t t = send(int s, const void *msg, size_t len, int flags);
+	send(sockfd, m, strlen(m), 0);
 
 	if (bytes_sent < 0) {
 		perror("Could not connect to socket");
@@ -59,20 +59,38 @@ void TCP_Socket::send_msg_to(char* msg)
 	}
 }
 
-void TCP_Socket::rec_msg_fr()
+std::string TCP_Socket::rec_msg_fr()
 {
 	ssize_t rec = 0;
-	char* msg = nullptr;
+	char msg [BUFSIZ];
 	size_t len = 0;
 	len = strlen(msg);
+	int bytesSend = 1;
+	std::string complete_message = "";
 
-	//rec = recv(sockfd, msg, len, 0);
-	rec = recvfrom(sockfd, msg, len, 0, (struct sockaddr*) & servaddr, &addrSize);
+	//read the buffer until it is empty
+	while (bytesSend != 0) {
+		bytesSend = recv(sockfd, msg, len, 0);
+
+		if (bytesSend < 0) {
+			perror("Could not receive the message");
+			exit(EXIT_FAILURE);
+		}
+
+		//TO DO -> write the msg to a string to store the data. or file?
+		complete_message += msg;
+	}
+	return complete_message;
+	/*
+	bzero(buffer,256);
+	n = read(newsockfd,buffer,255);
+	if (n < 0) error("ERROR reading from socket");
+	printf("Here is the message: %s
+	",buffer);
+	*/
+	//rec = recvfrom(sockfd, msg, len, 0, (struct sockaddr*) & servaddr, &addrSize);
 
 	//do smth with msg...
-
-	std::cout <<"message received: " <<  msg << std::endl;
-
 }
 
 void TCP_Socket::close_socket()
@@ -86,7 +104,6 @@ void TCP_Socket::close_socket()
 		exit(EXIT_FAILURE);
 	}
 }
-
 
 //unnötig für udp
 void TCP_Socket::connect_socket()

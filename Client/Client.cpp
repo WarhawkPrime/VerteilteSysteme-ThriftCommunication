@@ -10,10 +10,13 @@ Client::~Client() {
 	tcp.close_socket();
 }
 
-void Client::start() {
-	this->dialog();			//creation of header
-	this->sendMessage();
-	this->recMessage();
+void const Client::start() {
+	//loop to ask the server again
+	for (;;) {
+		this->dialog();			//creation of header
+		this->send_message();
+		this->rec_message();
+	}
 }
 
 /*Hier wird die Nachricht gebaut, erstmal nur aus dem Request-Header mit GET
@@ -37,26 +40,45 @@ ACCEPT-CHARSET: utf-8\r\n
 CONNECTION: keep-alive\r\n
 \r\n\r\n
 */
-void Client::buildHeader(std::string uri) {
+void Client::build_header(std::string path, std::string parameter) {
 
+	std::string uri = "http://" + tcp.get_server_adress() + ":" + tcp.get_CPORT() + path + "?" + parameter;
+	std::string message = "GET " + uri + "?" + parameter + "\r\n";
+	message += "HOST: " + tcp.get_server_adress() + "\r\n";
+	message += "CACHE: max-age = 10\r\n";
+	message += "DNT: 1\r\n";
+	message += "ACCEPT: text/plain\r\n";
+	message += "ACCEPT_CHARSET: utf-8\r\n";
+	message += "CONNECTION: keep-alive\r\n";
+	message += "\r\n\r\n";
+
+	char* cm = this->string_to_char(message);
+
+	std::cout << message << std::endl;
 }
 
-void Client::sendMessage() {
+void const Client::send_message() {
 
-	char* msg = "Hallo";
+	char* msg = "Hallo\0";
 
 	tcp.send_msg_to(msg);
 
 	std::cout << msg << "send" << std::endl;
 }
 
-void Client::recMessage() {
+//HTTP/1.1 200 ok\r\n
+//Content-type: text/html\r\n
+//Content-length: 41\r\n
+//\r\n\r\n
+//<html>hello world, account created</html>
+void const Client::rec_message() {
 
-	tcp.rec_msg_fr();
+	std::cout << tcp.rec_msg_fr() << std::endl;
 
+	//TO DO => read the lines from the http header and assign the values
 }
 
-void Client::dialog() {
+void const Client::dialog() {
 	int input = 0;
 	
 	while (input >= 0) {
@@ -72,11 +94,11 @@ void Client::dialog() {
 		{
 		default:  
 			break;
-		case 0:	this->sensorDialog();
+		case 0:	this->sensor_dialog();
 			break;
-		case 1: this->buildHeader("hier könnte ihre URI stehen");	this->buildHeader("1");
+		case 1: this->build_header("hier könnte ihre URI stehen", "4");
 			break;
-		case 2: this->buildHeader("hier könnte ihre URI stehen");	this->buildHeader("2");
+		case 2: this->build_header("hier könnte ihre URI stehen", "5");
 			break;
 		case -1:
 			break;
@@ -84,7 +106,7 @@ void Client::dialog() {
 	}
 }
 
-void Client::sensorDialog() {
+void const Client::sensor_dialog() {
 	std::cout << std::endl;
 	std::cout << "Sensor types" << std::endl;
 
@@ -94,13 +116,19 @@ void Client::sensorDialog() {
 	{
 	default: 
 		break;
-	case 0: std::cout << "all Temperature sensors" << std::endl;	this->buildHeader("3");
+	case 0: std::cout << "all Temperature sensors" << std::endl;	this->build_header("hier könnte ihre URI stehen","0");
 		break;
-	case 1:	std::cout << "all Wind sensors" << std::endl;	this->buildHeader("4");
+	case 1:	std::cout << "all Wind sensors" << std::endl;	this->build_header("hier könnte ihre URI stehen","1");
 		break;
-	case 2:	std::cout << "all Humidity sensors" << std::endl;	this->buildHeader("5");
+	case 2:	std::cout << "all Humidity sensors" << std::endl;	this->build_header("hier könnte ihre URI stehen","2");
 		break;
-	case 3:	std::cout << "all Brightness sensors" << std::endl;	this->buildHeader("6");
+	case 3:	std::cout << "all Brightness sensors" << std::endl;	this->build_header("hier könnte ihre URI stehen","3");
 		break;
 	}
+}
+
+char* Client::string_to_char(std::string string_to_c) {
+	char char_arr[sizeof(string_to_c)];
+	strcpy(char_arr, string_to_c.c_str());
+	return char_arr;
 }

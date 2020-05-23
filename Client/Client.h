@@ -56,14 +56,16 @@ public:
 	Client();
 	~Client();
 
-	void dialog();
-	void sensorDialog();
+	void const dialog();
+	void const sensor_dialog();
 
-	void buildHeader(std::string uri);
-	void sendMessage();
-	void recMessage();
+	void build_header(const std::string uri,const std::string parameter);
+	void const send_message();
+	void const rec_message();
 
-	void start();
+	char* string_to_char(std::string string);
+
+	void const start();
 
 
 private:

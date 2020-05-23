@@ -49,22 +49,22 @@ public:
 	//void bind_socket();			//bind the socket to an address-unnecessary for a client
 	void connect_socket();		//connect to a server
 	void send_msg_to(char* msg);			//send repeatingly until we have or receive data
-	void rec_msg_fr();
+	std::string rec_msg_fr();
 	void close_socket();			//close to release the data
 
 	//========== Getter & Setter ==========
+	std::string get_CPORT() const { return CPORT; }
 	int get_sockfd() const { return sockfd; }
 	char* get_buffer() { return buffer; }
-	ssize_t get_leng() { return len; }
-	socklen_t get_addr_size() { return addrSize; }
+	ssize_t get_leng() const { return len; }
+	socklen_t get_addr_size() const { return addrSize; }
 	char* get_port() const { return CPORT; }
 	int get_buffer_size() const { return BUF_SIZE; }
+	std::string get_server_adress() const { return std::to_string(servaddr.sin_addr.s_addr); }
 
 private:
 	int sockfd;				//file description
 	char buffer[BUF_SIZE];		//buffer für die Übertragung
-	int send;
-	int recv;
 	size_t len;
 	ssize_t nread;
 	socklen_t addrSize;
