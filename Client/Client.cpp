@@ -40,6 +40,7 @@ ACCEPT-CHARSET: utf-8\r\n
 CONNECTION: keep-alive\r\n
 \r\n\r\n
 */
+
 void Client::build_header(std::string path, std::string parameter) {
 
 	std::string uri = "http://" + tcp.get_server_adress() + ":" + tcp.get_CPORT() + path + "?" + parameter;
@@ -53,6 +54,7 @@ void Client::build_header(std::string path, std::string parameter) {
 	message += "\r\n\r\n";
 
 	char* msg = this->string_to_char(message);
+	//char* msg = message.c_str();
 	this->send_message(msg);
 
 }
@@ -63,16 +65,45 @@ void const Client::send_message(char* msg) {
 	std::cout << msg << " send" << std::endl;
 }
 
-//HTTP/1.1 200 ok\r\n
-//Content-type: text/html\r\n
-//Content-length: 41\r\n
-//\r\n\r\n
-//<html>hello world, account created</html>
-void const Client::rec_message() {
+/*
+HTTP/1.1 200 ok\r\n
+Content-type: text/html\r\n
+Content-length: 41\r\n
+\r\n\r\n
+<html>hello world, account created</html>
+*/
+
+void Client::rec_message() {
 
 	std::cout << tcp.rec_msg_fr() << std::endl;
 
-	//TO DO => read the lines from the http header and assign the values
+	std::string received_request = tcp.rec_msg_fr();
+	std::stringstream message_stream(received_request);
+	std::string segment;
+	
+	int line = 0;
+	while (std::getline(message_stream, segment, '\n')) {
+		switch (line)
+		{
+		default:
+			break;
+		case 0: response.h1 = segment; 
+			line++;
+			break;
+		case 1: response.content_type = segment; 
+			line++;
+			break;
+		case 2: response.content_length = segment;
+			line++;
+			break;
+		case 3: //leerstelle
+			line++;
+			break;
+		case 4: response.message = segment;
+			line++;
+			break;
+		}
+	}
 }
 
 void const Client::dialog() {
@@ -89,15 +120,13 @@ void const Client::dialog() {
 
 		switch (input)
 		{
-		default:  
+		default:  this->sensor_dialog();
 			break;
 		case 0:	this->sensor_dialog();
 			break;
 		case 1: this->build_header("hier könnte ihre URI stehen", "4");
 			break;
 		case 2: this->build_header("hier könnte ihre URI stehen", "5");
-			break;
-		case -1:
 			break;
 		}
 	}
@@ -106,8 +135,13 @@ void const Client::dialog() {
 void const Client::sensor_dialog() {
 	std::cout << std::endl;
 	std::cout << "Sensor types" << std::endl;
+	std::cout << "0 : all Temperature sensors" << std::endl;
+	std::cout << "1 : all Wind sensors" << std::endl;
+	std::cout << "2 : all Humidity sensors" << std::endl;
+	std::cout << "3  : all Brightness sensors" << std::endl;
 
 	int input = 0;
+	std::cin >> input;
 
 	switch (input) 
 	{
