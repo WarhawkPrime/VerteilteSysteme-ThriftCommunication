@@ -52,18 +52,15 @@ void Client::build_header(std::string path, std::string parameter) {
 	message += "CONNECTION: keep-alive\r\n";
 	message += "\r\n\r\n";
 
-	char* cm = this->string_to_char(message);
+	char* msg = this->string_to_char(message);
+	this->send_message(msg);
 
-	std::cout << message << std::endl;
 }
 
-void const Client::send_message() {
-
-	char* msg = "Hallo\0";
+void const Client::send_message(char* msg) {
 
 	tcp.send_msg_to(msg);
-
-	std::cout << msg << "send" << std::endl;
+	std::cout << msg << " send" << std::endl;
 }
 
 //HTTP/1.1 200 ok\r\n

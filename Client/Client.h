@@ -60,7 +60,7 @@ public:
 	void const sensor_dialog();
 
 	void build_header(const std::string uri,const std::string parameter);
-	void const send_message();
+	void const send_message(char* msg);
 	void const rec_message();
 
 	char* string_to_char(std::string string);
