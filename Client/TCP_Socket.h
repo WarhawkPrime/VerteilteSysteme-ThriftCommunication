@@ -15,7 +15,7 @@
 #include <string.h>
 
 
-#define BUF_SIZE 500
+#define BUF_SIZE 2000
 #define CPORT	"80"
 #define IPORT	80
 
@@ -48,7 +48,7 @@ public:
 	void create_socket();		//create the socket
 	//void bind_socket();			//bind the socket to an address-unnecessary for a client
 	void connect_socket();		//connect to a server
-	void send_msg_to(char* msg);			//send repeatingly until we have or receive data
+	void send_msg_to(const char* msg);			//send repeatingly until we have or receive data
 	std::string rec_msg_fr();
 	void close_socket();			//close to release the data
 

@@ -38,7 +38,9 @@ void UDP_Socket::fill_serverInfo()
 void UDP_Socket::create_socket()
 {
 	//int socket(int domain, int type, int protocol); -> -1 on error
-	sockfd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);	//sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP); 
+	int option = 1;
+	sockfd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);	//sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+	setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR ,&option, sizeof(option));
 
 	if (sockfd < 0) {
 		perror("Could not create socket");
@@ -68,8 +70,8 @@ void UDP_Socket::send_msg_to(char* msg)
 
 	len = strlen(msg);
 
-	bytes_sent = send(sockfd, msg, len, 0);
-	//bytes_sent = sendto(sockfd, msg, len, 0, (struct sockaddr*) & servaddr, addrSize);
+	//bytes_sent = send(sockfd, msg, len, 0);
+	bytes_sent = sendto(sockfd, msg, len, 0, (struct sockaddr*) & servaddr, addrSize);
 
 	msg = NULL;
 

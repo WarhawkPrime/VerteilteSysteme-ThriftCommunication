@@ -44,7 +44,7 @@ void TCP_Socket::create_socket()
 	std::cout << "socket created" << std::endl;
 }
 
-void TCP_Socket::send_msg_to(char* msg)
+void TCP_Socket::send_msg_to(const char* msg)
 {
 	size_t len;
 	int bytes_sent = 0;
@@ -67,15 +67,44 @@ void TCP_Socket::send_msg_to(char* msg)
 
 std::string TCP_Socket::rec_msg_fr()
 {
+	char readBuffer[BUF_SIZE];
+	int num_bytes_read = 0;
+	int num_bytes_written = 0;
+	char* response = "Server Test response";
+	memset(readBuffer, 0, BUF_SIZE);
+
+	if ((num_bytes_read = recv(sockfd, readBuffer, BUF_SIZE, NULL)) < 0) {
+		perror("Read");
+		std::cout << "Couldn't read from socket!" << std::endl;
+		return "-1";
+	}
+	if (!num_bytes_read == 0) {
+
+		std::cout << "Received Bytes: " << num_bytes_read << std::endl;
+		// Print received message
+		readBuffer[num_bytes_read] = '\0';
+		std::cout << readBuffer << std::endl;
+	}
+	else {
+		std::cout << "num_bytes_read was 0" << std::endl;
+	}
+
+	if ((num_bytes_written = send(sockfd, response, sizeof(response), NULL)) < 0) {
+		perror("write");
+		std::cout << "Failed to respond!" << std::endl;
+		return "-1";
+	}
+
+	/*
 	ssize_t rec = 0;
-	char msg [BUFSIZ];
+	char msg [BUF_SIZE];
 	size_t len = 0;
 	len = strlen(msg);
 	int bytesSend = 1;
 	std::string complete_message = "";
 
 	//read the buffer until it is empty
-	while (bytesSend != 0) {
+	//while (bytesSend != 0) {
 		bytesSend = recv(sockfd, msg, len, 0);
 
 		if (bytesSend < 0) {
@@ -83,10 +112,13 @@ std::string TCP_Socket::rec_msg_fr()
 			exit(EXIT_FAILURE);
 		}
 
+		std::cout << msg << std::endl;
+
 		//TO DO -> write the msg to a string to store the data. or file?
 		complete_message += msg;
-	}
+	//}
 	return complete_message;
+	*/
 
 	/*
 	bzero(buffer,256);

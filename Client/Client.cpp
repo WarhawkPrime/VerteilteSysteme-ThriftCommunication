@@ -14,6 +14,7 @@ void const Client::start() {
 	//loop to ask the server again
 		this->dialog();			//creation of header and sending it
 		//this->send_message();
+		std::cout << "dialog ended" << std::endl;
 		this->rec_message();
 }
 
@@ -41,7 +42,7 @@ CONNECTION: keep-alive\r\n
 
 void Client::build_header(std::string path, std::string parameter) {
 
-	/*
+	
 	std::string uri = "http://" + tcp.get_server_adress() + ":" + tcp.get_CPORT() + path + "?" + parameter;
 	std::string message = "GET " + uri + "?" + parameter + "\r\n";
 	message += "HOST: " + tcp.get_server_adress() + "\r\n";
@@ -51,20 +52,26 @@ void Client::build_header(std::string path, std::string parameter) {
 	message += "ACCEPT_CHARSET: utf-8\r\n";
 	message += "CONNECTION: keep-alive\r\n";
 	message += "\r\n\r\n";
-	*/
+	
+	std::cout << sizeof(message) << "size of message string" << std::endl;
+	std::cout << message << "size of msh pointer" << std::endl;
 
-	//char* msg = this->string_to_char(message);
+	//char* msg = this->string_to_char(message);	//core dump
+	const char* msg = message.c_str();
+	std::cout << sizeof(msg) <<"size of msh pointer" << std::endl;
 
-	char* msg = "hello from the other side\0";
+	//char* msg = "hello from the other side\0";
 
 	tcp.send_msg_to(msg);
 }
 
+/*
 void const Client::send_message(char* msg) {
 
 	tcp.send_msg_to(msg);
 	std::cout << msg << " send" << std::endl;
 }
+*/
 
 /*
 HTTP/1.1 200 ok\r\n
@@ -76,7 +83,10 @@ Content-length: 41\r\n
 
 void Client::rec_message() {
 
+	std::cout << "message received: " << std::endl;
 	std::cout << tcp.rec_msg_fr() << std::endl;
+	std::cout << "message end: " << std::endl;
+	std::cout << std::endl;
 
 	std::string received_request = tcp.rec_msg_fr();
 	std::stringstream message_stream(received_request);
@@ -110,7 +120,6 @@ void Client::rec_message() {
 void const Client::dialog() {
 	int input = 0;
 	
-	while (input >= 0) {
 		std::cout << "select wanted ressource: " << std::endl;
 		std::cout << "0 : current Sensor data" << std::endl;
 		std::cout << "1 : all Sensor data" << std::endl;
@@ -130,7 +139,6 @@ void const Client::dialog() {
 		case 2: this->build_header("hier könnte ihre URI stehen", "5");
 			break;
 		}
-	}
 }
 
 void const Client::sensor_dialog() {
@@ -159,8 +167,10 @@ void const Client::sensor_dialog() {
 	}
 }
 
+/*
 char* Client::string_to_char(std::string string_to_c) {
 	char char_arr[sizeof(string_to_c)];
 	strcpy(char_arr, string_to_c.c_str());
 	return char_arr;
 }
+*/
