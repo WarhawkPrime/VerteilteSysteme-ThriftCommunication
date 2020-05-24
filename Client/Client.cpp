@@ -53,12 +53,12 @@ void Client::build_header(std::string path, std::string parameter) {
 	message += "CONNECTION: keep-alive\r\n";
 	message += "\r\n\r\n";
 	
-	std::cout << sizeof(message) << "size of message string" << std::endl;
-	std::cout << message << "size of msh pointer" << std::endl;
+	std::cout << sizeof(message) << " size of message string" << std::endl;
+	std::cout << message << " size of msh pointer" << std::endl;
 
 	//char* msg = this->string_to_char(message);	//core dump
 	const char* msg = message.c_str();
-	std::cout << sizeof(msg) <<"size of msh pointer" << std::endl;
+	std::cout << sizeof(msg) <<" size of msh pointer" << std::endl;
 
 	//char* msg = "hello from the other side\0";
 
