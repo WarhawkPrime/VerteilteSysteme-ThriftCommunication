@@ -64,8 +64,6 @@ public:
 private:
 	int sockfd;				//file description
 	char buffer[BUF_SIZE];		//buffer für die Übertragung
-	int send;
-	int recv;
 	size_t len;
 	ssize_t nread;
 	socklen_t addrSize;

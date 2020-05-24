@@ -27,6 +27,8 @@ void TCP_Socket::fill_serverInfo()
 
 	memset(servaddr.sin_zero, 0, sizeof(servaddr.sin_zero));
 	addrSize = sizeof(servaddr);
+
+	std::cout << "server info filled" << std::endl;
 }
 
 void TCP_Socket::create_socket()
@@ -38,20 +40,24 @@ void TCP_Socket::create_socket()
 		perror("Could not create socket");
 		exit(EXIT_FAILURE);
 	}
+
+	std::cout << "socket created" << std::endl;
 }
 
-void TCP_Socket::send_msg_to(char* msg)
+void TCP_Socket::send_msg_to(const char* msg)
 {
 	size_t len;
 	int bytes_sent = 0;
 
 	len = strlen(msg);
-	const char* m;
+	
+	//const char* m;
 	//ssize_t send(int sockfd, const void *buf, size_t len, int flags);
 	//bytes_sent = sendto(sockfd, msg, len, 0, (struct sockaddr*) & servaddr, addrSize);
 
 	//ssize_t t = send(int s, const void *msg, size_t len, int flags);
-	send(sockfd, m, strlen(m), 0);
+
+	send(sockfd, msg, strlen(msg), 0);
 
 	if (bytes_sent < 0) {
 		perror("Could not connect to socket");
@@ -61,15 +67,44 @@ void TCP_Socket::send_msg_to(char* msg)
 
 std::string TCP_Socket::rec_msg_fr()
 {
+	char readBuffer[BUF_SIZE];
+	int num_bytes_read = 0;
+	int num_bytes_written = 0;
+	char* response = "Server Test response";
+	memset(readBuffer, 0, BUF_SIZE);
+
+	if ((num_bytes_read = recv(sockfd, readBuffer, BUF_SIZE, NULL)) < 0) {
+		perror("Read");
+		std::cout << "Couldn't read from socket!" << std::endl;
+		return "-1";
+	}
+	if (!num_bytes_read == 0) {
+
+		std::cout << "Received Bytes: " << num_bytes_read << std::endl;
+		// Print received message
+		readBuffer[num_bytes_read] = '\0';
+		std::cout << readBuffer << std::endl;
+	}
+	else {
+		std::cout << "num_bytes_read was 0" << std::endl;
+	}
+
+	if ((num_bytes_written = send(sockfd, response, sizeof(response), NULL)) < 0) {
+		perror("write");
+		std::cout << "Failed to respond!" << std::endl;
+		return "-1";
+	}
+
+	/*
 	ssize_t rec = 0;
-	char msg [BUFSIZ];
+	char msg [BUF_SIZE];
 	size_t len = 0;
 	len = strlen(msg);
 	int bytesSend = 1;
 	std::string complete_message = "";
 
 	//read the buffer until it is empty
-	while (bytesSend != 0) {
+	//while (bytesSend != 0) {
 		bytesSend = recv(sockfd, msg, len, 0);
 
 		if (bytesSend < 0) {
@@ -77,10 +112,14 @@ std::string TCP_Socket::rec_msg_fr()
 			exit(EXIT_FAILURE);
 		}
 
+		std::cout << msg << std::endl;
+
 		//TO DO -> write the msg to a string to store the data. or file?
 		complete_message += msg;
-	}
+	//}
 	return complete_message;
+	*/
+
 	/*
 	bzero(buffer,256);
 	n = read(newsockfd,buffer,255);
@@ -117,5 +156,6 @@ void TCP_Socket::connect_socket()
 		std::cerr << "Could not connect to address" << std::endl;
 	}
 
+	std::cout << "socket connected" << std::endl;
 	//freeaddrinfo(res);	//wird nicht länger gebraucht
 }

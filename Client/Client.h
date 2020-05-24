@@ -1,6 +1,10 @@
 #pragma once
 
+#include <string>
+#include <sstream>
+
 #include "TCP_Socket.h"
+
 //client->server(request)
 
 //GET /test?param1=1&param2=2 HTTP/1.1\r\n
@@ -48,6 +52,44 @@ Nachricht Zeile für Zeile auslesen und die Werte dann zuordnen
 
 */
 
+/*
+GET http ://serveradresse:80/c/username/dokuments/files/?param1=0\r\n
+HOST: zentrale adresse\r\n
+CACHE : max - age = 10\r\n
+DNT : 1\r\n
+ACCEPT : text / plain\r\n
+ACCEPT - CHARSET: utf - 8\r\n
+CONNECTION : keep - alive\r\n
+\r\n\r\n
+*/
+struct request {
+
+};
+
+/*
+HTTP/1.1 200 ok\r\n
+Content-type: text/html\r\n
+Content-length: 41\r\n
+\r\n\r\n
+<html>hello world, account created</html>
+*/
+
+/*
+HTTP/1.1 200 OK
+Date: Fri, 06 Nov 2009 00:35:42 GMT
+Server: Apache
+Content-Length: 0
+Keep-Alive: timeout=15, max=100
+Connection: Keep-Alive
+Content-Type: text/plain
+*/
+
+struct response {
+	std::string h1;
+	std::string content_type;
+	std::string content_length;
+	std::string message;
+};
 
 class Client
 {
@@ -60,15 +102,15 @@ public:
 	void const sensor_dialog();
 
 	void build_header(const std::string uri,const std::string parameter);
-	void const send_message();
-	void const rec_message();
+	//void const send_message(char* msg);
+	void rec_message();
 
-	char* string_to_char(std::string string);
+	//char* string_to_char(std::string string);
 
 	void const start();
 
-
 private:
 	TCP_Socket tcp;
+	//response response;
 };
 
