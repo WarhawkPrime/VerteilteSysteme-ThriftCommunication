@@ -19,7 +19,7 @@
 #include "Telemetry_data.h"
 
 #define MAX_BUFFER 1024
-#define PORT "40000"
+#define PORT "55000"
 #define R_OK 10
 #define R_FAIL 20
 #define R_ERR 30

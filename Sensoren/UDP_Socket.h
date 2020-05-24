@@ -29,8 +29,8 @@ closesocket()
 #include <string.h>
 
 #define BUF_SIZE 500
-#define CPORT	"40000"
-#define IPORT	40000
+#define CPORT	"50000"
+#define IPORT	50000
 
 class UDP_Socket
 {

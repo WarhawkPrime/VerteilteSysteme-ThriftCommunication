@@ -124,12 +124,14 @@ private:
 	struct addrinfo hints;
 	socklen_t client_addr_length;
 	char readBuffer[MAX_BUFFER];
-	
+	int handleConnection(int newSockfd); // Handles each connection and processes requests
+	int sendResponse(int sockfd, std::string data);
+	int handleRequest(int sockfd, std::string req);
 
 public:
 	HTTP_Server();
 	int createConnection(); // Generates socket and child processes, listens for incoming connections
-	int handleConnection(int newSockfd); // Handles each connection and processes requests
+	
 
 
 };

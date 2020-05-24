@@ -37,7 +37,10 @@ int UDP_server::create_socket() {
 		// Create the socket
 		// int socket(int domain, int type, int protocol): Define the type of socket you want and which protocol to use
 		// Check if socket for current address can be created
-		if ((sockfd = socket(temp->ai_family, temp->ai_socktype, temp->ai_protocol)) == -1)
+		int option = 1;
+		sockfd = socket(temp->ai_family, temp->ai_socktype, temp->ai_protocol);
+		setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
+		if (sockfd  == -1)
 			continue;
 
 		// Check if bind() works, then continue with next sensor address
@@ -63,13 +66,19 @@ int UDP_server::read_data(char buffer[NI_MAXHOST], char host[MAX_BUFFER]) {
 
 	historyFile.open(filename);
 
-	if (!historyFile) {
-		std::cerr << "unable to open file" << std::endl;
+	if (!historyFile.is_open()) {
+		std::ofstream file(filename, std::ios::out);
+		if(file.is_open())
+			std::cout << "Created File" << std::endl;
+		else
+			std::cout << "Couldn't open file" << std::endl;
+		file.close();
 	}
+	historyFile.close();
 
+	historyFile.open(filename);
 	if (historyFile.is_open()) {
-
-
+		std::cout << "Opened File" << std::endl;
 		while (std::getline(historyFile, lineString, '\n')) {
 
 			std::stringstream ss(lineString);

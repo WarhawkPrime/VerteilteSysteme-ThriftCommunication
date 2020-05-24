@@ -87,11 +87,24 @@ int HTTP_Server::createConnection() {
 // Receive HTTP GET requests
 int HTTP_Server::handleConnection(int sockfd) {
 
+	const int max_req_length = 65536;
 	int num_bytes_read = 0;
 	int num_bytes_written = 0;
 	char* response = "Server Test response";
+	std::string request;
 	memset(&this->readBuffer, 0, MAX_BUFFER);
 	
+	while ((num_bytes_read = recv(sockfd, readBuffer, MAX_BUFFER, NULL)) != 0) {
+
+		request.append(readBuffer);
+	}
+	const char* terminate = "\0";
+	request.append(terminate);
+	std::cout << "Received Request: " << request << std::endl;
+
+	handleRequest(sockfd, request);
+
+	/*
 	if ((num_bytes_read = recv(sockfd, readBuffer, MAX_BUFFER, NULL)) < 0) {
 		perror("Read");
 		std::cout << "Couldn't read from socket!" << std::endl;
@@ -101,7 +114,7 @@ int HTTP_Server::handleConnection(int sockfd) {
 
 		std::cout << "Received Bytes: " << num_bytes_read << std::endl;
 		// Print received message
-		readBuffer[num_bytes_read] = '\0';
+		//readBuffer[num_bytes_read] = '\0';
 		std::cout << readBuffer << std::endl;
 	}
 	else {
@@ -113,5 +126,67 @@ int HTTP_Server::handleConnection(int sockfd) {
 		std::cout << "Failed to respond!" << std::endl;
 		return -1;
 	}
+	*/
+}
 
+// Receives incoming request and fetches data
+int HTTP_Server::handleRequest(int sockfd, std::string req) {
+
+	// Variables to store requested information
+	std::string lineString, requestedData;
+	long sensorId;
+	std::stringstream ss();
+	requestedData = "";
+
+	// String manipulation variables
+	std::string delim = "\r\n";
+	std::string s;
+	int pos = 0;
+
+	if (!req.empty()) {
+		// Read all values between \r\n delimiters
+		while ((pos = req.find(delim)) != std::string::npos) {
+
+			s = req.substr(0, pos);
+			std::cout << "Teilstring: " << s << std::endl;
+			req.erase(0, pos + delim.length());
+		}
+	}
+
+	// TO-Do: Get sensor data from Telemetry.txt file specified in the received http request and send data back
+	sendResponse(sockfd, requestedData);
+
+	return 0;
+}
+
+// Sends the HTTP response header with information
+int HTTP_Server::sendResponse(int sockfd, std::string data) {
+	
+	int num_bytes_written = 0;
+	std::string response, respCode;
+	respCode = "200 ok";
+	//HTTP/1.1 200 ok\r\n
+	//Content-type: text/html\r\n
+	//Content-length: 41\r\n
+	//\r\n\r\n
+	//Sensor data goes here -> data (aka. body)
+
+	response += "HTTP/1.1" + respCode + "\r\n";
+	response += "Content-type: text/html\r\n";
+	response += "Content-length: 41\r\n";
+	response += "\r\n\r\n"; //End of response header
+	response += data;
+
+	// Send response
+	const char* res = response.c_str();
+	if ((num_bytes_written = send(sockfd, res, sizeof(res), NULL)) < 0) {
+		perror("write");
+		std::cout << "Failed to respond!" << std::endl;
+		return -1;
+	}
+	else {
+		std::cout << "Sent data: " << response << std::endl;
+	}
+
+	return 0;
 }
