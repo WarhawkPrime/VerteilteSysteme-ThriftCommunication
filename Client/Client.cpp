@@ -88,19 +88,19 @@ void Client::rec_message() {
 		{
 		default:
 			break;
-		case 0: response.h1 = segment; 
+		case 0: //response.h1 = segment; 
 			line++;
 			break;
-		case 1: response.content_type = segment; 
+		case 1: //response.content_type = segment; 
 			line++;
 			break;
-		case 2: response.content_length = segment;
+		case 2: //response.content_length = segment;
 			line++;
 			break;
 		case 3: //leerstelle
 			line++;
 			break;
-		case 4: response.message = segment;
+		case 4: //response.message = segment;
 			line++;
 			break;
 		}
