@@ -68,7 +68,8 @@ void UDP_Socket::send_msg_to(char* msg)
 
 	len = strlen(msg);
 
-	bytes_sent = sendto(sockfd, msg, len, 0, (struct sockaddr*) & servaddr, addrSize);
+	bytes_sent = send(sockfd, msg, len, 0);
+	//bytes_sent = sendto(sockfd, msg, len, 0, (struct sockaddr*) & servaddr, addrSize);
 
 	msg = NULL;
 
