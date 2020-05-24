@@ -111,6 +111,6 @@ public:
 
 private:
 	TCP_Socket tcp;
-	response response;
+	//response response;
 };
 

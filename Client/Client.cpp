@@ -12,11 +12,9 @@ Client::~Client() {
 
 void const Client::start() {
 	//loop to ask the server again
-	for (;;) {
 		this->dialog();			//creation of header and sending it
 		//this->send_message();
 		this->rec_message();
-	}
 }
 
 /*Hier wird die Nachricht gebaut, erstmal nur aus dem Request-Header mit GET
@@ -43,6 +41,7 @@ CONNECTION: keep-alive\r\n
 
 void Client::build_header(std::string path, std::string parameter) {
 
+	/*
 	std::string uri = "http://" + tcp.get_server_adress() + ":" + tcp.get_CPORT() + path + "?" + parameter;
 	std::string message = "GET " + uri + "?" + parameter + "\r\n";
 	message += "HOST: " + tcp.get_server_adress() + "\r\n";
@@ -52,11 +51,13 @@ void Client::build_header(std::string path, std::string parameter) {
 	message += "ACCEPT_CHARSET: utf-8\r\n";
 	message += "CONNECTION: keep-alive\r\n";
 	message += "\r\n\r\n";
+	*/
 
-	char* msg = this->string_to_char(message);
-	//char* msg = message.c_str();
-	this->send_message(msg);
+	//char* msg = this->string_to_char(message);
 
+	char* msg = "hello from the other side\0";
+
+	tcp.send_msg_to(msg);
 }
 
 void const Client::send_message(char* msg) {
