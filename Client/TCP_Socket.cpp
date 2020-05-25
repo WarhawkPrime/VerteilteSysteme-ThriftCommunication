@@ -74,6 +74,9 @@ std::string TCP_Socket::rec_msg_fr()
 	char readBuffer[BUF_SIZE];
 	int num_bytes_read = 0;
 	int num_bytes_written = 0;
+
+	std::string rec_message;
+
 	//char* response = "Server Test response\0";
 	memset(readBuffer, 0, BUF_SIZE);
 
@@ -105,12 +108,13 @@ std::string TCP_Socket::rec_msg_fr()
 	}
 	*/
 	
-
+	/*
 	if ((num_bytes_written = send(sockfd, response, sizeof(response), NULL)) < 0) {
 		perror("write");
 		std::cout << "Failed to respond!" << std::endl;
 		return "-1";
 	}
+	*/
 
 	/*
 	ssize_t rec = 0;
