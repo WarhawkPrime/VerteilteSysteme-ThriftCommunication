@@ -23,7 +23,27 @@ void dosmth2(Skynet* skynet) {
 int main()
 {
     Skynet* skynet = new Skynet();
-    skynet->start_skynet_with_http();
+
+    pid_t pid = fork();
+
+    if (pid == 0)
+    {
+        // child process
+        skynet->start_skynet_with_http();
+    }
+    else if (pid > 0)
+    {
+        // parent process
+        skynet->start_skynet_with_udp();
+    }
+    else
+    {
+        // fork failed
+        printf("fork() failed!\n");
+        return 1;
+    }
+
+    //skynet->start_skynet_with_udp();
     //std::thread t1(dosmth, skynet);
     //std::thread t2(dosmth2, skynet);
     //t1.join();
