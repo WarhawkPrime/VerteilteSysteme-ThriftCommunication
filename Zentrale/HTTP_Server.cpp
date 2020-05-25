@@ -91,9 +91,7 @@ int HTTP_Server::handleConnection(int sockfd) {
 	int num_bytes_read = 0;
 	int num_bytes_written = 0;
 	std::string request;
-	
-	
-	
+
 
 		memset(&this->readBuffer, 0, MAX_BUFFER);
 		if ((num_bytes_read = recv(sockfd, readBuffer, MAX_BUFFER, NULL)) < 0) {
@@ -116,9 +114,6 @@ int HTTP_Server::handleConnection(int sockfd) {
 		request.append(readBuffer);
 	}
 	*/
-	
-
-	
 
 	/*
 	if ((num_bytes_read = recv(sockfd, readBuffer, MAX_BUFFER, NULL)) < 0) {
