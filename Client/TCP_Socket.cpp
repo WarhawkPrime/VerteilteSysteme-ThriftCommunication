@@ -67,12 +67,25 @@ void TCP_Socket::send_msg_to(const char* msg)
 
 std::string TCP_Socket::rec_msg_fr()
 {
+	
 	char readBuffer[BUF_SIZE];
 	int num_bytes_read = 0;
 	int num_bytes_written = 0;
-	//char* response = "Server Test response\0";
+	std::string rec_message;
+
+	
 	memset(readBuffer, 0, BUF_SIZE);
 
+	while ((num_bytes_read = recv(sockfd, readBuffer, BUF_SIZE, NULL)) != 0) {
+		rec_message.append(readBuffer);
+	}
+
+	const char* teminate = "\0";
+	rec_message.append(teminate);
+	return rec_message;
+	
+
+	/*
 	if ((num_bytes_read = recv(sockfd, readBuffer, BUF_SIZE, NULL)) < 0) {
 		perror("Read");
 		std::cout << "Couldn't read from socket!" << std::endl;
@@ -84,10 +97,13 @@ std::string TCP_Socket::rec_msg_fr()
 		// Print received message
 		readBuffer[num_bytes_read] = '\0';
 		std::cout << readBuffer << std::endl;
+		return readBuffer;
 	}
 	else {
 		std::cout << "num_bytes_read was 0" << std::endl;
 	}
+	*/
+	
 
 	/*
 	ssize_t rec = 0;
