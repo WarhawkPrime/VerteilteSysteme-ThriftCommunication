@@ -1,6 +1,6 @@
 #include "UDP_server.h"
 
-// Cosntructor
+// Constructor
 UDP_server::UDP_server()
 {
 	this->sockfd = 0;
@@ -8,7 +8,6 @@ UDP_server::UDP_server()
 	this->srv_name = "localhost";
 	this->data = new Telemetry_data();
 	this->unique_id = 0; // To-Do: Read last written id and continue from there
-
 	this->rec_data = false;
 }
 

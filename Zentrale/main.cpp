@@ -23,11 +23,11 @@ void dosmth2(Skynet* skynet) {
 int main()
 {
     Skynet* skynet = new Skynet();
-    skynet->start_skynet_with_udp();
+    skynet->start_skynet_with_http();
     //std::thread t1(dosmth, skynet);
     //std::thread t2(dosmth2, skynet);
     //t1.join();
-   // t2.join();
+    //t2.join();
 
     /*
     std::thread t1(&Skynet::start_skynet_with_udp, skynet, "UDP-Server");
