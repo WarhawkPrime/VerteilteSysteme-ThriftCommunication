@@ -57,11 +57,14 @@ void TCP_Socket::send_msg_to(const char* msg)
 
 	//ssize_t t = send(int s, const void *msg, size_t len, int flags);
 
-	send(sockfd, msg, strlen(msg), 0);
+	bytes_sent = send(sockfd, msg, strlen(msg), 0);
 
 	if (bytes_sent < 0) {
 		perror("Could not connect to socket");
 		exit(EXIT_FAILURE);
+	}
+	else {
+		std::cout << "Sent " << bytes_sent << " bytes to server!" << std::endl;
 	}
 }
 
@@ -71,9 +74,7 @@ std::string TCP_Socket::rec_msg_fr()
 	char readBuffer[BUF_SIZE];
 	int num_bytes_read = 0;
 	int num_bytes_written = 0;
-	std::string rec_message;
-
-	
+	//char* response = "Server Test response\0";
 	memset(readBuffer, 0, BUF_SIZE);
 
 	while ((num_bytes_read = recv(sockfd, readBuffer, BUF_SIZE, NULL)) != 0) {
@@ -91,7 +92,7 @@ std::string TCP_Socket::rec_msg_fr()
 		std::cout << "Couldn't read from socket!" << std::endl;
 		return "-1";
 	}
-	if (!num_bytes_read == 0) {
+	if (!(num_bytes_read == 0)) {
 
 		std::cout << "Received Bytes: " << num_bytes_read << std::endl;
 		// Print received message
@@ -104,6 +105,12 @@ std::string TCP_Socket::rec_msg_fr()
 	}
 	*/
 	
+
+	if ((num_bytes_written = send(sockfd, response, sizeof(response), NULL)) < 0) {
+		perror("write");
+		std::cout << "Failed to respond!" << std::endl;
+		return "-1";
+	}
 
 	/*
 	ssize_t rec = 0;
