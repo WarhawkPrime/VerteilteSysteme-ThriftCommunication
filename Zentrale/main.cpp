@@ -11,25 +11,43 @@
 
 
 void dosmth(Skynet* skynet) {
-    
+
     skynet->start_skynet_with_udp();
-    std::cout << "Thread 1" << std::endl;
 };
 
 void dosmth2(Skynet* skynet) {
-   
+ 
     skynet->start_skynet_with_http();
-    std::cout << "Thread 2" << std::endl;
 };
 
 int main()
 {
     Skynet* skynet = new Skynet();
+
+    pid_t pid = fork();
+
+    if (pid == 0)
+    {
+        // child process
+        skynet->start_skynet_with_http();
+    }
+    else if (pid > 0)
+    {
+        // parent process
+        skynet->start_skynet_with_udp();
+    }
+    else
+    {
+        // fork failed
+        printf("fork() failed!\n");
+        return 1;
+    }
+
     //skynet->start_skynet_with_udp();
-    std::thread t1(dosmth, skynet);
-    std::thread t2(dosmth2, skynet);
-    t1.join();
-    t2.join();
+    //std::thread t1(dosmth, skynet);
+    //std::thread t2(dosmth2, skynet);
+    //t1.join();
+    //t2.join();
 
     /*
     std::thread t1(&Skynet::start_skynet_with_udp, skynet, "UDP-Server");

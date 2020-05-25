@@ -31,7 +31,7 @@ void UDP_Socket::fill_serverInfo()
 	addrSize = sizeof(servaddr);
 
 	std::cout << servaddr.sin_addr.s_addr << std::endl;
-
+	std::cout << "server info filled" << std::endl;
 }
 
 
@@ -46,6 +46,9 @@ void UDP_Socket::create_socket()
 		perror("Could not create socket");
 		exit(EXIT_FAILURE);
 	}
+
+	std::cout << "socket created" << std::endl;
+
 }
 
 
@@ -59,6 +62,9 @@ void UDP_Socket::bind_socket()
 		perror("Could not bind the socket");
 		exit(EXIT_FAILURE);
 	}
+
+	std::cout << "socket bind" << std::endl;
+
 }
 
 
@@ -79,6 +85,9 @@ void UDP_Socket::send_msg_to(char* msg)
 		perror("Could not connect to socket");
 		exit(EXIT_FAILURE);
 	}
+
+	std::cout << "message send" << std::endl;
+
 }
 
 void UDP_Socket::rec_msg_fr()
@@ -96,6 +105,9 @@ void UDP_Socket::close_socket()
 		perror("Could not close socket");
 		exit(EXIT_FAILURE);
 	}
+
+	std::cout << "close socket" << std::endl;
+
 }
 
 
@@ -110,6 +122,9 @@ void UDP_Socket::connect_socket()
 	if (rp == NULL) {
 		std::cerr << "Could not connect to address" << std::endl;
 	}
+
+	std::cout << "connect socket" << std::endl;
+
 
 	//freeaddrinfo(res);	//wird nicht länger gebraucht
 }
