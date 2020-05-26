@@ -15,7 +15,7 @@ public:
 	Sensor();
 
 	//Konstruktor um die jeweiligen Sensoren zu erstellen
-	Sensor(double lowEnd, double highEnd, std::string type, int modus);
+	Sensor(double lowEnd, double highEnd, std::string type, int modus, std::string sId);
 
 	//erstellt einen Zufallswert für die Daten
 	double random_value(double lowEnd, double highEnd);
@@ -44,7 +44,7 @@ public:
 		//usleep(10000000); 
 	}	//10sec
 
-	void setID(std::string id) { this->id = id; }
+	void setID(std::string sid) { this->id = sid; }
 	std::string getID() { return id; }
 
 private:

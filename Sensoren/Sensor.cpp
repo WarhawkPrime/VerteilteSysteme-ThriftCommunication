@@ -5,14 +5,13 @@ Sensor::Sensor()
 	udpc.close_socket();
 }
 
-Sensor::Sensor(double lowEnd, double highEnd, std::string type, int modus) : type{ type }
+Sensor::Sensor(double lowEnd, double highEnd, std::string type, int modus, std::string sid) : type{ type }
 {
+	this->id = sid;
+	this->type = type;
 	udpc.fill_serverInfo();
 	udpc.create_socket();
 	udpc.bind_socket();
-
-	this->type = type;
-
 	repeater(lowEnd, highEnd, modus);
 }
 

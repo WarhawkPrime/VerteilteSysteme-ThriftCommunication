@@ -22,41 +22,35 @@ Sensor_Management::~Sensor_Management()
 	sensor = NULL;
 }
 
-void Sensor_Management::create_temperatureSensor(int mod, std::string id)
+void Sensor_Management::create_temperatureSensor(int mod, std::string sid)
 {
-	Sensor* s = new Sensor(0, 30, "temperatursensor", mod);
-	s->setID(id);
+	Sensor* s = new Sensor(0, 30, "temperatursensor", mod, sid);
 	set_sensor(s);
 }
 
-void Sensor_Management::create_brightnessSensor(int mod, std::string id)
+void Sensor_Management::create_brightnessSensor(int mod, std::string sid)
 {
-	Sensor* s = new Sensor(50, 1200, "helligkeitssensor", mod);
-	s->setID(id);
+	Sensor* s = new Sensor(50, 1200, "helligkeitssensor", mod, sid);
 	set_sensor(s);
 }
 
-void Sensor_Management::create_windSensor(int mod, std::string id)
+void Sensor_Management::create_windSensor(int mod, std::string sid)
 {
-	Sensor* s = new Sensor(0, 80, "windsensor", mod);
-	s->setID(id);
+	Sensor* s = new Sensor(0, 80, "windsensor", mod, sid);
 	set_sensor(s);
+	
 }
 
-void Sensor_Management::create_humiditySensor(int mod, std::string id)
+void Sensor_Management::create_humiditySensor(int mod, std::string sid)
 {
-	Sensor* s = new Sensor(0, 100, "luftfeuchtigkeitssensor", mod);
-	s->setID(id);
+	Sensor* s = new Sensor(0, 100, "luftfeuchtigkeitssensor", mod, sid);
 	set_sensor(s);
+	
 }
 
 
-void Sensor_Management::user_dialog(std::string id)
+void Sensor_Management::user_dialog(std::string sid)
 {
-	std::cout << "test1" << std::endl;
-	std::cout << id << std::endl;
-
-
 	int input_1;
 	std::cout << "Modus auswählen: Manuell oder Automatik:" << std::endl;
 	std::cout << "1 : Manuell" << std::endl;
@@ -90,19 +84,19 @@ void Sensor_Management::user_dialog(std::string id)
 		break;
 	case 1:
 		std::cout << "Temperatursensor erstellt";
-		create_temperatureSensor(modus, id);
+		create_temperatureSensor(modus, sid);
 		break;
 	case 2:
 		std::cout << "Helligkeitssensor erstellt";
-		create_brightnessSensor(modus, id);
+		create_brightnessSensor(modus, sid);
 		break;
 	case 3:
 		std::cout << "Windgeschwindigkeitssensor erstellt";
-		create_windSensor(modus, id);
+		create_windSensor(modus, sid);
 		break;
 	case 4:
 		std::cout << "Luftfeuchtigkeitssensor erstellt";
-		create_humiditySensor(modus, id);
+		create_humiditySensor(modus, sid);
 		break;
 	case 0:
 		break;

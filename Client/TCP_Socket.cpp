@@ -27,8 +27,6 @@ void TCP_Socket::fill_serverInfo()
 
 	memset(servaddr.sin_zero, 0, sizeof(servaddr.sin_zero));
 	addrSize = sizeof(servaddr);
-
-	std::cout << "server info filled" << std::endl;
 }
 
 void TCP_Socket::create_socket()
@@ -40,8 +38,6 @@ void TCP_Socket::create_socket()
 		perror("Could not create socket");
 		exit(EXIT_FAILURE);
 	}
-
-	std::cout << "socket created" << std::endl;
 }
 
 void TCP_Socket::send_msg_to(const char* msg)
@@ -64,6 +60,7 @@ void TCP_Socket::send_msg_to(const char* msg)
 		exit(EXIT_FAILURE);
 	}
 	else {
+		std::cout << std::endl;
 		std::cout << "Sent " << bytes_sent << " bytes to server!" << std::endl;
 	}
 }
@@ -176,7 +173,4 @@ void TCP_Socket::connect_socket()
 	if (rp == NULL) {
 		std::cerr << "Could not connect to address" << std::endl;
 	}
-
-	std::cout << "socket connected" << std::endl;
-	//freeaddrinfo(res);	//wird nicht länger gebraucht
 }

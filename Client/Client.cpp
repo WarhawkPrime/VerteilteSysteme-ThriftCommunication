@@ -11,17 +11,15 @@ Client::~Client() {
 }
 
 void const Client::start() {
-	//loop to ask the server again
+	while (true) {
+		//loop to ask the server again
 		this->dialog();			//creation of header and sending it
 		//this->send_message();
 		std::cout << "dialog ended" << std::endl;
-		this->rec_message();
 		std::cout << std::endl;
-		std::cout << resp.h1 << std::endl;
-		std::cout << resp.content_type << std::endl;
-		std::cout << resp.content_length << std::endl;
-		std::cout << resp.message << std::endl;
-
+		this->rec_message();
+		this->interprete_message();
+	}
 }
 
 /*Hier wird die Nachricht gebaut, erstmal nur aus dem Request-Header mit GET
@@ -60,12 +58,8 @@ void Client::build_header(std::string path, std::string parameter) {
 	message += "CONNECTION: keep-alive\r\n";
 	message += "\r\n\r\n";
 	
-	std::cout << sizeof(message) << " size of message string" << std::endl;
-	std::cout << message << " size of msh pointer" << std::endl;
-
 	//char* msg = this->string_to_char(message);	//core dump
 	const char* msg = message.c_str();
-	std::cout << sizeof(msg) <<" size of msh pointer" << std::endl;
 
 	//char* msg = "hello from the other side\0";
 
@@ -95,22 +89,56 @@ void Client::rec_message() {
 	
 	std::stringstream message_stream(received_request);
 	std::string segment;
-	std::cout << received_request << std::endl;
 
+	int linecounter = 0;
+	while (std::getline(message_stream, segment)) {
+			switch (linecounter)
+			{
+			default:
+				break;
+			case 0: resp.h1 = segment.substr(9);
+				linecounter++;
+				break;
+			case 1: resp.content_type = segment.substr(14);
+				linecounter++;
+				break;
+			case 2: resp.content_length = segment.substr(16);
+				linecounter++;
+				break;
+			case 3: resp.connection = segment.substr(12);
+				linecounter++;
+				break;
+			case 4: // trennung von header zu message
+				linecounter++;
+				break;
+			case 5: resp.message = segment;
+				linecounter++;
+				break;
+			}
+	}
+
+	std::cout << "Erhaltende Nachricht: " << std::endl;
+	std::cout << std::endl;
+	std::cout << resp.message << std::endl;
+
+
+	/*
 	int line = 0;
+	std::cout << "Message received: " << segment << std::endl;
+
 	while (std::getline(message_stream, segment, '\n')) {
 		std::cout << "line: " << segment << std::endl;
 		switch (line)
 		{
 		default:
 			break;
-		case 0: resp.h1 = segment; 
+		case 0: resp.h1 = segment.substr(9); 
 			line++;
 			break;
-		case 1: resp.content_type = segment; 
+		case 1: resp.content_type = segment.substr(14); 
 			line++;
 			break;
-		case 2: resp.content_length = segment;
+		case 2: resp.content_length = segment.substr(16);
 			line++;
 			break;
 		case 3: //leerstelle
@@ -121,6 +149,7 @@ void Client::rec_message() {
 			break;
 		}
 	}
+	*/
 }
 
 void const Client::dialog() {
@@ -215,6 +244,18 @@ void const Client::sensor_dialog(std::string uri) {
 	}
 	*/
 }
+
+void Client::interprete_message() {
+	//expect more data
+	if (resp.connection == "keep-alive") {
+
+	}
+	//end connection
+	else {
+		std::cout << "break connection" << std::endl;
+	}
+}
+
 
 /*
 char* Client::string_to_char(std::string string_to_c) {
