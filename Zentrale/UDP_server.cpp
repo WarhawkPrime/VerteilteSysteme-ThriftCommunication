@@ -51,17 +51,20 @@ int UDP_server::create_socket() {
 	}
 }
 
-
+//TO DO:
+/*
+Erstelle für jeden einzelnen Sensortyp eine eigene Datei, in der dann diese Daten gespeichert werden.
+Dazu muss aus der Nachricht der Sensortyp ermittelt werden und dann die entsprechende file erstellt werden
+*/
 int UDP_server::read_data(char buffer[NI_MAXHOST], char host[MAX_BUFFER]) {
 
 	// Save data
 	std::ifstream historyFile;
 	std::ofstream outFile;
 	std::string lineString;
-
 	std::string filename;
-	filename = "Telemetry.txt";
 
+	filename = "Telemetry.txt";
 
 	historyFile.open(filename);
 
@@ -85,21 +88,28 @@ int UDP_server::read_data(char buffer[NI_MAXHOST], char host[MAX_BUFFER]) {
 			int counter = 0;
 
 			while (std::getline(ss, s, ';')) {
-
 				if (counter == 0) {
 					std::istringstream(s) >> unique_id;
 					break;
 				}
 				counter++;
-
 			}
-
 		}
 
 		unique_id++;
 
 		// Construct string of data to write
 		std::string data(buffer, numBytesReceived);
+		
+		//search string for whitelist
+		std::string t = "temp";
+		if (data.find(t) != std::string::npos == true) {
+			std::cout << "gefunden" << std::endl;
+		}
+		else {
+			std::cout << "not" << std::endl;
+		}
+
 		data.insert(0, ";");
 		data.insert(0, host);
 		data.insert(0, ";");
@@ -112,7 +122,6 @@ int UDP_server::read_data(char buffer[NI_MAXHOST], char host[MAX_BUFFER]) {
 			outFile << data;
 		else
 			std::cout << "Couldn't write to file!" << std::endl;
-
 		outFile.close();
 
 	}
