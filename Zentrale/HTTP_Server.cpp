@@ -5,6 +5,7 @@
 
 HTTP_Server::HTTP_Server(Telemetry_data* fh)
 {
+	this->BAD_REQUEST = false;
 	this->sockfd = 0;
 	this->port = 80;
 	this->server_addr.sin_family = AF_UNSPEC;
@@ -169,17 +170,18 @@ int HTTP_Server::handleRequest(int sockfd, std::string req) {
 		}
 		
 
-		// TO-Do: Get sensor data specified in the received http request and send data back
+		// Get requested sensor data
 		request r;
 		std::string* data = fetchRequestedData(requestParamVector, r);
-		if (data) {
-			std::string response = createResponse(data, r);
+		
+		std::string response = createResponse(data, r);
 
-			return sendResponse(sockfd, response);
-		}
-		else {
-			return -1;
-		}
+		return sendResponse(sockfd, response);
+		
+		
+			
+			
+		
 	}
 	else {
 		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
@@ -203,8 +205,12 @@ std::string* HTTP_Server::fetchRequestedData(std::vector<std::string>* params, r
 		tmp.erase(std::remove_if(tmp.begin(), tmp.end(), isspace), tmp.end());
 		int p = tmp.find(type);
 		
-		if (p == std::string::npos)
-			return NULL;
+		if (p == std::string::npos) {
+			*data = "Bad Request!";
+			BAD_REQUEST = true;
+			return data;
+		}
+			
 
 		switch (counter) {
 
@@ -261,43 +267,115 @@ std::string* HTTP_Server::fetchRequestedData(std::vector<std::string>* params, r
 				break;
 			}
 			default: {
-
-				std::cout << "Bad Request!" << std::endl;
+				*data = "Bad Request!";
+				BAD_REQUEST = true;
+				return data;
 				break;
 			}
 		}
 	}
 
 	// Retrieve file parameters and file to read from
-	std::string param1, s = r.req;
-	std::cout << s << std::endl;
+	std::string delim, param1, value1, path, host, prefix, a, s = r.req;
+	delim = ":";
+	int count = 0;
+	int pos = 0;
 
+	if (!s.empty()) {
 
+		std::cout << "s: " << s << std::endl;
 
+		while ((pos = s.find(delim)) != std::string::npos) {
 
-	return data;
+			a = s.substr(0, pos);
+
+			if (count == 0) {
+
+				prefix = a;
+				std::cout << "prefix: " << prefix << std::endl;
+				s.erase(0, pos + delim.length());
+				count++;
+			}
+			else if (count == 1) {
+
+				host = a;
+				std::cout << "host: " << host << std::endl;
+				s.erase(0, pos + delim.length());
+				count++;
+			}
+			else {
+				break;
+			}
+		}
+	
+		param1 = s;
+		std::cout << "param1: " << param1 << std::endl;
+		param1.erase(0, 2);
+		pos = param1.find("?");
+		path = param1.substr(0, pos);
+		param1.erase(0, pos + 1);
+		std::cout << "path: " << path << std::endl;
+		value1 = param1;
+		value1.erase(1, value1.length());
+		std::cout << "value1: " << value1 << std::endl;
+
+		if (std::atoi(value1.c_str()) == 0) {
+
+			//*data = fileHandle->readFile(path, 0);
+		}
+		else if (std::atoi(value1.c_str()) == 1) {
+
+			//*data = fileHandle->readFile(path, 1);
+		}
+		else {
+			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
+			std::cout << "Given Parameter is invalid!" << std::endl;
+			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
+			*data = "Bad Request!";
+			BAD_REQUEST = true;
+			return data;
+		}
+		
+		return data;
+	}
+	else {
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
+		std::cout << "Field req of struct REQUEST is empty!" << std::endl;
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
+		*data = "Bad Request!";
+		BAD_REQUEST = true;
+		return data;
+	}
 }
 
 std::string HTTP_Server::createResponse(std::string* data, request &params) {
 	
-	int content_length = 0;
+	// Variables
 	std::string response;
-	std::string respCode, s_content_length, s_conn, tmp;
-	tmp = *data;
-	respCode = "200 ok";
-	content_length = tmp.length() + 1;
-	s_content_length = std::to_string(content_length);
-	s_conn = "keep-alive";
-	
 
-	// Build response
-	response += "HTTP/1.1 " + respCode + "\r\n";
-	response += "Content-type: text/html\r\n";
-	response += "Content-length: " + s_content_length + "\r\n";
-	response += "Connection: " + s_conn + "\r\n";
-	response += "\r\n\r\n"; //End of response header
-	response += tmp;
-	
+	// Check if request was valid, if not send back error
+	if (!BAD_REQUEST) {
+
+		// Build response
+		response += "HTTP/1.1 200 ok \r\n";
+		response += "Content-type: text/html\r\n";
+		response += "Content-length: " + std::to_string((*data).length()) + "\r\n";
+		response += "Connection: " + params.connection + "\r\n";
+		response += "\r\n\r\n"; //End of response header
+		response += *data;
+
+	}
+	else {
+		
+		// Build response and reset BAD_REQUEST
+		response += "HTTP/1.1 400 Bad Request \r\n";
+		response += "Content-type: text/html\r\n";
+		response += "Content-length: " + std::to_string((*data).length()) + "\r\n";
+		response += "Connection: close \r\n";
+		response += "\r\n\r\n"; //End of response header
+		response += *data;
+		BAD_REQUEST = false;
+	}
 
 	return response;
 }

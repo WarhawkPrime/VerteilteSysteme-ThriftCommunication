@@ -142,6 +142,7 @@ class HTTP_Server
 private:
 
 	// Variables
+	bool BAD_REQUEST;
 	int sockfd, child_sockfd, port, pid;
 	struct sockaddr_in client_addr, server_addr;
 	struct addrinfo hints;
