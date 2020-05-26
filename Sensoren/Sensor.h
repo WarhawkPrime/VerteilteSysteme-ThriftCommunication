@@ -44,11 +44,14 @@ public:
 		//usleep(10000000); 
 	}	//10sec
 
+	void setID(std::string id) { this->id = id; }
+	std::string getID() { return id; }
 
 private:
 	std::string type;	//type des jeweiligen Sensors: Temperatur, Helligkeit, Wind, Luftfeuchtigkeit, Niederschlag
 	char* now;			//aktuelle Zeit und Datum
 	double data;		//Der tatsächliche Wert den der Sensor zurück gibt, soll im Vernünftigen Rahmen der jeweiligen Sensorart bleiben
+	std::string id;
 
 	UDP_Socket udpc;		//UDP socket
 };

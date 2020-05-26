@@ -63,12 +63,16 @@ char* Sensor::build_message()
 	char* message = "0";
 	std::string s_msg = "0";
 
+	//start with id
+	std::string id = this->getID();
+	id = id + ";";
+
 	//add port and type
 	std::string port = udpc.get_port();
 	port = port + ";";
 	std::string type_s = get_type();
 	type_s = type_s + ";";
-	s_msg = port + type_s;
+	s_msg = id + port + type_s;
 
 	//messwerte
 	std::string data_s = std::to_string(get_data());

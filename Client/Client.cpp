@@ -16,6 +16,12 @@ void const Client::start() {
 		//this->send_message();
 		std::cout << "dialog ended" << std::endl;
 		this->rec_message();
+		std::cout << std::endl;
+		std::cout << resp.h1 << std::endl;
+		std::cout << resp.content_type << std::endl;
+		std::cout << resp.content_length << std::endl;
+		std::cout << resp.message << std::endl;
+
 }
 
 /*Hier wird die Nachricht gebaut, erstmal nur aus dem Request-Header mit GET
@@ -40,6 +46,7 @@ CONNECTION: keep-alive\r\n
 \r\n\r\n
 */
 
+//htdocs
 void Client::build_header(std::string path, std::string parameter) {
 
 	
@@ -77,23 +84,22 @@ void const Client::send_message(char* msg) {
 HTTP/1.1 200 ok\r\n
 Content-type: text/html\r\n
 Content-length: 41\r\n
+Connection: keep-alive\r\n
 \r\n\r\n
 <html>hello world, account created</html>
 */
 
 void Client::rec_message() {
-
-	std::cout << "message received: " << std::endl;
-	std::cout << tcp.rec_msg_fr() << std::endl;
-	std::cout << "message end: " << std::endl;
-	std::cout << std::endl;
-
-	std::string received_request = tcp.rec_msg_fr();
+	std::string received_request;
+	received_request = tcp.rec_msg_fr();
+	
 	std::stringstream message_stream(received_request);
 	std::string segment;
-	
+	std::cout << received_request << std::endl;
+
 	int line = 0;
 	while (std::getline(message_stream, segment, '\n')) {
+		std::cout << "line: " << segment << std::endl;
 		switch (line)
 		{
 		default:
@@ -120,10 +126,33 @@ void Client::rec_message() {
 void const Client::dialog() {
 	int input = 0;
 	
+	std::cout << "select wanted ressource: " << std::endl;
+	std::cout << "0 :Temperature sensors" << std::endl;
+	std::cout << "1 :Wind sensors" << std::endl;
+	std::cout << "2 :Humidity sensors" << std::endl;
+	std::cout << "3 :Brightness sensors" << std::endl;
+
+	std::cin >> input;
+
+	switch (input)
+	{
+	default:  std::cout << "auswahl nicht getroffen" << std::endl;
+		this->dialog();
+		break;
+	case 0:	this->sensor_dialog("uriTemp");
+		break;
+	case 1:	this->sensor_dialog("uriWind");
+		break;
+	case 2: this->sensor_dialog("uriHum");
+		break;
+	case 3: this->sensor_dialog("uriBright");
+	}
+
+	/*
 		std::cout << "select wanted ressource: " << std::endl;
-		std::cout << "0 : current Sensor data" << std::endl;
-		std::cout << "1 : all Sensor data" << std::endl;
-		std::cout << "2 : all past Sensor data" << std::endl;
+		std::cout << "0 : current Sensor data" << std::endl;	//aktueller Stand
+		std::cout << "1 : all Sensor data" << std::endl;	//von jedem der neuste wert
+		std::cout << "2 : all past Sensor data" << std::endl;	//vergangene Daten bis zu einer Grenze
 		std::cout << "-1  : end communication with server" << std::endl;
 
 		std::cin >> input;
@@ -139,9 +168,28 @@ void const Client::dialog() {
 		case 2: this->build_header("hier könnte ihre URI stehen", "5");
 			break;
 		}
+	*/
 }
 
-void const Client::sensor_dialog() {
+void const Client::sensor_dialog(std::string uri) {
+	std::cout << "bestimmte Auswahl treffen" << std::endl;
+
+	std::cout << "0: current data" << std::endl;	//der letzte Wert des Sensortypes
+	std::cout << "1: all Sensor data" << std::endl;	//alle vergangenen Daten des ausgewählten Sensort<pes
+	std::cout << "2: past Sensor data" << std::endl;	//alle vergangenen Daten von allen Sensortypen
+
+	int input = 0;
+	std::cin >> input;
+	if(input < 0 || input > 2) {
+		input = 0;
+	}
+
+	std::string sPara = std::to_string(input);
+
+	this->build_header(uri, sPara);
+
+
+	/*
 	std::cout << std::endl;
 	std::cout << "Sensor types" << std::endl;
 	std::cout << "0 : all Temperature sensors" << std::endl;
@@ -165,6 +213,7 @@ void const Client::sensor_dialog() {
 	case 3:	std::cout << "all Brightness sensors" << std::endl;	this->build_header("hier könnte ihre URI stehen","3");
 		break;
 	}
+	*/
 }
 
 /*

@@ -99,7 +99,7 @@ public:
 	~Client();
 
 	void const dialog();
-	void const sensor_dialog();
+	void const sensor_dialog(std::string uri);
 
 	void build_header(const std::string uri,const std::string parameter);
 	//void const send_message(char* msg);

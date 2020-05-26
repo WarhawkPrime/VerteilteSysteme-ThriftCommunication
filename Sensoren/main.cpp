@@ -20,10 +20,16 @@
 	std::cout << "Waited " << elapsed.count() << " ms\n";
 	*/
 
-int main() {
+int main(int argc, char* argv[]) {
+
+	std::cout << argv[1] << std::endl;
+
+	std::string stringID = argv[1];
+	std::cout << stringID << std::endl;
 
 	Sensor_Management sm;
-	sm.user_dialog();
+	std::cout << "test0" << std::endl;
+	sm.user_dialog(stringID);
 
 	return 0;
 }
