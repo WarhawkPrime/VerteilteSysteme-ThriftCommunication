@@ -1,6 +1,8 @@
 #include "HTTP_Server.h"
 #include <string.h>
 
+
+
 HTTP_Server::HTTP_Server()
 {
 	this->sockfd = 0;
@@ -8,8 +10,13 @@ HTTP_Server::HTTP_Server()
 	this->server_addr.sin_family = AF_UNSPEC;
 	this->server_addr.sin_addr.s_addr = INADDR_ANY;
 	this->server_addr.sin_port = port;
+	this->currentSensorInfo = new std::vector<std::string>();
 }
 
+HTTP_Server::~HTTP_Server() {
+
+	delete this->currentSensorInfo;
+}
 
 int HTTP_Server::createConnection() {
 
@@ -29,29 +36,38 @@ int HTTP_Server::createConnection() {
 	const char* p = "80";
 	if ((status = getaddrinfo(NULL, p, &hints, &result)) != 0) {
 		perror("Getaddrinfo");
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		std::cout << "Error! Couldn't populate struct!" << std::endl;
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		return 0;
 	}
 
 	// Create parent socket
 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
 		perror("Socket");
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		std::cout << "Couldn't open socket!" << std::endl;
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		return -1;
 	}
 
-	memset(&this->server_addr, 0, sizeof(server_addr));
+	
 	// Bind socket
+	memset(&this->server_addr, 0, sizeof(server_addr));
 	if ((bind(sockfd, result->ai_addr, result->ai_addrlen)) < 0) {
 		perror("Bind");
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		std::cout << "Couldn't bind socket!" << std::endl;
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		return -1;
 	}
 	
 	// Listen for all incoming connections
 	if ((listen(sockfd, 10)) < 0) {
 		perror("Listen");
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		std::cout << "Couldn't listen to socket!" << std::endl;
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		return -1;
 	}
 		// Accept all incoming connections
@@ -61,18 +77,24 @@ int HTTP_Server::createConnection() {
 			this->client_addr_length = sizeof(client_addr);
 			if ((child_sockfd = accept(sockfd, (struct sockaddr*) &client_addr, &client_addr_length)) < 0) {
 				perror("Accept");
+				std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 				std::cout << "Connection attempt failed!" << std::endl;
+				std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 			}
 
 			// Fork a child process to handle new connection
 			pid = fork();
 			if (pid < 0) {
+				std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 				std::cout << "Failed to create child process!" << std::endl;
+				std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 			}
 
 			// Child
 			if (pid == 0) {
+				std::cout << ">------------------------------------------------------------------------<" << std::endl;
 				std::cout << "Process started" << std::endl;
+				std::cout << ">------------------------------------------------------------------------<" << std::endl;
 				close(sockfd);
 				handleConnection(child_sockfd);
 				exit(0);
@@ -87,67 +109,35 @@ int HTTP_Server::createConnection() {
 // Receive HTTP GET requests
 int HTTP_Server::handleConnection(int sockfd) {
 	
-	const int max_req_length = 65536;
 	int num_bytes_read = 0;
-	int num_bytes_written = 0;
 	std::string request;
 
 
 		memset(&this->readBuffer, 0, MAX_BUFFER);
 		if ((num_bytes_read = recv(sockfd, readBuffer, MAX_BUFFER, NULL)) < 0) {
 			perror("Read");
+			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 			std::cout << "Couldn't read from socket!" << std::endl;
+			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 			return -1;
 		}
 		else {
-
-			std::cout << "Received Bytes: " << num_bytes_read << std::endl;
+			std::cout << ">------------------------------------------------------------------------<" << std::endl;
+			std::cout << "Received a request of " << num_bytes_read << " Bytes! " << std::endl;
+			std::cout << ">------------------------------------------------------------------------<" << std::endl;
 			request = readBuffer;
+			return handleRequest(sockfd, request);
 		}
 
-		handleRequest(sockfd, request);
-
-
-	/*
-	while ((num_bytes_read = recv(sockfd, readBuffer, MAX_BUFFER, NULL)) != 0) {
-
-		request.append(readBuffer);
-	}
-	*/
-
-	/*
-	if ((num_bytes_read = recv(sockfd, readBuffer, MAX_BUFFER, NULL)) < 0) {
-		perror("Read");
-		std::cout << "Couldn't read from socket!" << std::endl;
 		return -1;
-	}
-	if (!num_bytes_read == 0) {
-
-		std::cout << "Received Bytes: " << num_bytes_read << std::endl;
-		// Print received message
-		//readBuffer[num_bytes_read] = '\0';
-		std::cout << readBuffer << std::endl;
-	}
-	else {
-		std::cout << "num_bytes_read was 0" << std::endl;
-	}
-
-	if ((num_bytes_written = send(sockfd, response, sizeof(response), NULL)) < 0) {
-		perror("write");
-		std::cout << "Failed to respond!" << std::endl;
-		return -1;
-	}
-	*/
 }
 
-// Receives incoming request and fetches data
+// Receives incoming request and fetches data, drops connection if given connection: close
 int HTTP_Server::handleRequest(int sockfd, std::string req) {
 
 	// Variables to store requested information
-	std::string lineString, requestedData, requestSave;
-	long sensorId;
-	requestedData = "Server Test response";
-	
+	std::string requestSave;
+	std::vector<std::string>* requestParamVector = new std::vector<std::string>();
 
 	// String manipulation variables
 	std::string s, delim = "\r\n";
@@ -160,68 +150,176 @@ int HTTP_Server::handleRequest(int sockfd, std::string req) {
 
 			s = req.substr(0, pos);
 			if (s.empty()) {
-				std::cout << "s is empty. s: " << s << std::endl;
+
 				counter++;
-				std::cout << "counter/c after increment: " << counter << std::endl;
 			}
 			else {
 
-				std::cout << "Teilstring: " << s << std::endl;
+				requestParamVector->push_back(s);
 			}
 			
 			if (counter == 2) {
-				std::cout << "req after end of header: " << req << std::endl;
+
 				break;
 			}
 			
 			req.erase(0, pos + delim.length());
 		}
-		std::cout << "Received Request: " << requestSave << std::endl;
-		std::cout << "Body of received request: " << req << std::endl;
+		
+
+		// TO-Do: Get sensor data specified in the received http request and send data back
+		request r;
+		std::string* data = fetchRequestedData(requestParamVector, r);
+		if (data) {
+			std::string response = createResponse(data, r);
+
+			return sendResponse(sockfd, response);
+		}
+		else {
+			return -1;
+		}
 	}
 	else {
-		std::cout << "request was empty" << std::endl;
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
+		std::cout << "Request was empty!" << std::endl;
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
+		return -1;
 	}
-
-	// TO-Do: Get sensor data from Telemetry.txt file specified in the received http request and send data back
-	sendResponse(sockfd, requestedData);
-
-	return 0;
 }
 
-// Sends the HTTP response header with information
-int HTTP_Server::sendResponse(int sockfd, std::string data) {
-	
-	int num_bytes_written = 0;
-	std::string response, respCode;
-	respCode = "200 ok";
-	std::string s_content_length;
-	int content_length = 0;
-	//HTTP/1.1 200 ok\r\n
-	//Content-type: text/html\r\n
-	//Content-length: 41\r\n
-	//\r\n\r\n
-	//Sensor data goes here -> data (aka. body)
-	content_length = data.length() + 1;
-	s_content_length = std::to_string(content_length);
+std::string* HTTP_Server::fetchRequestedData(std::vector<std::string>* params, request& r) {
 
+	std::string* data = new std::string();
+	std::string type = ":", get = "GET";
+	REQUEST e_r;
+	// Set struct members
+	int counter = 0;
+	for (int i = 0; i < params->size(); i++) {
+
+		std::string tmp = params->at(i);
+		tmp.erase(std::remove_if(tmp.begin(), tmp.end(), isspace), tmp.end());
+		int p = tmp.find(type);
+		
+		if (p == std::string::npos)
+			return NULL;
+
+		switch (counter) {
+
+			case REQ: {
+				int pos = tmp.find(get);
+				if (pos != std::string::npos) {
+
+					tmp = tmp.substr(pos + get.size(), std::string::npos);
+					r.req = tmp;
+					counter++;
+				}
+				break;
+			}
+			case HOST: {
+				
+				tmp = tmp.substr(p + type.size(), std::string::npos);
+				r.host = tmp;
+				counter++;
+				break;
+			}
+			case CACHE: {
+
+				tmp = tmp.substr(p + type.size(), std::string::npos);
+				r.cache = tmp;
+				counter++;
+				break;
+			}
+			case DNT: {
+
+				tmp = tmp.substr(p + type.size(), std::string::npos);
+				r.dnt = tmp;
+				counter++;
+				break;
+			}
+			case ACCEPT: {
+
+				tmp = tmp.substr(p + type.size(), std::string::npos);
+				r.accept = tmp;
+				counter++;
+				break;
+			}
+			case ACCEPT_CHARSET: {
+
+				tmp = tmp.substr(p + type.size(), std::string::npos);
+				r.accept_charset = tmp;
+				counter++;
+				break;
+			}
+			case CONNECTION: {
+
+				tmp = tmp.substr(p + type.size(), std::string::npos);
+				r.connection = tmp;
+				counter++;
+				break;
+			}
+			default: {
+
+				std::cout << "Bad Request!" << std::endl;
+				break;
+			}
+		}
+	}
+
+
+	return data;
+}
+
+std::string HTTP_Server::createResponse(std::string* data, request &params) {
+	
+	int content_length = 0;
+	std::string response;
+	std::string respCode, s_content_length, s_conn, tmp;
+	tmp = *data;
+	respCode = "200 ok";
+	content_length = tmp.length() + 1;
+	s_content_length = std::to_string(content_length);
+	s_conn = "keep-alive";
+	
+
+	// Build response
 	response += "HTTP/1.1 " + respCode + "\r\n";
 	response += "Content-type: text/html\r\n";
 	response += "Content-length: " + s_content_length + "\r\n";
+	response += "Connection: " + s_conn + "\r\n";
 	response += "\r\n\r\n"; //End of response header
-	response += data;
+	response += tmp;
+	
 
+	return response;
+}
+
+
+
+// Sends the HTTP response header with information
+//HTTP/1.1 200 ok\r\n
+//Content-type: text/html\r\n
+//Content-length: 41\r\n
+//Connection: keep-alive
+//\r\n\r\n
+//Sensor data goes here -> data (aka. body)
+int HTTP_Server::sendResponse(int sockfd, std::string response) {
+	
+	int num_bytes_written = 0;
+	
 	// Send response
 	if ((num_bytes_written = send(sockfd, response.c_str(), response.length(), NULL)) < 0) {
+
 		perror("write");
 		std::cout << "Failed to respond!" << std::endl;
 		return -1;
 	}
 	else {
 
+		std::cout << ">------------------------------------------------------------------------<" << std::endl;
 		std::cout << "Sent " << num_bytes_written << " bytes to client" << std::endl;
-		std::cout << "Successfully sent following data: " << response.c_str() << std::endl;
+		std::cout << ">------------------------------------------------------------------------<" << std::endl;
+		std::cout << "Successfully sent following data: " << std::endl << response.c_str() << std::endl;
+		std::cout << ">------------------------------------------------------------------------<" << std::endl;
+		return 0;
 	}
-
-	return 0;
 }

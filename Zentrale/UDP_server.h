@@ -26,9 +26,6 @@
 #define R_RETURN 40
 
 // Class that contains all server functionality to send and receive data from the sensors
-
-//Dies ist ein kleiner Test
-
 class UDP_server {
 
 	// Variables
@@ -43,12 +40,8 @@ private:
 	Telemetry_data *data;
 	char s[INET6_ADDRSTRLEN];
 	char* srv_name;
-	
 	long unique_id;
 	bool rec_data;
-
-
-
 public:
 	// Server functions
 	UDP_server();

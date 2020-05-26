@@ -109,27 +109,52 @@ TCP Socket und Client erstellen, dann einfach mit Strings oder ähnlichem die HTT
 #include <errno.h>
 #include <stdio.h>
 #include <netdb.h>
+#include <vector>
+#include <algorithm>
 
 #define MAX_BUFFER 1024
+
+// Request struct to store information about a request
+struct request {
+
+	std::string req;
+	std::string host;
+	std::string cache;
+	std::string dnt;
+	std::string accept;
+	std::string accept_charset;
+	std::string connection;
+};
+
+enum REQUEST{
+	REQ,
+	HOST,
+	CACHE,
+	DNT,
+	ACCEPT,
+	ACCEPT_CHARSET,
+	CONNECTION
+};
 
 class HTTP_Server
 {
 private:
 
 	// Variables
-	int sockfd, child_sockfd; 
-	int port; // Specifies receiving port number
-	int pid;
+	int sockfd, child_sockfd, port, pid;
 	struct sockaddr_in client_addr, server_addr;
 	struct addrinfo hints;
 	socklen_t client_addr_length;
 	char readBuffer[MAX_BUFFER];
+	std::vector<std::string>* currentSensorInfo;
 	int handleConnection(int newSockfd); // Handles each connection and processes requests
-	int sendResponse(int sockfd, std::string data);
+	int sendResponse(int sockfd, std::string resp);
 	int handleRequest(int sockfd, std::string req);
-
+	std::string* fetchRequestedData(std::vector<std::string>* requestParameters, request &r);
+	std::string createResponse(std::string* requestedData, request &requestParameters);
 public:
 	HTTP_Server();
+	~HTTP_Server();
 	int createConnection(); // Generates socket and child processes, listens for incoming connections
 	
 
