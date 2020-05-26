@@ -21,7 +21,7 @@ void const Client::start() {
 		std::cout << resp.content_type << std::endl;
 		std::cout << resp.content_length << std::endl;
 		std::cout << resp.message << std::endl;
-
+		this->interprete_message();
 }
 
 /*Hier wird die Nachricht gebaut, erstmal nur aus dem Request-Header mit GET
@@ -98,19 +98,21 @@ void Client::rec_message() {
 	std::cout << received_request << std::endl;
 
 	int line = 0;
+	std::cout << "Message received: " << segment << std::endl;
+
 	while (std::getline(message_stream, segment, '\n')) {
 		std::cout << "line: " << segment << std::endl;
 		switch (line)
 		{
 		default:
 			break;
-		case 0: resp.h1 = segment; 
+		case 0: resp.h1 = segment.substr(9); 
 			line++;
 			break;
-		case 1: resp.content_type = segment; 
+		case 1: resp.content_type = segment.substr(14); 
 			line++;
 			break;
-		case 2: resp.content_length = segment;
+		case 2: resp.content_length = segment.substr(16);
 			line++;
 			break;
 		case 3: //leerstelle
@@ -215,6 +217,11 @@ void const Client::sensor_dialog(std::string uri) {
 	}
 	*/
 }
+
+void Client::interprete_message() {
+	//die strings des structs weiter aufteilen
+}
+
 
 /*
 char* Client::string_to_char(std::string string_to_c) {

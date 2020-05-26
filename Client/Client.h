@@ -88,6 +88,7 @@ struct response {
 	std::string h1;
 	std::string content_type;
 	std::string content_length;
+	std::string connection;
 	std::string message;
 };
 
@@ -108,6 +109,8 @@ public:
 	//char* string_to_char(std::string string);
 
 	void const start();
+
+	void interprete_message();
 
 private:
 	TCP_Socket tcp;
