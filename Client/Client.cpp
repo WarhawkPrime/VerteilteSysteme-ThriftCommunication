@@ -46,9 +46,8 @@ CONNECTION: keep-alive\r\n
 
 //htdocs
 void Client::build_header(std::string path, std::string parameter) {
-
 	
-	std::string uri = "http://" + tcp.get_server_adress() + ":" + tcp.get_CPORT() + path + "?" + parameter;
+	std::string uri = "http://" + tcp.get_server_adress() + ":" + tcp.get_CPORT() + path;
 	std::string message = "GET " + uri + "?" + parameter + "\r\n";
 	message += "HOST: " + tcp.get_server_adress() + "\r\n";
 	message += "CACHE: max-age = 10\r\n";
@@ -58,10 +57,7 @@ void Client::build_header(std::string path, std::string parameter) {
 	message += "CONNECTION: keep-alive\r\n";
 	message += "\r\n\r\n";
 	
-	//char* msg = this->string_to_char(message);	//core dump
 	const char* msg = message.c_str();
-
-	//char* msg = "hello from the other side\0";
 
 	tcp.send_msg_to(msg);
 }
@@ -168,13 +164,13 @@ void const Client::dialog() {
 	default:  std::cout << "auswahl nicht getroffen" << std::endl;
 		this->dialog();
 		break;
-	case 0:	this->sensor_dialog("uriTemp");
+	case 0:	this->sensor_dialog("/data/uriTemp");
 		break;
-	case 1:	this->sensor_dialog("uriWind");
+	case 1:	this->sensor_dialog("/data/uriWind");
 		break;
-	case 2: this->sensor_dialog("uriHum");
+	case 2: this->sensor_dialog("/data/uriHum");
 		break;
-	case 3: this->sensor_dialog("uriBright");
+	case 3: this->sensor_dialog("/data/uriBright");
 	}
 
 	/*
@@ -213,7 +209,10 @@ void const Client::sensor_dialog(std::string uri) {
 		input = 0;
 	}
 
-	std::string sPara = std::to_string(input);
+	std::string a = "=";
+	std::string sPara = "param1";
+	sPara += a + std::to_string(input);
+		//+std::to_string(input);
 
 	this->build_header(uri, sPara);
 
