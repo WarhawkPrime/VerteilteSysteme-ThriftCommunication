@@ -175,11 +175,6 @@ int HTTP_Server::handleRequest(int sockfd, std::string req) {
 		std::string response = createResponse(data, r);
 
 		return sendResponse(sockfd, response);
-		
-		
-			
-			
-		
 	}
 	else {
 		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
@@ -319,11 +314,11 @@ std::string* HTTP_Server::fetchRequestedData(std::vector<std::string>* params, r
 
 		if (std::atoi(value1.c_str()) == 0) {
 
-			//*data = fileHandle->readFile(path, 0);
+			*data = fileHandle->readLineFromFile(path, 0, false);
 		}
 		else if (std::atoi(value1.c_str()) == 1) {
 
-			//*data = fileHandle->readFile(path, 1);
+			*data = fileHandle->readLineFromFile(path, 0, true);
 		}
 		else {
 			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;

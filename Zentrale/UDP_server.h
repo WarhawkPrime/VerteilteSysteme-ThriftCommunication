@@ -37,7 +37,7 @@ private:
 	struct sockaddr_storage sensors, * from; // Struct for IP addresses and ports of sensors
 	socklen_t address_length; // address length required for recvfrom()
 	int destfd; // Filedescriptor to save the received data
-	FileManagement *data;
+	FileManagement *fileHandle;
 	char s[INET6_ADDRSTRLEN];
 	char* srv_name;
 	long unique_id;
