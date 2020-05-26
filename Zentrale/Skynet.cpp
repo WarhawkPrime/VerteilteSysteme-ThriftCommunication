@@ -2,9 +2,9 @@
 
 Skynet::Skynet() {
 
-	this->fileHandle = new Telemetry_data();
+	this->fileHandle = new FileManagement();
 	this->http = new HTTP_Server(this->fileHandle);
-	this->udp = new UDP_server();
+	this->udp = new UDP_server(this->fileHandle);
 	// TO-DO: this->udp = new UDP_Server(this->fileHandle);
 }
 

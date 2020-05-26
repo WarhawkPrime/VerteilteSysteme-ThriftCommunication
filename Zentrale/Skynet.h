@@ -17,6 +17,6 @@ public:
 private:
 	UDP_server *udp;
 	HTTP_Server *http;
-	Telemetry_data* fileHandle;
+	FileManagement* fileHandle;
 	
 };

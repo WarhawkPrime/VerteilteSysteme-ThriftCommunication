@@ -3,7 +3,7 @@
 
 
 
-HTTP_Server::HTTP_Server(Telemetry_data* fh)
+HTTP_Server::HTTP_Server(FileManagement* fh)
 {
 	this->BAD_REQUEST = false;
 	this->sockfd = 0;
@@ -11,14 +11,12 @@ HTTP_Server::HTTP_Server(Telemetry_data* fh)
 	this->server_addr.sin_family = AF_UNSPEC;
 	this->server_addr.sin_addr.s_addr = INADDR_ANY;
 	this->server_addr.sin_port = port;
-	this->currentSensorInfo = new std::vector<std::string>();
 	this->fileHandle = fh;
 
 }
 
 HTTP_Server::~HTTP_Server() {
 
-	delete this->currentSensorInfo;
 }
 
 int HTTP_Server::createConnection() {
@@ -315,8 +313,8 @@ std::string* HTTP_Server::fetchRequestedData(std::vector<std::string>* params, r
 		path = param1.substr(0, pos);
 		param1.erase(0, pos + 1);
 		std::cout << "path: " << path << std::endl;
-		value1 = param1;
-		value1.erase(1, value1.length());
+		pos = param1.find("=");
+		value1 = param1.substr(pos + 1, std::string::npos);
 		std::cout << "value1: " << value1 << std::endl;
 
 		if (std::atoi(value1.c_str()) == 0) {

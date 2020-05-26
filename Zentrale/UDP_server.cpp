@@ -1,12 +1,12 @@
 #include "UDP_server.h"
 
 // Constructor
-UDP_server::UDP_server()
+UDP_server::UDP_server(FileManagement* fh)
 {
 	this->sockfd = 0;
 	this->status = 0;
 	this->srv_name = "localhost";
-	this->data = new Telemetry_data();
+	this->data = fh;
 	this->unique_id = 0; // To-Do: Read last written id and continue from there
 	this->rec_data = false;
 }
@@ -15,7 +15,6 @@ UDP_server::UDP_server()
 // Destructor
 UDP_server::~UDP_server() {
 
-	delete this->data;
 }
 
 // Return the correct ip address

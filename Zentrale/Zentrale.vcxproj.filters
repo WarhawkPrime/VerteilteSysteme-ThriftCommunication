@@ -2,9 +2,6 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Telemetry_data.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="UDP_server.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -14,11 +11,11 @@
     <ClCompile Include="HTTP_Server.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="FileManagement.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Telemetry_data.h">
-      <Filter>header</Filter>
-    </ClInclude>
     <ClInclude Include="UDP_server.h">
       <Filter>header</Filter>
     </ClInclude>
@@ -26,6 +23,9 @@
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="HTTP_Server.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="FileManagement.h">
       <Filter>header</Filter>
     </ClInclude>
   </ItemGroup>
