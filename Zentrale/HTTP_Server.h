@@ -111,6 +111,7 @@ TCP Socket und Client erstellen, dann einfach mit Strings oder ähnlichem die HTT
 #include <netdb.h>
 #include <vector>
 #include <algorithm>
+#include "Telemetry_data.h"
 
 #define MAX_BUFFER 1024
 
@@ -147,13 +148,14 @@ private:
 	socklen_t client_addr_length;
 	char readBuffer[MAX_BUFFER];
 	std::vector<std::string>* currentSensorInfo;
+	Telemetry_data* fileHandle;
 	int handleConnection(int newSockfd); // Handles each connection and processes requests
 	int sendResponse(int sockfd, std::string resp);
 	int handleRequest(int sockfd, std::string req);
 	std::string* fetchRequestedData(std::vector<std::string>* requestParameters, request &r);
 	std::string createResponse(std::string* requestedData, request &requestParameters);
 public:
-	HTTP_Server();
+	HTTP_Server(Telemetry_data* fh);
 	~HTTP_Server();
 	int createConnection(); // Generates socket and child processes, listens for incoming connections
 	

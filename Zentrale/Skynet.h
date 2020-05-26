@@ -8,7 +8,7 @@
 class Skynet
 {
 public:
-	Skynet() {}
+	Skynet();
 	~Skynet();
 	//TO DO => evtl mit template ersetzen oder die beiden Sockets von einer Generalisierung erben lassen
 	void start_skynet_with_udp();
@@ -17,5 +17,6 @@ public:
 private:
 	UDP_server *udp;
 	HTTP_Server *http;
+	Telemetry_data* fileHandle;
 	
 };

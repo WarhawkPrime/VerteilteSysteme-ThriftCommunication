@@ -3,7 +3,7 @@
 
 
 
-HTTP_Server::HTTP_Server()
+HTTP_Server::HTTP_Server(Telemetry_data* fh)
 {
 	this->sockfd = 0;
 	this->port = 80;
@@ -11,6 +11,8 @@ HTTP_Server::HTTP_Server()
 	this->server_addr.sin_addr.s_addr = INADDR_ANY;
 	this->server_addr.sin_port = port;
 	this->currentSensorInfo = new std::vector<std::string>();
+	this->fileHandle = fh;
+
 }
 
 HTTP_Server::~HTTP_Server() {
@@ -190,9 +192,10 @@ int HTTP_Server::handleRequest(int sockfd, std::string req) {
 std::string* HTTP_Server::fetchRequestedData(std::vector<std::string>* params, request& r) {
 
 	std::string* data = new std::string();
-	std::string type = ":", get = "GET";
 	REQUEST e_r;
+
 	// Set struct members
+	std::string type = ":", get = "GET";
 	int counter = 0;
 	for (int i = 0; i < params->size(); i++) {
 
@@ -264,6 +267,12 @@ std::string* HTTP_Server::fetchRequestedData(std::vector<std::string>* params, r
 			}
 		}
 	}
+
+	// Retrieve file parameters and file to read from
+	std::string param1, s = r.req;
+	std::cout << s << std::endl;
+
+
 
 
 	return data;
