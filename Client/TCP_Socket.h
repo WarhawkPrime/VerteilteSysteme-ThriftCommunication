@@ -37,7 +37,6 @@ public:
 	TCP_Socket();
 	~TCP_Socket();
 
-
 	struct sockaddr_in servaddr;
 	struct sockaddr_in to;
 
