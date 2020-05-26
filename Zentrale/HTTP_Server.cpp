@@ -270,6 +270,7 @@ std::string* HTTP_Server::fetchRequestedData(std::vector<std::string>* params, r
 
 	// Retrieve file parameters and file to read from
 	std::string delim, param1, value1, path, host, prefix, a, s = r.req;
+	std::vector<std::string> fileLines;
 	delim = ":";
 	int count = 0;
 	int pos = 0;
@@ -319,6 +320,15 @@ std::string* HTTP_Server::fetchRequestedData(std::vector<std::string>* params, r
 		else if (std::atoi(value1.c_str()) == 1) {
 
 			*data = fileHandle->readLineFromFile(path, 0, true);
+		}
+		else if (std::atoi(value1.c_str()) == 2) {
+
+			fileLines = fileHandle->readFile(path);
+
+			for (int i = 0; i < fileLines.size(); i++)
+			{
+				*data += fileLines.at(i);
+			}
 		}
 		else {
 			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;

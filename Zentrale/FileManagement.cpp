@@ -22,7 +22,7 @@ FileManagement::FileManagement() {
 			if (!file.rdstate()) {
 				std::cout << "Failed to open file. Error state: " << file.rdstate() << std::endl;
 				filenames->erase(filenames->begin() + i);
-				this->init_success = false;
+				//this->init_success = false;
 				return;
 			}
 		}
@@ -60,6 +60,7 @@ std::string FileManagement::readLineFromFile(const std::string filename, int lin
 			lines.push_back(lineString);
 		}
 
+		InFile.close();
 		lineCount = (lines.size() - 1);
 
 		line < 0 ? line = 0 : (line > lineCount ? line = lineCount : line = line);
@@ -88,11 +89,43 @@ std::vector<std::string> FileManagement::readFile(const std::string filename) {
 
 			lines.push_back(lineString);
 		}
-	
+		InFile.close();
 		return lines;
 	}
 	else {
 		std::cout << "Couldn't open " << filename << "!" << std::endl;
+	}
+}
+
+int FileManagement::getNextLineNumber(const std::string filename) {
+
+	InFile.open(filename);
+	long lineId = 0;
+	long tmp = 0;
+	std::string lineString;
+
+	if (InFile.is_open()) {
+
+		while (std::getline(InFile, lineString, '\n')) {
+
+			std::stringstream ss(lineString);
+			std::string s;
+			int counter = 0;
+
+			while (std::getline(ss, s, ';')) {
+				if (counter == 0) {
+					std::istringstream(s) >> tmp;
+					if (tmp >= lineId) {
+						lineId = tmp;
+					}
+					break;
+				}
+				counter++;
+			}
+		}
+
+		lineId++;
+		return lineId;
 	}
 }
 
@@ -104,6 +137,7 @@ bool FileManagement::writeToFile(const std::string filename, const std::string d
 	if (OutFile.is_open()) {
 
 		OutFile << data;
+		OutFile.close();
 		return true;
 	}
 	else {

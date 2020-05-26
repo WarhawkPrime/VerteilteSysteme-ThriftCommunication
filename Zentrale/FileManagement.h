@@ -5,6 +5,7 @@
 #include <fstream>
 #include <vector>
 #include <streambuf>
+#include <sstream>
 
 class FileManagement
 {
@@ -38,6 +39,7 @@ public:
 	std::string readLineFromFile(const std::string filename, int line); // Returns line at the given line number, starting at beginning of file
 	std::string readLineFromFile(const std::string filename, int line, bool inverted); // Overload of readLineFromFile(), allows for reverse reading from file
 	std::vector<std::string> readFile(const std::string filename); // Returns entire file content as vector
+	int getNextLineNumber(const std::string filename);
 	bool writeToFile(const std::string filename, const std::string data); // Writes to end of given file
 };
 

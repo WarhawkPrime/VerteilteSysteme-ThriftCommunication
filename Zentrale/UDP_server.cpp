@@ -6,8 +6,8 @@ UDP_server::UDP_server(FileManagement* fh)
 	this->sockfd = 0;
 	this->status = 0;
 	this->srv_name = "localhost";
-	this->data = fh;
-	this->unique_id = 0; // To-Do: Read last written id and continue from there
+	this->fileHandle = fh;
+	this->unique_id = 0; 
 	this->rec_data = false;
 }
 
@@ -63,39 +63,9 @@ int UDP_server::read_data(char buffer[NI_MAXHOST], char host[MAX_BUFFER]) {
 	std::string lineString;
 	std::string filename;
 
-	filename = "Telemetry.txt";
+	
+	unique_id = fileHandle->getNextLineNumber(filename);
 
-	historyFile.open(filename);
-
-	if (!historyFile.is_open()) {
-		std::ofstream file(filename, std::ios::out);
-		if(file.is_open())
-			std::cout << "Created File" << std::endl;
-		else
-			std::cout << "Couldn't open file" << std::endl;
-		file.close();
-	}
-	historyFile.close();
-
-	historyFile.open(filename);
-	if (historyFile.is_open()) {
-		std::cout << "Opened File" << std::endl;
-		while (std::getline(historyFile, lineString, '\n')) {
-
-			std::stringstream ss(lineString);
-			std::string s;
-			int counter = 0;
-
-			while (std::getline(ss, s, ';')) {
-				if (counter == 0) {
-					std::istringstream(s) >> unique_id;
-					break;
-				}
-				counter++;
-			}
-		}
-
-		unique_id++;
 
 		// Construct string of data to write
 		std::string data(buffer, numBytesReceived);
