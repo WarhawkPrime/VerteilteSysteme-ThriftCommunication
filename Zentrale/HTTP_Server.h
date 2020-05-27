@@ -101,6 +101,7 @@ TCP Socket und Client erstellen, dann einfach mit Strings oder ähnlichem die HTT
 
 #include <iostream>
 #include <string>
+#include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -113,7 +114,7 @@ TCP Socket und Client erstellen, dann einfach mit Strings oder ähnlichem die HTT
 #include <algorithm>
 #include "FileManagement.h"
 
-#define MAX_BUFFER 1024
+
 
 // Request struct to store information about a request
 struct request {
@@ -152,8 +153,8 @@ private:
 	int handleConnection(int newSockfd); // Handles each connection and processes requests
 	int sendResponse(int sockfd, std::string resp);
 	int handleRequest(int sockfd, std::string req);
-	std::string* fetchRequestedData(std::vector<std::string>* requestParameters, request &r);
-	std::string createResponse(std::string* requestedData, request &requestParameters);
+	std::string fetchRequestedData(std::vector<std::string> requestParameters, request &r);
+	std::string createResponse(std::string requestedData, request &requestParameters);
 public:
 	HTTP_Server(FileManagement* fh);
 	~HTTP_Server();

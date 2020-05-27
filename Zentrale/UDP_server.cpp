@@ -6,9 +6,7 @@ UDP_server::UDP_server(FileManagement* fh)
 	this->sockfd = 0;
 	this->status = 0;
 	this->srv_name = "localhost";
-	this->fileHandle = fh;
-	this->unique_id = 0; 
-	this->rec_data = false;
+	this->fileHandle = fh; 
 }
 
 
@@ -49,57 +47,6 @@ int UDP_server::create_socket() {
 		close(sockfd);
 	}
 }
-
-//TO DO:
-/*
-Erstelle für jeden einzelnen Sensortyp eine eigene Datei, in der dann diese Daten gespeichert werden.
-Dazu muss aus der Nachricht der Sensortyp ermittelt werden und dann die entsprechende file erstellt werden
-*/
-int UDP_server::read_data(char buffer[NI_MAXHOST], char host[MAX_BUFFER]) {
-
-	// Save data
-	std::ifstream historyFile;
-	std::ofstream outFile;
-	std::string lineString;
-	std::string filename;
-
-	
-	unique_id = fileHandle->getNextLineNumber(filename);
-
-
-		// Construct string of data to write
-		std::string data(buffer, numBytesReceived);
-		
-		//search string for whitelist
-		std::string t = "temp";
-		if (data.find(t) != std::string::npos == true) {
-			std::cout << "gefunden" << std::endl;
-		}
-		else {
-			std::cout << "not" << std::endl;
-		}
-
-		data.insert(0, ";");
-		data.insert(0, host);
-		data.insert(0, ";");
-		data.insert(0, std::to_string(unique_id));
-		std::cout << "Received data: " << data << std::endl;
-		historyFile.close();
-
-		outFile.open(filename, std::ios::out | std::ios::app);
-		if (outFile.is_open())
-			outFile << data;
-		else
-			std::cout << "Couldn't write to file!" << std::endl;
-		outFile.close();
-
-	}
-	else {
-		std::cout << "Error! Couldn't open file." << std::endl;
-	}
-}
-
-
 
 
 // Handle all incoming telemetry
@@ -150,8 +97,14 @@ int UDP_server::processRequests()
 				else {
 					// Terminate received string
 					buffer[numBytesReceived] = '\0';
-
-					this->read_data(buffer, host);
+					std::string* result = fileHandle->writeBufferToFile(buffer, host, numBytesReceived);
+					if (!result) {
+						std::cout << "Failed to write to file!" << std::endl;
+						return R_FAIL;
+					}
+					else {
+						std::cout << "Written data! " << std::endl;
+					}
 				}
 
 			}
@@ -181,9 +134,7 @@ int UDP_server::initialize()
 	if ((status = getaddrinfo(NULL, PORT, &hints, &results)) != 0) {
 
 		std::cout << "Error! Couldn't populate struct!" << std::endl;
-		// error.log();
 		return R_FAIL;
-
 	}
 
 	processRequests();

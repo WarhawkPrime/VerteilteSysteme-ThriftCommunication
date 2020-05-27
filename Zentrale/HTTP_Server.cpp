@@ -138,11 +138,13 @@ int HTTP_Server::handleRequest(int sockfd, std::string req) {
 
 	// Variables to store requested information
 	std::string requestSave;
-	std::vector<std::string>* requestParamVector = new std::vector<std::string>();
+	std::vector<std::string> requestParamVector;
 
 	// String manipulation variables
 	std::string s, delim = "\r\n";
 	int pos, counter = 0;
+
+	std::cout << "req: " << req << std::endl;
 
 	if (!req.empty()) {
 		// Read all values between \r\n delimiters
@@ -156,7 +158,7 @@ int HTTP_Server::handleRequest(int sockfd, std::string req) {
 			}
 			else {
 
-				requestParamVector->push_back(s);
+				requestParamVector.push_back(s);
 			}
 			
 			if (counter == 2) {
@@ -170,7 +172,7 @@ int HTTP_Server::handleRequest(int sockfd, std::string req) {
 
 		// Get requested sensor data
 		request r;
-		std::string* data = fetchRequestedData(requestParamVector, r);
+		std::string data = fetchRequestedData(requestParamVector, r);
 		
 		std::string response = createResponse(data, r);
 
@@ -184,22 +186,22 @@ int HTTP_Server::handleRequest(int sockfd, std::string req) {
 	}
 }
 
-std::string* HTTP_Server::fetchRequestedData(std::vector<std::string>* params, request& r) {
-
-	std::string* data = new std::string();
+std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, request& r) {
+	
+	std::string data;
 	REQUEST e_r;
 
 	// Set struct members
 	std::string type = ":", get = "GET";
 	int counter = 0;
-	for (int i = 0; i < params->size(); i++) {
+	for (int i = 0; i < params.size(); i++) {
 
-		std::string tmp = params->at(i);
+		std::string tmp = params.at(i);
 		tmp.erase(std::remove_if(tmp.begin(), tmp.end(), isspace), tmp.end());
 		int p = tmp.find(type);
 		
 		if (p == std::string::npos) {
-			*data = "Bad Request!";
+			data = "Bad Request!";
 			BAD_REQUEST = true;
 			return data;
 		}
@@ -260,7 +262,7 @@ std::string* HTTP_Server::fetchRequestedData(std::vector<std::string>* params, r
 				break;
 			}
 			default: {
-				*data = "Bad Request!";
+				data = "Bad Request!";
 				BAD_REQUEST = true;
 				return data;
 				break;
@@ -313,28 +315,31 @@ std::string* HTTP_Server::fetchRequestedData(std::vector<std::string>* params, r
 		value1 = param1.substr(pos + 1, std::string::npos);
 		std::cout << "value1: " << value1 << std::endl;
 
+		// Aktuellster Wert des Sensors
 		if (std::atoi(value1.c_str()) == 0) {
-
-			*data = fileHandle->readLineFromFile(path, 0, false);
+			
+			data = fileHandle->readLineFromFile(path, 0, true);
 		}
+		// Alle Daten
 		else if (std::atoi(value1.c_str()) == 1) {
-
-			*data = fileHandle->readLineFromFile(path, 0, true);
-		}
-		else if (std::atoi(value1.c_str()) == 2) {
 
 			fileLines = fileHandle->readFile(path);
 
 			for (int i = 0; i < fileLines.size(); i++)
 			{
-				*data += fileLines.at(i);
+				data += fileLines.at(i);
 			}
+		}
+		// Stub: Returns 1. value of given filename
+		else if (std::atoi(value1.c_str()) == 2) {
+
+			data = fileHandle->readLineFromFile(path, 0, false);
 		}
 		else {
 			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 			std::cout << "Given Parameter is invalid!" << std::endl;
 			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
-			*data = "Bad Request!";
+			data = "Bad Request!";
 			BAD_REQUEST = true;
 			return data;
 		}
@@ -345,13 +350,13 @@ std::string* HTTP_Server::fetchRequestedData(std::vector<std::string>* params, r
 		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		std::cout << "Field req of struct REQUEST is empty!" << std::endl;
 		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
-		*data = "Bad Request!";
+		data = "Bad Request!";
 		BAD_REQUEST = true;
 		return data;
 	}
 }
 
-std::string HTTP_Server::createResponse(std::string* data, request &params) {
+std::string HTTP_Server::createResponse(std::string data, request &params) {
 	
 	// Variables
 	std::string response;
@@ -362,10 +367,10 @@ std::string HTTP_Server::createResponse(std::string* data, request &params) {
 		// Build response
 		response += "HTTP/1.1 200 ok \r\n";
 		response += "Content-type: text/html\r\n";
-		response += "Content-length: " + std::to_string((*data).length()) + "\r\n";
+		response += "Content-length: " + std::to_string(data.length()) + "\r\n";
 		response += "Connection: " + params.connection + "\r\n";
 		response += "\r\n\r\n"; //End of response header
-		response += *data;
+		response += data;
 
 	}
 	else {
@@ -373,10 +378,10 @@ std::string HTTP_Server::createResponse(std::string* data, request &params) {
 		// Build response and reset BAD_REQUEST
 		response += "HTTP/1.1 400 Bad Request \r\n";
 		response += "Content-type: text/html\r\n";
-		response += "Content-length: " + std::to_string((*data).length()) + "\r\n";
+		response += "Content-length: " + std::to_string(data.length()) + "\r\n";
 		response += "Connection: close \r\n";
 		response += "\r\n\r\n"; //End of response header
-		response += *data;
+		response += data;
 		BAD_REQUEST = false;
 	}
 

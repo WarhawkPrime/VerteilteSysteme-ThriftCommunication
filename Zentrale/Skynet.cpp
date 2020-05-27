@@ -5,7 +5,6 @@ Skynet::Skynet() {
 	this->fileHandle = new FileManagement();
 	this->http = new HTTP_Server(this->fileHandle);
 	this->udp = new UDP_server(this->fileHandle);
-	// TO-DO: this->udp = new UDP_Server(this->fileHandle);
 }
 
 void Skynet::start_skynet_with_udp() {

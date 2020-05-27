@@ -7,7 +7,6 @@
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
-#include <netdb.h>
 #include <arpa/inet.h>
 #include <sys/wait.h>
 #include <signal.h>
@@ -40,19 +39,14 @@ private:
 	FileManagement *fileHandle;
 	char s[INET6_ADDRSTRLEN];
 	char* srv_name;
-	long unique_id;
-	bool rec_data;
+
 public:
+
 	// Server functions
 	UDP_server(FileManagement* fileHandle);
 	~UDP_server();
-
 	int create_socket();
-
 	int processRequests();
 	int initialize(); // Initialize server
-
-	int read_data(char buffer[NI_MAXHOST], char host[MAX_BUFFER]);
-
 	int get_statusVar() { return status; }
 };
