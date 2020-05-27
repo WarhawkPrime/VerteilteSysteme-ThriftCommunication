@@ -82,12 +82,12 @@ Connection: keep-alive\r\n
 void Client::rec_message() {
 	std::string received_request;
 	received_request = tcp.rec_msg_fr();
-	
 	std::stringstream message_stream(received_request);
 	std::string segment;
 
 	int linecounter = 0;
 	while (std::getline(message_stream, segment)) {
+		std::cout << std::endl;
 			switch (linecounter)
 			{
 			default:
@@ -107,7 +107,10 @@ void Client::rec_message() {
 			case 4: // trennung von header zu message
 				linecounter++;
 				break;
-			case 5: resp.message = segment;
+			case 5: 
+				linecounter++;
+				break;
+			case 6: resp.message = segment;
 				linecounter++;
 				break;
 			}
@@ -148,6 +151,14 @@ void Client::rec_message() {
 	*/
 }
 
+
+/*
+tempFileName = "tempSensorData.txt";
+lxDataFileName = "luxSensorData.txt";
+allDataFileName = "allSensorData.txt";
+hmdtyDataFileName = "hmdtySensorData.txt";
+airSpdFileName = "airspdSensorData.txt";
+*/
 void const Client::dialog() {
 	int input = 0;
 	
@@ -156,6 +167,7 @@ void const Client::dialog() {
 	std::cout << "1 :Wind sensors" << std::endl;
 	std::cout << "2 :Humidity sensors" << std::endl;
 	std::cout << "3 :Brightness sensors" << std::endl;
+	std::cout << "4 :All Sensor data" << std::endl;
 
 	std::cin >> input;
 
@@ -164,13 +176,15 @@ void const Client::dialog() {
 	default:  std::cout << "auswahl nicht getroffen" << std::endl;
 		this->dialog();
 		break;
-	case 0:	this->sensor_dialog("/data/uriTemp");
+	case 0:	this->sensor_dialog("tempSensorData.txt");
 		break;
-	case 1:	this->sensor_dialog("/data/uriWind");
+	case 1:	this->sensor_dialog("airspdSensorData.txt");
 		break;
-	case 2: this->sensor_dialog("/data/uriHum");
+	case 2: this->sensor_dialog("hmdtySensorData.txt");
 		break;
-	case 3: this->sensor_dialog("/data/uriBright");
+	case 3: this->sensor_dialog("luxSensorData.txt");
+		break;
+	case 4: this->sensor_dialog("allSensorData.txt");
 	}
 
 	/*
@@ -245,15 +259,19 @@ void const Client::sensor_dialog(std::string uri) {
 }
 
 void Client::interprete_message() {
+	std::string con = resp.connection;
+	std::string t = "keep-alive\r";
 	//expect more data
-	if (resp.connection == "keep-alive") {
-
+	if (con == t ) {
+		std::cout << "alive" << std::endl;
 	}
 	//end connection
 	else {
 		std::cout << "break connection" << std::endl;
+		this->tcp.close_socket();
 	}
 }
+
 
 
 /*

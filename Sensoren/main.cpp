@@ -21,8 +21,15 @@
 	*/
 
 int main(int argc, char* argv[]) {
-
-	std::string stringID = argv[1];
+	std::string stringID = "0";
+	if (argv[1] != NULL) {
+		stringID = argv[1];
+	}
+	else {
+		std::cout << "kein Argument übergeben" << std::endl;
+		std::cout << "Argument: " << std::endl;
+		std::cin >> stringID;
+	}
 
 	Sensor_Management sm;
 	sm.user_dialog(stringID);

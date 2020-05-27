@@ -166,6 +166,9 @@ bool FileManagement::getNextLineNumber(const std::string filename, long &lineId)
 
 std::string* FileManagement::writeBufferToFile(char dataBuffer[NI_MAXHOST], char hostBuffer[MAX_BUFFER], int numBytesReceived) {
 
+	std::cout << "FILEMANAGEMENMT CALLED" << std::endl;
+
+
 	// Construct string of data to write
 	std::string filename, token, sensorType, data(dataBuffer, numBytesReceived);
 	std::string* ret = &data;
