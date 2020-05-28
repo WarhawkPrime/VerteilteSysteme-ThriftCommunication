@@ -29,18 +29,26 @@ void UDP_Socket::fill_serverInfo()
 
 	memset(servaddr.sin_zero, 0, sizeof(servaddr.sin_zero));
 	addrSize = sizeof(servaddr);
+
+	std::cout << servaddr.sin_addr.s_addr << std::endl;
+	std::cout << "server info filled" << std::endl;
 }
 
 
 void UDP_Socket::create_socket()
 {
 	//int socket(int domain, int type, int protocol); -> -1 on error
-	sockfd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);	//sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP); 
+	int option = 1;
+	sockfd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);	//sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+	setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR ,&option, sizeof(option));
 
 	if (sockfd < 0) {
 		perror("Could not create socket");
 		exit(EXIT_FAILURE);
 	}
+
+	std::cout << "socket created" << std::endl;
+
 }
 
 
@@ -48,12 +56,15 @@ void UDP_Socket::bind_socket()
 {
 	int b = 0;
 	//int bind(ind fd, struct sockaddr *local_addr, socklen_t addr_lenght); -> 0 on success, -1 on error
-	bind(sockfd, res->ai_addr, res->ai_addrlen);
+	b = bind(sockfd, res->ai_addr, res->ai_addrlen);
 
 	if (b < 0) {
 		perror("Could not bind the socket");
 		exit(EXIT_FAILURE);
 	}
+
+	std::cout << "socket bind" << std::endl;
+
 }
 
 
@@ -65,6 +76,7 @@ void UDP_Socket::send_msg_to(char* msg)
 
 	len = strlen(msg);
 
+	//bytes_sent = send(sockfd, msg, len, 0);
 	bytes_sent = sendto(sockfd, msg, len, 0, (struct sockaddr*) & servaddr, addrSize);
 
 	msg = NULL;
@@ -73,6 +85,9 @@ void UDP_Socket::send_msg_to(char* msg)
 		perror("Could not connect to socket");
 		exit(EXIT_FAILURE);
 	}
+
+	std::cout << "message send" << std::endl;
+
 }
 
 void UDP_Socket::rec_msg_fr()
@@ -90,6 +105,9 @@ void UDP_Socket::close_socket()
 		perror("Could not close socket");
 		exit(EXIT_FAILURE);
 	}
+
+	std::cout << "close socket" << std::endl;
+
 }
 
 
@@ -104,6 +122,9 @@ void UDP_Socket::connect_socket()
 	if (rp == NULL) {
 		std::cerr << "Could not connect to address" << std::endl;
 	}
+
+	std::cout << "connect socket" << std::endl;
+
 
 	//freeaddrinfo(res);	//wird nicht länger gebraucht
 }

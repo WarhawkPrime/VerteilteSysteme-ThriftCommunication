@@ -1,0 +1,21 @@
+#!/bin/bash
+if hash ~/projects/Sensoren/sensor 2>/dev/null; then	
+	if sudo g++ -w \
+		main.cpp \
+		-I src \
+			./Sensor.h ./Sensor.cpp \
+			./Sensor_Management.h ./Sensor_Management.cpp \
+			./UDP_Socket.h ./UDP_Socket.cpp \
+		-pthread \
+		-std=gnu++11 \
+	        -o sensor; then
+		echo "Application built, executing...";
+		sudo  chmod +x sensor
+		sudo ./sensor
+	else
+		echo "Build Error, exiting..."
+	fi
+else
+	echo "Executing..."
+	sudo ./sensor
+fi

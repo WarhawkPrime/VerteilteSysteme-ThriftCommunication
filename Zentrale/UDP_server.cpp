@@ -1,22 +1,18 @@
 #include "UDP_server.h"
 
-// Cosntructor
-UDP_server::UDP_server()
+// Constructor
+UDP_server::UDP_server(FileManagement* fh)
 {
 	this->sockfd = 0;
 	this->status = 0;
 	this->srv_name = "localhost";
-	this->data = new Telemetry_data();
-	this->unique_id = 0; // To-Do: Read last written id and continue from there
-
-	this->rec_data = false;
+	this->fileHandle = fh; 
 }
 
 
 // Destructor
 UDP_server::~UDP_server() {
 
-	delete this->data;
 }
 
 // Return the correct ip address
@@ -37,7 +33,10 @@ int UDP_server::create_socket() {
 		// Create the socket
 		// int socket(int domain, int type, int protocol): Define the type of socket you want and which protocol to use
 		// Check if socket for current address can be created
-		if (sockfd = socket(temp->ai_family, temp->ai_socktype, temp->ai_protocol) == -1)
+		int option = 1;
+		sockfd = socket(temp->ai_family, temp->ai_socktype, temp->ai_protocol);
+		setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
+		if (sockfd  == -1)
 			continue;
 
 		// Check if bind() works, then continue with next sensor address
@@ -48,72 +47,6 @@ int UDP_server::create_socket() {
 		close(sockfd);
 	}
 }
-
-
-int UDP_server::read_data(char buffer[NI_MAXHOST], char host[MAX_BUFFER]) {
-
-	// Save data
-	std::ifstream historyFile;
-	std::ofstream outFile;
-	std::string lineString;
-
-	std::string filename;
-	filename = "Telemetry.txt";
-
-
-	historyFile.open(filename);
-
-	if (!historyFile) {
-		std::cerr << "unable to open file" << std::endl;
-	}
-
-	if (historyFile.is_open()) {
-
-
-		while (std::getline(historyFile, lineString, '\n')) {
-
-			std::stringstream ss(lineString);
-			std::string s;
-			int counter = 0;
-
-			while (std::getline(ss, s, ';')) {
-
-				if (counter == 0) {
-					std::istringstream(s) >> unique_id;
-					break;
-				}
-				counter++;
-
-			}
-
-		}
-
-		unique_id++;
-
-		// Construct string of data to write
-		std::string data(buffer, numBytesReceived);
-		data.insert(0, ";");
-		data.insert(0, host);
-		data.insert(0, ";");
-		data.insert(0, std::to_string(unique_id));
-		std::cout << "Received data: " << data << std::endl;
-		historyFile.close();
-
-		outFile.open(filename, std::ios::out | std::ios::app);
-		if (outFile.is_open())
-			outFile << data;
-		else
-			std::cout << "Couldn't write to file!" << std::endl;
-
-		outFile.close();
-
-	}
-	else {
-		std::cout << "Error! Couldn't open file." << std::endl;
-	}
-}
-
-
 
 
 // Handle all incoming telemetry
@@ -164,13 +97,15 @@ int UDP_server::processRequests()
 				else {
 					// Terminate received string
 					buffer[numBytesReceived] = '\0';
-
-					//TO DO: save data
-					this->read_data(buffer, host);
-					
-
+					std::string* result = fileHandle->writeBufferToFile(buffer, host, numBytesReceived);
+					if (!result) {
+						std::cout << "Failed to write to file!" << std::endl;
+						return R_FAIL;
+					}
+					else {
+						std::cout << "Written data! " << std::endl;
+					}
 				}
-
 			}
 		}
 		else {
@@ -198,13 +133,10 @@ int UDP_server::initialize()
 	if ((status = getaddrinfo(NULL, PORT, &hints, &results)) != 0) {
 
 		std::cout << "Error! Couldn't populate struct!" << std::endl;
-		// error.log();
 		return R_FAIL;
-
 	}
 
 	processRequests();
 
 	return 0;
 }
-

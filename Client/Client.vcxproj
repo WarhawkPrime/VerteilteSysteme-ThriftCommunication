@@ -35,9 +35,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{0b73e352-e903-4a5a-b685-9288c9c32979}</ProjectGuid>
+    <ProjectGuid>{0e4b1bf4-3c02-45e1-ac5e-23c2215a0afd}</ProjectGuid>
     <Keyword>Linux</Keyword>
-    <RootNamespace>Zentrale</RootNamespace>
+    <RootNamespace>Client</RootNamespace>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
     <ApplicationType>Linux</ApplicationType>
     <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
@@ -59,7 +59,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>Remote_GCC_1_0</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
@@ -76,26 +75,15 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
-    <ClCompile Include="HTTP_Server.cpp" />
+    <ClCompile Include="Client.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Skynet.cpp" />
-    <ClCompile Include="FileManagement.cpp" />
-    <ClCompile Include="UDP_server.cpp" />
+    <ClCompile Include="TCP_Socket.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="HTTP_Server.h" />
-    <ClInclude Include="Skynet.h" />
-    <ClInclude Include="FileManagement.h" />
-    <ClInclude Include="UDP_server.h" />
+    <ClInclude Include="Client.h" />
+    <ClInclude Include="TCP_Socket.h" />
   </ItemGroup>
-  <ItemGroup>
-    <Text Include="runServerScript.txt" />
-  </ItemGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Link>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Link>
-  </ItemDefinitionGroup>
+  <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>

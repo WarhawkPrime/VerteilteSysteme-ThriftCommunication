@@ -1,5 +1,10 @@
 #include "Sensor_Management.h"
 
+void Sensor_Management::set_Sensor_ID(std::string id) {
+	sensor->setID(id);
+}
+
+
 int Sensor_Management::firstTest()
 {
 	int a = 1;
@@ -17,32 +22,34 @@ Sensor_Management::~Sensor_Management()
 	sensor = NULL;
 }
 
-void Sensor_Management::create_temperatureSensor(int mod)
+void Sensor_Management::create_temperatureSensor(int mod, std::string sid)
 {
-	Sensor* s = new Sensor(0, 30, "temperatursensor", mod);
+	Sensor* s = new Sensor(0, 30, "temperatursensor", mod, sid);
 	set_sensor(s);
 }
 
-void Sensor_Management::create_brightnessSensor(int mod)
+void Sensor_Management::create_brightnessSensor(int mod, std::string sid)
 {
-	Sensor* s = new Sensor(50, 1200, "helligkeitssensor", mod);
+	Sensor* s = new Sensor(50, 1200, "helligkeitssensor", mod, sid);
 	set_sensor(s);
 }
 
-void Sensor_Management::create_windSensor(int mod)
+void Sensor_Management::create_windSensor(int mod, std::string sid)
 {
-	Sensor* s = new Sensor(0, 80, "windsensor", mod);
+	Sensor* s = new Sensor(0, 80, "windsensor", mod, sid);
 	set_sensor(s);
+	
 }
 
-void Sensor_Management::create_humiditySensor(int mod)
+void Sensor_Management::create_humiditySensor(int mod, std::string sid)
 {
-	Sensor* s = new Sensor(0, 100, "luftfeuchtigkeitssensor", mod);
+	Sensor* s = new Sensor(0, 100, "luftfeuchtigkeitssensor", mod, sid);
 	set_sensor(s);
+	
 }
 
 
-void Sensor_Management::user_dialog()
+void Sensor_Management::user_dialog(std::string sid)
 {
 	int input_1;
 	std::cout << "Modus auswählen: Manuell oder Automatik:" << std::endl;
@@ -77,19 +84,19 @@ void Sensor_Management::user_dialog()
 		break;
 	case 1:
 		std::cout << "Temperatursensor erstellt";
-		create_temperatureSensor(modus);
+		create_temperatureSensor(modus, sid);
 		break;
 	case 2:
 		std::cout << "Helligkeitssensor erstellt";
-		create_brightnessSensor(modus);
+		create_brightnessSensor(modus, sid);
 		break;
 	case 3:
 		std::cout << "Windgeschwindigkeitssensor erstellt";
-		create_windSensor(modus);
+		create_windSensor(modus, sid);
 		break;
 	case 4:
 		std::cout << "Luftfeuchtigkeitssensor erstellt";
-		create_humiditySensor(modus);
+		create_humiditySensor(modus, sid);
 		break;
 	case 0:
 		break;

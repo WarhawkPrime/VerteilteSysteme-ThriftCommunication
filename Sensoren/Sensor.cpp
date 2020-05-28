@@ -1,4 +1,3 @@
-
 #include "Sensor.h"
 
 Sensor::Sensor()
@@ -6,14 +5,13 @@ Sensor::Sensor()
 	udpc.close_socket();
 }
 
-Sensor::Sensor(double lowEnd, double highEnd, std::string type, int modus) : type{ type }
+Sensor::Sensor(double lowEnd, double highEnd, std::string type, int modus, std::string sid) : type{ type }
 {
+	this->id = sid;
+	this->type = type;
 	udpc.fill_serverInfo();
 	udpc.create_socket();
 	udpc.bind_socket();
-
-	this->type = type;
-
 	repeater(lowEnd, highEnd, modus);
 }
 
@@ -64,12 +62,16 @@ char* Sensor::build_message()
 	char* message = "0";
 	std::string s_msg = "0";
 
+	//start with id
+	std::string id = this->getID();
+	id = id + ";";
+
 	//add port and type
 	std::string port = udpc.get_port();
 	port = port + ";";
 	std::string type_s = get_type();
 	type_s = type_s + ";";
-	s_msg = port + type_s;
+	s_msg = id + port + type_s;
 
 	//messwerte
 	std::string data_s = std::to_string(get_data());
@@ -100,8 +102,12 @@ char* Sensor::getTime()
 
 double Sensor::random_value(double lowEnd, double highEnd)
 {
+	//std::uniform_real_distribution<double> unif(lowEnd, highEnd);
+	std::random_device rd;
+	unsigned seed = rd();
+	std::default_random_engine re(seed);
 	std::uniform_real_distribution<double> unif(lowEnd, highEnd);
-	std::default_random_engine re;
+	//return unif(re);
 	return unif(re);
 }
 
