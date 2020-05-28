@@ -44,8 +44,6 @@ void TCP_Socket::create_socket()
 
 void TCP_Socket::send_msg_to(const char* msg)
 {
-	std::cout << "bout to send" << std::endl;
-
 	size_t len;
 	int bytes_sent = 0;
 
@@ -71,18 +69,13 @@ std::string TCP_Socket::rec_msg_fr()
 	std::string rec_message;
 	memset(readBuffer, 0, BUF_SIZE);
 
-	std::cout << "wait for msg to recv" << std::endl;
-
 	if ((num_bytes_read = recv(sockfd, readBuffer, BUF_SIZE, 0)) < 0) {
 		perror("Read");
 	}
-	std::cout << "buffer: " << std::endl;
-	std::cout << readBuffer << std::endl;
 
 	if (num_bytes_read <= 0) {
 		std::cerr << "buffer leer" << std::endl;
 	}
-	std::cout << "end of msg" << std::endl;
 
 	rec_message = readBuffer;
 	const char* teminate = "\0";
@@ -91,67 +84,6 @@ std::string TCP_Socket::rec_msg_fr()
 	std::cout << rec_message << std::endl;
 
 	return rec_message;
-
-	/*
-	if ((num_bytes_read = recv(sockfd, readBuffer, BUF_SIZE, NULL)) < 0) {
-		perror("Read");
-		std::cout << "Couldn't read from socket!" << std::endl;
-		return "-1";
-	}
-	if (!(num_bytes_read == 0)) {
-
-		std::cout << "Received Bytes: " << num_bytes_read << std::endl;
-		// Print received message
-		readBuffer[num_bytes_read] = '\0';
-		std::cout << readBuffer << std::endl;
-		return readBuffer;
-	}
-	else {
-		std::cout << "num_bytes_read was 0" << std::endl;
-	}
-	*/
-
-	/*
-	if ((num_bytes_written = send(sockfd, response, sizeof(response), NULL)) < 0) {
-		perror("write");
-		std::cout << "Failed to respond!" << std::endl;
-		return "-1";
-	}
-	*/
-
-	/*
-	ssize_t rec = 0;
-	char msg [BUF_SIZE];
-	size_t len = 0;
-	len = strlen(msg);
-	int bytesSend = 1;
-	std::string complete_message = "";
-
-	//read the buffer until it is empty
-	//while (bytesSend != 0) {
-		bytesSend = recv(sockfd, msg, len, 0);
-
-		if (bytesSend < 0) {
-			perror("Could not receive the message");
-			exit(EXIT_FAILURE);
-		}
-
-		std::cout << msg << std::endl;
-
-		//TO DO -> write the msg to a string to store the data. or file?
-		complete_message += msg;
-	//}
-	return complete_message;
-	*/
-
-	/*
-	bzero(buffer,256);
-	n = read(newsockfd,buffer,255);
-	if (n < 0) error("ERROR reading from socket");
-	printf("Here is the message: %s
-	",buffer);
-	*/
-
 }
 
 void TCP_Socket::close_socket()
