@@ -15,9 +15,8 @@ FileManagement::FileManagement() {
 	this->filenames->push_back(hmdtyDataFileName);
 	this->filenames->push_back(allDataFileName);
 
-
-
 	//Check files and create if necessary
+	/*
 	for (int i = 0; i < filenames->size(); i++)
 	{
 		if (!f_exists(filenames->at(i))) {
@@ -32,6 +31,7 @@ FileManagement::FileManagement() {
 			file.close();
 		}
 	}
+	*/
 }
 
 FileManagement::~FileManagement() {
@@ -61,15 +61,18 @@ std::string FileManagement::readLineFromFile(const std::string filename, int lin
 	std::string lineString;
 	std::vector<std::string> lines;
 	int lineCount = 0;
-	if (f_exists(filename)) {
+	if (!f_exists(filename)) {
 
-		InFile.open(filename, std::ios::in);
-	}
-	else {
-		std::cout << "File doesn't exist." << std::endl;
-		return "File doesn't exist";
+		OutFile.open(filename, std::ios::app);
+		if (!OutFile.is_open()){
+		
+			std::cout << "File couldn't be opened!" << std::endl;
+			return "File couldn't be opened!";
+		}
+		OutFile.close();
 	}
 	
+	InFile.open(filename, std::ios::in);
 	
 	if (InFile.is_open()) {
 
@@ -80,16 +83,35 @@ std::string FileManagement::readLineFromFile(const std::string filename, int lin
 		}
 		
 		InFile.close();
+		
 		lineCount = (lines.size() - 1);
-
-		line < 0 ? line = 0 : (line > lineCount ? line = lineCount : line = line);
+		if (lineCount < 0) {
+			lineCount = 0;
+		}
+		if (line >= lines.size()) {
+			line = (lines.size() - 1);
+			if (line < 0) {
+				line = 0;
+			}
+		}
 			
-		if (inverted) {
-			return lines.at((lineCount - line));
-		}
-		else {
-			return lines.at(line);
-		}
+		
+
+			if (lines.empty()) {
+
+				return "No data yet!";
+			}
+			else {
+
+				if (inverted) {
+
+					return lines.at((lineCount - line));
+				}
+				else {
+
+					return lines.at(line);
+				}
+			}
 	}
 	else {
 
@@ -104,23 +126,37 @@ std::vector<std::string> FileManagement::readFile(const std::string filename) {
 	std::string lineString;
 	std::vector<std::string> lines;
 
-	InFile.open(filename);
+	if (!f_exists(filename)) {
 
-	if (InFile.is_open()) {
-
-		while (std::getline(InFile, lineString)) {
-
-			lines.push_back(lineString);
-		}
-		InFile.close();
-		return lines;
+		std::cout << "File doesn't exist." << std::endl;
 	}
 	else {
-		std::cout << "Couldn't open " << filename << "!" << std::endl;
+
+		InFile.open(filename);
+
+		if (InFile.is_open()) {
+
+			while (std::getline(InFile, lineString)) {
+
+				lines.push_back(lineString);
+			}
+			InFile.close();
+			return lines;
+		}
+		else {
+
+			std::cout << "Couldn't open " << filename << "!" << std::endl;
+		}
 	}
 }
 
 bool FileManagement::getNextLineNumber(const std::string filename, long &lineId) {
+
+	if (!f_exists(filename)) {
+
+		std::cout << "File doesn't exist." << std::endl;
+		return false;
+	}
 
 	InFile.open(filename);
 	long tmp = 0;
@@ -223,12 +259,21 @@ std::string* FileManagement::writeBufferToFile(char dataBuffer[NI_MAXHOST], char
 
 	// Set line number
 	std::string allData = data;
-	getNextLineNumber(filename, nextId);
-	getNextLineNumber(allDataFileName, nextIdAll);
-	data.insert(0, std::to_string(nextId));
-	allData.insert(0, std::to_string(nextIdAll));
-	
+	if (getNextLineNumber(filename, nextId)) {
 
+		data.insert(0, std::to_string(nextId));
+	}
+	else {
+		return NULL;
+	}
+	if (getNextLineNumber(allDataFileName, nextIdAll)) {
+
+		allData.insert(0, std::to_string(nextIdAll));
+	}
+	else {
+		return NULL;
+	}
+	
 	if (writeToFile(filename, data)) {
 
 		std::cout << "Written following data to " << filename << ": " << std::endl << data << std::endl;

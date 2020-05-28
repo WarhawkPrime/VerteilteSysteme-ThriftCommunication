@@ -6,6 +6,7 @@
 HTTP_Server::HTTP_Server(FileManagement* fh)
 {
 	this->BAD_REQUEST = false;
+	this->CLOSE_CONN = false;
 	this->sockfd = 0;
 	this->port = 80;
 	this->server_addr.sin_family = AF_UNSPEC;
@@ -96,12 +97,14 @@ int HTTP_Server::createConnection() {
 				std::cout << ">------------------------------------------------------------------------<" << std::endl;
 				std::cout << "Process started" << std::endl;
 				std::cout << ">------------------------------------------------------------------------<" << std::endl;
+				
 				close(sockfd);
 				handleConnection(child_sockfd);
 				exit(0);
 			}
 			else {
 				// Parent
+				signal(SIGCHLD, SIG_IGN);
 				close(child_sockfd);
 			}
 		}
@@ -111,11 +114,13 @@ int HTTP_Server::createConnection() {
 int HTTP_Server::handleConnection(int sockfd) {
 	
 	int num_bytes_read = 0;
+	bool sentData = false;
 	std::string request;
 
+	while (!CLOSE_CONN) {
 
 		memset(&this->readBuffer, 0, MAX_BUFFER);
-		if ((num_bytes_read = recv(sockfd, readBuffer, MAX_BUFFER, NULL)) < 0) {
+		if ((num_bytes_read = recv(child_sockfd, readBuffer, MAX_BUFFER, NULL)) < 0) {
 			perror("Read");
 			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 			std::cout << "Couldn't read from socket!" << std::endl;
@@ -127,10 +132,16 @@ int HTTP_Server::handleConnection(int sockfd) {
 			std::cout << "Received a request of " << num_bytes_read << " Bytes! " << std::endl;
 			std::cout << ">------------------------------------------------------------------------<" << std::endl;
 			request = readBuffer;
-			return handleRequest(sockfd, request);
-		}
+			sentData = handleRequest(child_sockfd, request);
 
-		return -1;
+			if (!sentData) {
+				CLOSE_CONN = true;
+			}
+		}
+	}
+	CLOSE_CONN = false;
+	close(child_sockfd);
+	return 0;
 }
 
 // Receives incoming request and fetches data, drops connection if given connection: close
@@ -176,19 +187,19 @@ int HTTP_Server::handleRequest(int sockfd, std::string req) {
 		
 		std::string response = createResponse(data, r);
 
-		return sendResponse(sockfd, response);
+		return sendResponse(child_sockfd, response);
 	}
 	else {
 		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		std::cout << "Request was empty!" << std::endl;
 		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
-		return -1;
+		return false;
 	}
 }
 
 std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, request& r) {
 	
-	std::string data;
+	std::string data = "";
 	REQUEST e_r;
 
 	// Set struct members
@@ -205,7 +216,6 @@ std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, req
 			BAD_REQUEST = true;
 			return data;
 		}
-			
 
 		switch (counter) {
 
@@ -325,9 +335,16 @@ std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, req
 
 			fileLines = fileHandle->readFile(path);
 
-			for (int i = 0; i < fileLines.size(); i++)
-			{
-				data += fileLines.at(i);
+			if (!fileLines.empty()) {
+
+				for (int i = 0; i < fileLines.size(); i++)
+				{
+					data += fileLines.at(i);
+				}
+			}
+			else {
+				std::cout << "FileLines is empty!" << std::endl;
+
 			}
 		}
 		// Stub: Returns 1. value of given filename
@@ -339,7 +356,7 @@ std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, req
 			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 			std::cout << "Given Parameter is invalid!" << std::endl;
 			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
-			data = "Bad Request!";
+			data = "";
 			BAD_REQUEST = true;
 			return data;
 		}
@@ -350,7 +367,7 @@ std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, req
 		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		std::cout << "Field req of struct REQUEST is empty!" << std::endl;
 		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
-		data = "Bad Request!";
+		data = "";
 		BAD_REQUEST = true;
 		return data;
 	}
@@ -360,9 +377,17 @@ std::string HTTP_Server::createResponse(std::string data, request &params) {
 	
 	// Variables
 	std::string response;
+	
 
 	// Check if request was valid, if not send back error
 	if (!BAD_REQUEST) {
+
+		if (params.connection == "close") {
+			CLOSE_CONN = true;
+		}
+		else {
+			CLOSE_CONN = false;
+		}
 
 		// Build response
 		response += "HTTP/1.1 200 ok \r\n";
@@ -370,8 +395,17 @@ std::string HTTP_Server::createResponse(std::string data, request &params) {
 		response += "Content-length: " + std::to_string(data.length()) + "\r\n";
 		response += "Connection: " + params.connection + "\r\n";
 		response += "\r\n\r\n"; //End of response header
-		response += data;
 
+		// Check if data is empty
+		if (data.empty()) {
+
+			std::cout << "Requested data was empty!" << std::endl;
+			response += "Keine Daten vorhanden";
+		}
+		else {
+
+			response += data;
+		}
 	}
 	else {
 		
@@ -381,7 +415,7 @@ std::string HTTP_Server::createResponse(std::string data, request &params) {
 		response += "Content-length: " + std::to_string(data.length()) + "\r\n";
 		response += "Connection: close \r\n";
 		response += "\r\n\r\n"; //End of response header
-		response += data;
+		CLOSE_CONN = true;
 		BAD_REQUEST = false;
 	}
 
@@ -402,19 +436,27 @@ int HTTP_Server::sendResponse(int sockfd, std::string response) {
 	int num_bytes_written = 0;
 	
 	// Send response
-	if ((num_bytes_written = send(sockfd, response.c_str(), response.length(), NULL)) < 0) {
+	if ((num_bytes_written = send(child_sockfd, response.c_str(), response.length(), NULL)) < 0) {
 
 		perror("write");
-		std::cout << "Failed to respond!" << std::endl;
-		return -1;
+		std::cout << "Failed to send!" << std::endl;
+		return 0;
 	}
 	else {
 
-		std::cout << ">------------------------------------------------------------------------<" << std::endl;
-		std::cout << "Sent " << num_bytes_written << " bytes to client" << std::endl;
-		std::cout << ">------------------------------------------------------------------------<" << std::endl;
-		std::cout << "Successfully sent following data: " << std::endl << response.c_str() << std::endl;
-		std::cout << ">------------------------------------------------------------------------<" << std::endl;
-		return 0;
+		if (num_bytes_written == 0) {
+			std::cout << "num_bytes_written: " << num_bytes_written << std::endl;
+			// Send again
+			num_bytes_written = send(child_sockfd, response.c_str(), response.length(), NULL);
+		}
+		else {
+
+			std::cout << ">------------------------------------------------------------------------<" << std::endl;
+			std::cout << "Sent " << num_bytes_written << " bytes to client" << std::endl;
+			std::cout << ">------------------------------------------------------------------------<" << std::endl;
+			std::cout << "Successfully sent following data: " << std::endl << response.c_str() << std::endl;
+			std::cout << ">------------------------------------------------------------------------<" << std::endl;
+			return 1;
+		}
 	}
 }

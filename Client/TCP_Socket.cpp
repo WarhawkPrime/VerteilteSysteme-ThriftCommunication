@@ -33,6 +33,8 @@ void TCP_Socket::create_socket()
 {
 	//int socket(int domain, int type, int protocol); -> -1 on error
 	sockfd = socket(rp->ai_family, rp->ai_socktype, rp->ai_protocol);	//sockfd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP); 
+	//int option = 1;
+	//setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
 
 	if (sockfd < 0) {
 		perror("Could not create socket");
@@ -42,17 +44,12 @@ void TCP_Socket::create_socket()
 
 void TCP_Socket::send_msg_to(const char* msg)
 {
+	std::cout << "bout to send" << std::endl;
+
 	size_t len;
 	int bytes_sent = 0;
 
 	len = strlen(msg);
-	
-	//const char* m;
-	//ssize_t send(int sockfd, const void *buf, size_t len, int flags);
-	//bytes_sent = sendto(sockfd, msg, len, 0, (struct sockaddr*) & servaddr, addrSize);
-
-	//ssize_t t = send(int s, const void *msg, size_t len, int flags);
-
 	bytes_sent = send(sockfd, msg, strlen(msg), 0);
 
 	if (bytes_sent < 0) {
@@ -67,24 +64,33 @@ void TCP_Socket::send_msg_to(const char* msg)
 
 std::string TCP_Socket::rec_msg_fr()
 {
-	
 	char readBuffer[BUF_SIZE];
 	int num_bytes_read = 0;
 	int num_bytes_written = 0;
 
 	std::string rec_message;
-
-	//char* response = "Server Test response\0";
 	memset(readBuffer, 0, BUF_SIZE);
 
-	while ((num_bytes_read = recv(sockfd, readBuffer, BUF_SIZE, NULL)) != 0) {
-		rec_message.append(readBuffer);
-	}
+	std::cout << "wait for msg to recv" << std::endl;
 
+	if ((num_bytes_read = recv(sockfd, readBuffer, BUF_SIZE, 0)) < 0) {
+		perror("Read");
+	}
+	std::cout << "buffer: " << std::endl;
+	std::cout << readBuffer << std::endl;
+
+	if (num_bytes_read <= 0) {
+		std::cerr << "buffer leer" << std::endl;
+	}
+	std::cout << "end of msg" << std::endl;
+
+	rec_message = readBuffer;
 	const char* teminate = "\0";
 	rec_message.append(teminate);
+
+	std::cout << rec_message << std::endl;
+
 	return rec_message;
-	
 
 	/*
 	if ((num_bytes_read = recv(sockfd, readBuffer, BUF_SIZE, NULL)) < 0) {
@@ -104,7 +110,7 @@ std::string TCP_Socket::rec_msg_fr()
 		std::cout << "num_bytes_read was 0" << std::endl;
 	}
 	*/
-	
+
 	/*
 	if ((num_bytes_written = send(sockfd, response, sizeof(response), NULL)) < 0) {
 		perror("write");
@@ -145,9 +151,7 @@ std::string TCP_Socket::rec_msg_fr()
 	printf("Here is the message: %s
 	",buffer);
 	*/
-	//rec = recvfrom(sockfd, msg, len, 0, (struct sockaddr*) & servaddr, &addrSize);
 
-	//do smth with msg...
 }
 
 void TCP_Socket::close_socket()

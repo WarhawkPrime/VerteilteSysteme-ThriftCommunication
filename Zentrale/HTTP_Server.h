@@ -105,6 +105,7 @@ TCP Socket und Client erstellen, dann einfach mit Strings oder ähnlichem die HTT
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/socket.h>
+#include <sys/wait.h>
 #include <netinet/in.h>
 #include <stdlib.h>
 #include <errno.h>
@@ -143,7 +144,7 @@ class HTTP_Server
 private:
 
 	// Variables
-	bool BAD_REQUEST;
+	bool BAD_REQUEST, CLOSE_CONN;
 	int sockfd, child_sockfd, port, pid;
 	struct sockaddr_in client_addr, server_addr;
 	struct addrinfo hints;
@@ -159,8 +160,6 @@ public:
 	HTTP_Server(FileManagement* fh);
 	~HTTP_Server();
 	int createConnection(); // Generates socket and child processes, listens for incoming connections
-	
-
 
 };
 

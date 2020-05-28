@@ -46,7 +46,7 @@ CONNECTION: keep-alive\r\n
 
 //htdocs
 void Client::build_header(std::string path, std::string parameter) {
-	
+
 	std::string uri = "http://" + tcp.get_server_adress() + ":" + tcp.get_CPORT() + path;
 	std::string message = "GET " + uri + "?" + parameter + "\r\n";
 	message += "HOST: " + tcp.get_server_adress() + "\r\n";
@@ -56,8 +56,10 @@ void Client::build_header(std::string path, std::string parameter) {
 	message += "ACCEPT_CHARSET: utf-8\r\n";
 	message += "CONNECTION: keep-alive\r\n";
 	message += "\r\n\r\n";
-	
+
 	const char* msg = message.c_str();
+
+	std::cout << msg << std::endl;
 
 	tcp.send_msg_to(msg);
 }
@@ -80,39 +82,53 @@ Connection: keep-alive\r\n
 */
 
 void Client::rec_message() {
+
 	std::string received_request;
 	received_request = tcp.rec_msg_fr();
-	
-	std::stringstream message_stream(received_request);
+	std::cout << "rec message; " << received_request << std::endl;
+	std::stringstream message_stream;
+	std::string s = message_stream.str();
+
+	message_stream.str(std::string());
+	message_stream.str(received_request);
+
+	this->resp.message = "";
+
+	//std::stringstream message_stream(received_request);
 	std::string segment;
 
 	int linecounter = 0;
 	while (std::getline(message_stream, segment)) {
-			switch (linecounter)
-			{
-			default:
-				break;
-			case 0: resp.h1 = segment.substr(9);
-				linecounter++;
-				break;
-			case 1: resp.content_type = segment.substr(14);
-				linecounter++;
-				break;
-			case 2: resp.content_length = segment.substr(16);
-				linecounter++;
-				break;
-			case 3: resp.connection = segment.substr(12);
-				linecounter++;
-				break;
-			case 4: // trennung von header zu message
-				linecounter++;
-				break;
-			case 5: resp.message = segment;
-				linecounter++;
-				break;
-			}
+		std::cout << std::endl;
+		switch (linecounter)
+		{
+		default:
+			break;
+		case 0: resp.h1 = segment.substr(9); std::cout << "seg0: " << resp.h1 << std::endl;
+			linecounter++;
+			break;
+		case 1: resp.content_type = segment.substr(14);	std::cout << "seg1: " << resp.content_type << std::endl;
+			linecounter++;
+			break;
+		case 2: resp.content_length = segment.substr(16);	std::cout << "seg2: " << resp.content_length << std::endl;
+			linecounter++;
+			break;
+		case 3: resp.connection = segment.substr(12);	std::cout << "seg3: " << resp.connection << std::endl;
+			linecounter++;
+			break;
+		case 4: // trennung von header zu message
+			linecounter++;	std::cout << "seg4: " << segment << std::endl;
+			break;
+		case 5:
+			linecounter++;	std::cout << "seg5: " << segment << std::endl;
+			break;
+		case 6: resp.message = segment;	std::cout << "seg6: " << resp.message << std::endl;
+			linecounter++;
+			break;
+		}
 	}
 
+	std::cout << std::endl;
 	std::cout << "Erhaltende Nachricht: " << std::endl;
 	std::cout << std::endl;
 	std::cout << resp.message << std::endl;
@@ -128,10 +144,10 @@ void Client::rec_message() {
 		{
 		default:
 			break;
-		case 0: resp.h1 = segment.substr(9); 
+		case 0: resp.h1 = segment.substr(9);
 			line++;
 			break;
-		case 1: resp.content_type = segment.substr(14); 
+		case 1: resp.content_type = segment.substr(14);
 			line++;
 			break;
 		case 2: resp.content_length = segment.substr(16);
@@ -148,29 +164,39 @@ void Client::rec_message() {
 	*/
 }
 
+
+/*
+tempFileName = "tempSensorData.txt";
+lxDataFileName = "luxSensorData.txt";
+allDataFileName = "allSensorData.txt";
+hmdtyDataFileName = "hmdtySensorData.txt";
+airSpdFileName = "airspdSensorData.txt";
+*/
 void const Client::dialog() {
 	int input = 0;
-	
+
 	std::cout << "select wanted ressource: " << std::endl;
 	std::cout << "0 :Temperature sensors" << std::endl;
 	std::cout << "1 :Wind sensors" << std::endl;
 	std::cout << "2 :Humidity sensors" << std::endl;
 	std::cout << "3 :Brightness sensors" << std::endl;
+	std::cout << "4 :All Sensor data" << std::endl;
 
 	std::cin >> input;
-
 	switch (input)
 	{
 	default:  std::cout << "auswahl nicht getroffen" << std::endl;
 		this->dialog();
 		break;
-	case 0:	this->sensor_dialog("/data/uriTemp");
+	case 0:	this->sensor_dialog("tempSensorData.txt");
 		break;
-	case 1:	this->sensor_dialog("/data/uriWind");
+	case 1:	this->sensor_dialog("airspdSensorData.txt");
 		break;
-	case 2: this->sensor_dialog("/data/uriHum");
+	case 2: this->sensor_dialog("hmdtySensorData.txt");
 		break;
-	case 3: this->sensor_dialog("/data/uriBright");
+	case 3: this->sensor_dialog("luxSensorData.txt");
+		break;
+	case 4: this->sensor_dialog("allSensorData.txt");
 	}
 
 	/*
@@ -205,14 +231,14 @@ void const Client::sensor_dialog(std::string uri) {
 
 	int input = 0;
 	std::cin >> input;
-	if(input < 0 || input > 2) {
+	if (input < 0 || input > 2) {
 		input = 0;
 	}
 
 	std::string a = "=";
 	std::string sPara = "param1";
 	sPara += a + std::to_string(input);
-		//+std::to_string(input);
+	//+std::to_string(input);
 
 	this->build_header(uri, sPara);
 
@@ -228,9 +254,9 @@ void const Client::sensor_dialog(std::string uri) {
 	int input = 0;
 	std::cin >> input;
 
-	switch (input) 
+	switch (input)
 	{
-	default: 
+	default:
 		break;
 	case 0: std::cout << "all Temperature sensors" << std::endl;	this->build_header("hier könnte ihre URI stehen","0");
 		break;
@@ -245,15 +271,20 @@ void const Client::sensor_dialog(std::string uri) {
 }
 
 void Client::interprete_message() {
-	//expect more data
-	if (resp.connection == "keep-alive") {
+	std::string con = resp.connection;
 
+	/*
+	//expect more data
+	if (con.find("keep") != std::string::npos) {
+		std::cout << "keep-alive" << std::endl;
 	}
-	//end connection
 	else {
 		std::cout << "break connection" << std::endl;
+		this->tcp.close_socket();
 	}
+	*/
 }
+
 
 
 /*
