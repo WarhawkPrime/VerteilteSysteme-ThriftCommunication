@@ -102,8 +102,12 @@ char* Sensor::getTime()
 
 double Sensor::random_value(double lowEnd, double highEnd)
 {
+	//std::uniform_real_distribution<double> unif(lowEnd, highEnd);
+	std::random_device rd;
+	unsigned seed = rd();
+	std::default_random_engine re(seed);
 	std::uniform_real_distribution<double> unif(lowEnd, highEnd);
-	std::default_random_engine re;
+	//return unif(re);
 	return unif(re);
 }
 

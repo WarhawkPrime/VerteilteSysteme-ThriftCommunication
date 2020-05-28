@@ -156,6 +156,17 @@ private:
 	int handleRequest(int sockfd, std::string req);
 	std::string fetchRequestedData(std::vector<std::string> requestParameters, request &r);
 	std::string createResponse(std::string requestedData, request &requestParameters);
+
+	//======================================================================================
+	int createSocket();
+	int getAddrInfoMethod(int status, struct addrinfo* result, const char* p = "80");
+	int bindSocketMethod(struct addrinfo* result);
+	int listenForConnection();
+	int acceptConnectionMethod();
+	void receiveTest();
+	void sendTest();
+	//======================================================================================
+
 public:
 	HTTP_Server(FileManagement* fh);
 	~HTTP_Server();

@@ -62,9 +62,6 @@ ACCEPT - CHARSET: utf - 8\r\n
 CONNECTION : keep - alive\r\n
 \r\n\r\n
 */
-struct request {
-
-};
 
 /*
 HTTP/1.1 200 ok\r\n
@@ -89,7 +86,7 @@ struct response {
 	std::string content_type;
 	std::string content_length;
 	std::string connection;
-	std::string message;
+	std::string message = "";
 };
 
 class Client
@@ -106,9 +103,11 @@ public:
 	void interprete_message();
 
 	void const start();
+	struct response getResponse() { return resp; }
 
 private:
 	TCP_Socket tcp;
 	response resp;
+
 };
 
