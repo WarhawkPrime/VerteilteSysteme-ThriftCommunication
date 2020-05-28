@@ -155,8 +155,6 @@ int HTTP_Server::handleRequest(int sockfd, std::string req) {
 	std::string s, delim = "\r\n";
 	int pos, counter = 0;
 
-	std::cout << "req: " << req << std::endl;
-
 	if (!req.empty()) {
 		// Read all values between \r\n delimiters
 		requestSave = req;
@@ -289,7 +287,7 @@ std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, req
 
 	if (!s.empty()) {
 
-		std::cout << "s: " << s << std::endl;
+		
 
 		while ((pos = s.find(delim)) != std::string::npos) {
 
@@ -298,14 +296,12 @@ std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, req
 			if (count == 0) {
 
 				prefix = a;
-				std::cout << "prefix: " << prefix << std::endl;
 				s.erase(0, pos + delim.length());
 				count++;
 			}
 			else if (count == 1) {
 
 				host = a;
-				std::cout << "host: " << host << std::endl;
 				s.erase(0, pos + delim.length());
 				count++;
 			}
@@ -315,15 +311,13 @@ std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, req
 		}
 	
 		param1 = s;
-		std::cout << "param1: " << param1 << std::endl;
 		param1.erase(0, 2);
 		pos = param1.find("?");
 		path = param1.substr(0, pos);
 		param1.erase(0, pos + 1);
-		std::cout << "path: " << path << std::endl;
 		pos = param1.find("=");
 		value1 = param1.substr(pos + 1, std::string::npos);
-		std::cout << "value1: " << value1 << std::endl;
+		
 
 		// Aktuellster Wert des Sensors
 		if (std::atoi(value1.c_str()) == 0) {
@@ -343,7 +337,9 @@ std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, req
 				}
 			}
 			else {
+				std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 				std::cout << "FileLines is empty!" << std::endl;
+				std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 
 			}
 		}
@@ -398,8 +394,9 @@ std::string HTTP_Server::createResponse(std::string data, request &params) {
 
 		// Check if data is empty
 		if (data.empty()) {
-
+			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 			std::cout << "Requested data was empty!" << std::endl;
+			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 			response += "Keine Daten vorhanden";
 		}
 		else {
@@ -439,7 +436,9 @@ int HTTP_Server::sendResponse(int sockfd, std::string response) {
 	if ((num_bytes_written = send(child_sockfd, response.c_str(), response.length(), NULL)) < 0) {
 
 		perror("write");
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		std::cout << "Failed to send!" << std::endl;
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		return 0;
 	}
 	else {

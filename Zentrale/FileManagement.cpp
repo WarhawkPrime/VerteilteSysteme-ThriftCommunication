@@ -16,22 +16,23 @@ FileManagement::FileManagement() {
 	this->filenames->push_back(allDataFileName);
 
 	//Check files and create if necessary
-	/*
 	for (int i = 0; i < filenames->size(); i++)
 	{
 		if (!f_exists(filenames->at(i))) {
 
-			std::fstream file;
-			file.open(filenames->at(i));
-			if (!file.rdstate()) {
-				std::cout << "Failed to open file. Error state: " << file.rdstate() << std::endl;
-				filenames->erase(filenames->begin() + i);
+			
+			OutFile.open(filenames->at(i), std::ios::out | std::ios::app);
+			if (!OutFile.is_open()) {
+				std::cout << "Failed to open file. Error state: " << OutFile.rdstate() << std::endl;
 				return;
 			}
-			file.close();
+			OutFile.close();
+		}
+		else {
+			std::cout << "Found file: " << filenames->at(i) << std::endl;
 		}
 	}
-	*/
+	
 }
 
 FileManagement::~FileManagement() {
@@ -95,7 +96,6 @@ std::string FileManagement::readLineFromFile(const std::string filename, int lin
 			}
 		}
 			
-		
 
 			if (lines.empty()) {
 
