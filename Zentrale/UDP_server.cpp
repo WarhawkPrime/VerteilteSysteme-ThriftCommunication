@@ -106,7 +106,6 @@ int UDP_server::processRequests()
 						std::cout << "Written data! " << std::endl;
 					}
 				}
-
 			}
 		}
 		else {

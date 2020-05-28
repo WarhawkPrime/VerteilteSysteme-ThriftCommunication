@@ -27,6 +27,7 @@ FileManagement::FileManagement() {
 			if (!file.rdstate()) {
 				std::cout << "Failed to open file. Error state: " << file.rdstate() << std::endl;
 				filenames->erase(filenames->begin() + i);
+				//remove((filenames->at(i).c_str));		evtl so ?
 				return;
 			}
 			file.close();
@@ -39,10 +40,24 @@ FileManagement::~FileManagement() {
 
 }
 
+
+//wrong filenames. it takes the names, not the values of the files
 bool FileManagement::f_exists(const std::string& filename) {
 
-	std::ifstream ifile(filename.c_str());
-	return (bool)ifile;
+	//std::cout << "TTTTT: " << filename << std::endl;
+	//std::ifstream ifile(filename.c_str());
+	//return (bool)ifile;
+	//return true;
+
+	for (std::string var : *filenames)
+	{
+		std::cout << var << std::endl;
+		if (var == filename) {
+			return true;
+		}
+	}
+	return false;
+
 }
 
 bool FileManagement::f_is_empty(std::ifstream& inFile) {
@@ -58,11 +73,15 @@ std::string FileManagement::readLineFromFile(const std::string filename, int lin
 
 std::string FileManagement::readLineFromFile(const std::string filename, int line, bool inverted) {
 
+	std::cout << std::endl;
+	std::cout << "opens readline!!!" << std::endl;
+	std::cout << filename << std::endl;
+
 	std::string lineString;
 	std::vector<std::string> lines;
 	int lineCount = 0;
-	if (f_exists(filename)) {
 
+	if (f_exists(filename)) {
 		InFile.open(filename, std::ios::in);
 	}
 	else {
@@ -71,8 +90,8 @@ std::string FileManagement::readLineFromFile(const std::string filename, int lin
 	}
 	
 	
-	if (InFile.is_open()) {
 
+	if (InFile.is_open()) {
 		
 		while (std::getline(InFile, lineString)) {
 
@@ -167,7 +186,6 @@ bool FileManagement::getNextLineNumber(const std::string filename, long &lineId)
 std::string* FileManagement::writeBufferToFile(char dataBuffer[NI_MAXHOST], char hostBuffer[MAX_BUFFER], int numBytesReceived) {
 
 	std::cout << "FILEMANAGEMENMT CALLED" << std::endl;
-
 
 	// Construct string of data to write
 	std::string filename, token, sensorType, data(dataBuffer, numBytesReceived);

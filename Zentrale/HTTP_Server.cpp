@@ -35,6 +35,11 @@ int HTTP_Server::createConnection() {
 	int status = 0;
 	struct addrinfo *result;
 	const char* p = "80";
+
+	//this->getAddrInfoMethod(status, result, p);
+
+	
+	//get status
 	if ((status = getaddrinfo(NULL, p, &hints, &result)) != 0) {
 		perror("Getaddrinfo");
 		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
@@ -42,6 +47,7 @@ int HTTP_Server::createConnection() {
 		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		return 0;
 	}
+	
 
 	// Create parent socket
 	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
@@ -71,12 +77,30 @@ int HTTP_Server::createConnection() {
 		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		return -1;
 	}
+
+	while (true) {
+
+		std::cout << "going to accept" << std::endl;
+
+		// Set addr length to size of client_addr
+		this->client_addr_length = sizeof(client_addr);
+		if ((child_sockfd = accept(sockfd, (struct sockaddr*) & client_addr, &client_addr_length)) < 0) {
+			perror("Accept");
+			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
+			std::cout << "Connection attempt failed!" << std::endl;
+			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
+		}
+		handleConnection(child_sockfd);
+		exit(0);
+	}
+
+
+	/*
 		// Accept all incoming connections
 		while (1) {
-
 			// Set addr length to size of client_addr
 			this->client_addr_length = sizeof(client_addr);
-			if ((child_sockfd = accept(sockfd, (struct sockaddr*) &client_addr, &client_addr_length)) < 0) {
+			if ((child_sockfd = accept(sockfd, (struct sockaddr*) & client_addr, &client_addr_length)) < 0) {
 				perror("Accept");
 				std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 				std::cout << "Connection attempt failed!" << std::endl;
@@ -105,6 +129,11 @@ int HTTP_Server::createConnection() {
 				close(child_sockfd);
 			}
 		}
+		*/
+
+
+
+
 }
 
 // Receive HTTP GET requests
@@ -112,7 +141,6 @@ int HTTP_Server::handleConnection(int sockfd) {
 	
 	int num_bytes_read = 0;
 	std::string request;
-
 
 		memset(&this->readBuffer, 0, MAX_BUFFER);
 		if ((num_bytes_read = recv(sockfd, readBuffer, MAX_BUFFER, NULL)) < 0) {
@@ -130,11 +158,15 @@ int HTTP_Server::handleConnection(int sockfd) {
 			return handleRequest(sockfd, request);
 		}
 
+		std::cout << "going to exit handleConnection" << std::endl;
+
 		return -1;
 }
 
 // Receives incoming request and fetches data, drops connection if given connection: close
 int HTTP_Server::handleRequest(int sockfd, std::string req) {
+
+	std::cout << "start handleRequest" << std::endl;
 
 	// Variables to store requested information
 	std::string requestSave;
@@ -176,7 +208,9 @@ int HTTP_Server::handleRequest(int sockfd, std::string req) {
 		
 		std::string response = createResponse(data, r);
 
-		return sendResponse(sockfd, response);
+		int i = sendResponse(sockfd, response);
+		std::cout << "sendResponseEnd: " << i << std::endl;
+		return i;
 	}
 	else {
 		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
@@ -184,6 +218,9 @@ int HTTP_Server::handleRequest(int sockfd, std::string req) {
 		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		return -1;
 	}
+
+	std::cout << "exit handleRequest" << std::endl;
+
 }
 
 std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, request& r) {
@@ -317,8 +354,10 @@ std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, req
 
 		// Aktuellster Wert des Sensors
 		if (std::atoi(value1.c_str()) == 0) {
-			
+			std::cout << std::endl;
+			std::cout << "calls readline!!!" << std::endl;
 			data = fileHandle->readLineFromFile(path, 0, true);
+			std::cout << data << std::endl;
 		}
 		// Alle Daten
 		else if (std::atoi(value1.c_str()) == 1) {
@@ -357,7 +396,7 @@ std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, req
 }
 
 std::string HTTP_Server::createResponse(std::string data, request &params) {
-	
+
 	// Variables
 	std::string response;
 
@@ -400,7 +439,7 @@ std::string HTTP_Server::createResponse(std::string data, request &params) {
 int HTTP_Server::sendResponse(int sockfd, std::string response) {
 	
 	int num_bytes_written = 0;
-	
+
 	// Send response
 	if ((num_bytes_written = send(sockfd, response.c_str(), response.length(), NULL)) < 0) {
 
@@ -415,6 +454,34 @@ int HTTP_Server::sendResponse(int sockfd, std::string response) {
 		std::cout << ">------------------------------------------------------------------------<" << std::endl;
 		std::cout << "Successfully sent following data: " << std::endl << response.c_str() << std::endl;
 		std::cout << ">------------------------------------------------------------------------<" << std::endl;
+		return 0;
+	}
+}
+
+
+
+
+
+
+
+int HTTP_Server::createSocket() {
+	// Create parent socket
+	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+		perror("Socket");
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
+		std::cout << "Couldn't open socket!" << std::endl;
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
+		return -1;
+	}
+	return sockfd;
+}
+
+int HTTP_Server::getAddrInfoMethod(int status, struct addrinfo* result, const char* p) {
+	if ((status = getaddrinfo(NULL, p, &hints, &result)) != 0) {
+		perror("Getaddrinfo");
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
+		std::cout << "Error! Couldn't populate struct!" << std::endl;
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		return 0;
 	}
 }

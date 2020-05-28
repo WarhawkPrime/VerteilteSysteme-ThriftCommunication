@@ -59,6 +59,8 @@ void Client::build_header(std::string path, std::string parameter) {
 	
 	const char* msg = message.c_str();
 
+	std::cout << msg << std::endl;
+
 	tcp.send_msg_to(msg);
 }
 
@@ -80,9 +82,19 @@ Connection: keep-alive\r\n
 */
 
 void Client::rec_message() {
+
 	std::string received_request;
 	received_request = tcp.rec_msg_fr();
-	std::stringstream message_stream(received_request);
+	std::cout << "rec message; " << received_request << std::endl;
+	std::stringstream message_stream;
+	std::string s = message_stream.str();
+
+	message_stream.str(std::string());
+	message_stream.str(received_request);
+
+	this->resp.message = "";
+
+	//std::stringstream message_stream(received_request);
 	std::string segment;
 
 	int linecounter = 0;
@@ -92,25 +104,25 @@ void Client::rec_message() {
 			{
 			default:
 				break;
-			case 0: resp.h1 = segment.substr(9);
+			case 0: resp.h1 = segment.substr(9); std::cout << "seg0: " << resp.h1 << std::endl;
 				linecounter++;
 				break;
-			case 1: resp.content_type = segment.substr(14);
+			case 1: resp.content_type = segment.substr(14);	std::cout << "seg1: " << resp.content_type << std::endl;
 				linecounter++;
 				break;
-			case 2: resp.content_length = segment.substr(16);
+			case 2: resp.content_length = segment.substr(16);	std::cout << "seg2: " << resp.content_length << std::endl;
 				linecounter++;
 				break;
-			case 3: resp.connection = segment.substr(12);
+			case 3: resp.connection = segment.substr(12);	std::cout << "seg3: " << resp.connection << std::endl;
 				linecounter++;
 				break;
 			case 4: // trennung von header zu message
-				linecounter++;
+				linecounter++;	std::cout << "seg4: " << segment << std::endl;
 				break;
 			case 5: 
-				linecounter++;
+				linecounter++;	std::cout << "seg5: " << segment << std::endl;
 				break;
-			case 6: resp.message = segment;
+			case 6: resp.message = segment;	std::cout << "seg6: " << resp.message << std::endl;
 				linecounter++;
 				break;
 			}
@@ -170,7 +182,6 @@ void const Client::dialog() {
 	std::cout << "4 :All Sensor data" << std::endl;
 
 	std::cin >> input;
-
 	switch (input)
 	{
 	default:  std::cout << "auswahl nicht getroffen" << std::endl;
@@ -260,12 +271,11 @@ void const Client::sensor_dialog(std::string uri) {
 
 void Client::interprete_message() {
 	std::string con = resp.connection;
-	std::string t = "keep-alive\r";
+	
 	//expect more data
-	if (con == t ) {
-		std::cout << "alive" << std::endl;
+	if (con.find("keep") != std::string::npos) {
+		std::cout << "keep-alive" << std::endl;
 	}
-	//end connection
 	else {
 		std::cout << "break connection" << std::endl;
 		this->tcp.close_socket();
