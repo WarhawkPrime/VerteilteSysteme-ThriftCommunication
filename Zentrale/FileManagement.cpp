@@ -138,6 +138,7 @@ std::vector<std::string> FileManagement::readFile(const std::string filename) {
 
 			while (std::getline(InFile, lineString)) {
 
+				lineString += "\n";
 				lines.push_back(lineString);
 			}
 			InFile.close();
