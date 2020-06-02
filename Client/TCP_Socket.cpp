@@ -69,15 +69,19 @@ std::string TCP_Socket::rec_msg_fr()
 	std::string rec_message;
 	memset(readBuffer, 0, BUF_SIZE);
 
-	if ((num_bytes_read = recv(sockfd, readBuffer, BUF_SIZE, 0)) < 0) {
-		perror("Read");
+	//TODO: read the recv as long as there are bytes to receive
+	while (num_bytes_read > 0) {
+		num_bytes_read = recv(sockfd, readBuffer, BUF_SIZE, 0);
+
+		if ((num_bytes_read = recv(sockfd, readBuffer, BUF_SIZE, 0)) < 0) {
+			perror("Read");
+		}
+
+		rec_message += readBuffer;
 	}
 
-	if (num_bytes_read <= 0) {
-		std::cerr << "buffer leer" << std::endl;
-	}
 
-	rec_message = readBuffer;
+	//rec_message = readBuffer;
 	const char* teminate = "\0";
 	rec_message.append(teminate);
 

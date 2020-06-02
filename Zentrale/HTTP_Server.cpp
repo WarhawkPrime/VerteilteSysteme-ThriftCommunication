@@ -121,6 +121,7 @@ int HTTP_Server::handleConnection(int sockfd) {
 
 		memset(&this->readBuffer, 0, MAX_BUFFER);
 		if ((num_bytes_read = recv(child_sockfd, readBuffer, MAX_BUFFER, NULL)) < 0) {
+
 			perror("Read");
 			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 			std::cout << "Couldn't read from socket!" << std::endl;
@@ -128,6 +129,9 @@ int HTTP_Server::handleConnection(int sockfd) {
 			return -1;
 		}
 		else {
+
+			std::cout << readBuffer << std::endl;
+
 			std::cout << ">------------------------------------------------------------------------<" << std::endl;
 			std::cout << "Received a request of " << num_bytes_read << " Bytes! " << std::endl;
 			std::cout << ">------------------------------------------------------------------------<" << std::endl;
