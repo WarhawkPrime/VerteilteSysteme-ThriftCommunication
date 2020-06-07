@@ -85,6 +85,9 @@ void Client::rec_message() {
 
 	std::string received_request;
 	received_request = tcp.rec_msg_fr();
+
+	std::cout << received_request << std::endl;
+
 	std::stringstream message_stream;
 	std::string s = message_stream.str();
 

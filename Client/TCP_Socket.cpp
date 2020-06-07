@@ -63,17 +63,19 @@ void TCP_Socket::send_msg_to(const char* msg)
 std::string TCP_Socket::rec_msg_fr()
 {
 	char readBuffer[BUF_SIZE];
-	int num_bytes_read = 0;
+	int num_bytes_read = BUF_SIZE;
 	int num_bytes_written = 0;
 
 	std::string rec_message;
 	memset(readBuffer, 0, BUF_SIZE);
 
 	//TODO: read the recv as long as there are bytes to receive
-	while (num_bytes_read > 0) {
+	while (num_bytes_read == BUF_SIZE) {
 		num_bytes_read = recv(sockfd, readBuffer, BUF_SIZE, 0);
 
-		if ((num_bytes_read = recv(sockfd, readBuffer, BUF_SIZE, 0)) < 0) {
+		std::cout << "buffer: " << readBuffer << std::endl;
+
+		if (num_bytes_read < 0) {
 			perror("Read");
 		}
 
