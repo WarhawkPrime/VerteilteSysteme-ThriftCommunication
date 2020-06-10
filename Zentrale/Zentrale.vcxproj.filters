@@ -14,6 +14,21 @@
     <ClCompile Include="FileManagement.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="SendSensordataService.cpp">
+      <Filter>thrift</Filter>
+    </ClCompile>
+    <ClCompile Include="SendSensordataService_server.skeleton.cpp">
+      <Filter>thrift</Filter>
+    </ClCompile>
+    <ClCompile Include="thriftServer.cpp">
+      <Filter>thrift</Filter>
+    </ClCompile>
+    <ClCompile Include="verbindung_constants.cpp">
+      <Filter>thrift</Filter>
+    </ClCompile>
+    <ClCompile Include="verbindung_types.cpp">
+      <Filter>thrift</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UDP_server.h">
@@ -28,6 +43,15 @@
     <ClInclude Include="FileManagement.h">
       <Filter>header</Filter>
     </ClInclude>
+    <ClInclude Include="SendSensordataService.h">
+      <Filter>thrift</Filter>
+    </ClInclude>
+    <ClInclude Include="verbindung_constants.h">
+      <Filter>thrift</Filter>
+    </ClInclude>
+    <ClInclude Include="verbindung_types.h">
+      <Filter>thrift</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="header">
@@ -36,8 +60,16 @@
     <Filter Include="src">
       <UniqueIdentifier>{29595f2f-168e-47e7-9447-253017d703e5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="thrift">
+      <UniqueIdentifier>{5dd86caf-3328-4259-9f96-906bc3f1a322}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="runServerScript.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Makefile">
+      <Filter>thrift</Filter>
+    </None>
   </ItemGroup>
 </Project>

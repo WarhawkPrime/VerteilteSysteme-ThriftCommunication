@@ -17,6 +17,10 @@ void Skynet::start_skynet_with_http() {
 	this->http->createConnection();
 }
 
+void Skynet::start_skynet_with_thrift() {
+	std::cout << "start with thrift" << std::endl;
+}
+
 Skynet::~Skynet() {
 	delete this->udp;
 	delete this->http;

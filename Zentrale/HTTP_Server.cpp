@@ -45,7 +45,10 @@ int HTTP_Server::createConnection() {
 	}
 
 	// Create parent socket
-	if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+	int option = 1;
+	sockfd = socket(AF_INET, SOCK_STREAM, 0);
+	setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &option, sizeof(option));
+	if (sockfd < 0) {
 		perror("Socket");
 		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		std::cout << "Couldn't open socket!" << std::endl;
@@ -120,25 +123,34 @@ int HTTP_Server::handleConnection(int sockfd) {
 	while (!CLOSE_CONN) {
 
 		memset(&this->readBuffer, 0, MAX_BUFFER);
-		if ((num_bytes_read = recv(child_sockfd, readBuffer, MAX_BUFFER, NULL)) < 0) {
-			perror("Read");
-			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
-			std::cout << "Couldn't read from socket!" << std::endl;
-			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
-			return -1;
-		}
-		else {
-			std::cout << ">------------------------------------------------------------------------<" << std::endl;
-			std::cout << "Received a request of " << num_bytes_read << " Bytes! " << std::endl;
-			std::cout << ">------------------------------------------------------------------------<" << std::endl;
-			request = readBuffer;
-			sentData = handleRequest(child_sockfd, request);
 
-			if (!sentData) {
-				CLOSE_CONN = true;
+		do {
+			num_bytes_read = recv(child_sockfd, readBuffer, MAX_BUFFER, NULL);
+
+			if ((num_bytes_read) < 0) {
+				perror("Read");
+				std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
+				std::cout << "Couldn't read from socket!" << std::endl;
+				std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
+				return -1;
 			}
+			else {
+				std::cout << ">------------------------------------------------------------------------<" << std::endl;
+				std::cout << "Received a request of " << num_bytes_read << " Bytes! " << std::endl;
+				std::cout << ">------------------------------------------------------------------------<" << std::endl;
+				request += readBuffer;
+			}
+		} while (num_bytes_read == MAX_BUFFER);
+
+
+		sentData = handleRequest(child_sockfd, request);
+
+		if (!sentData) {
+			CLOSE_CONN = true;
 		}
 	}
+	
+	
 	CLOSE_CONN = false;
 	close(child_sockfd);
 	return 0;

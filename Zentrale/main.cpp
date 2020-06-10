@@ -10,51 +10,43 @@
 #include <unistd.h>
 
 
-void dosmth(Skynet* skynet) {
-
-    skynet->start_skynet_with_udp();
-};
-
-void dosmth2(Skynet* skynet) {
- 
-    skynet->start_skynet_with_http();
-};
-
 int main()
 {
+
+    int status = 0; 
+    pid_t pid, wpid;
+
+    //Father code
     Skynet* skynet = new Skynet();
-
-    pid_t pid = fork();
-
-    if (pid == 0)
-    {
-        // child process
-        skynet->start_skynet_with_http();
+    
+    int n = 3;
+    for (int id = 0; id < n; id++) {
+        if ((pid = fork() == 0)) {
+            
+            if (id == 0) {
+                pid = getpid();
+                std::cout << "first child http pid: " << pid << std::endl;
+                skynet->start_skynet_with_http();
+                exit(0);
+            }
+            else if (id == 1) {
+                pid = getpid();
+                std::cout << "second child pid: " << pid << std::endl;
+                //skynet->start_skynet_with_udp();
+                exit(0);
+            }
+            else if (id == 2) {
+                pid = getpid();
+                std::cout << "thrid child pid: " << pid << std::endl;
+                exit(0);
+            }
+            else {
+                std::cerr << "error" << std::endl;
+            }
+        }
     }
-    else if (pid > 0)
-    {
-        // parent process
-        skynet->start_skynet_with_udp();
-    }
-    else
-    {
-        // fork failed
-        printf("fork() failed!\n");
-        return 1;
-    }
+    while ((wpid = wait(&status)) > 0);
+    std::cout << "father ends" << std::endl;
 
-    //skynet->start_skynet_with_udp();
-    //std::thread t1(dosmth, skynet);
-    //std::thread t2(dosmth2, skynet);
-    //t1.join();
-    //t2.join();
-
-    /*
-    std::thread t1(&Skynet::start_skynet_with_udp, skynet, "UDP-Server");
-    std::thread t2(&Skynet::start_skynet_with_http, skynet, "HTTP-Server");
-
-    t1.join();
-    t2.join();
-    */
     return 0;
 }
