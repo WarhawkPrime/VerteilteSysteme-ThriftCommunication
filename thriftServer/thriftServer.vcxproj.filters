@@ -18,7 +18,7 @@
     <ClInclude Include="verbindung_types.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="..\Zentrale\ServerFileManagement.h">
+    <ClInclude Include="ServerFileManagement.h">
       <Filter>header</Filter>
     </ClInclude>
   </ItemGroup>
@@ -36,7 +36,7 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="..\Zentrale\ServerFileManagement.cpp">
+    <ClCompile Include="ServerFileManagement.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
