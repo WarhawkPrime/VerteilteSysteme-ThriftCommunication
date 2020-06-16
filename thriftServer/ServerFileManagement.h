@@ -32,8 +32,8 @@ public:
 
 	std::vector<std::string>* currentSensorInfo;
 
-	FileManagement();
-	~FileManagement();
+	ServerFileManagement();
+	~ServerFileManagement();
 	std::string readLineFromFile(const std::string filename, int line); // Returns line at the given line number, starting at beginning of file
 	std::string readLineFromFile(const std::string filename, int line, bool inverted); // Overload of readLineFromFile(), allows for reverse reading from file
 	std::vector<std::string> readFile(const std::string filename); // Returns entire file content as vector	
