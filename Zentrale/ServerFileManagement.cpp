@@ -1,14 +1,14 @@
-#include "FileManagement.h"
+#include "ServerFileManagement.h"
 
 FileManagement::FileManagement() {
 
 	this->init_success = true;
 	this->filenames = new std::vector<std::string>();
-	tempFileName = "tempSensorData.txt";
-	lxDataFileName = "luxSensorData.txt";
-	allDataFileName = "allSensorData.txt";
-	hmdtyDataFileName = "hmdtySensorData.txt";
-	airSpdFileName = "airspdSensorData.txt";
+	tempFileName = "tempSensorDataServer.txt";
+	lxDataFileName = "luxSensorDataServer.txt";
+	allDataFileName = "allSensorDataServer.txt";
+	hmdtyDataFileName = "hmdtySensorDataServer.txt";
+	airSpdFileName = "airspdSensorDataServer.txt";
 	this->filenames->push_back(tempFileName);
 	this->filenames->push_back(lxDataFileName);
 	this->filenames->push_back(airSpdFileName);
@@ -281,7 +281,7 @@ std::string* FileManagement::writeBufferToFile(char dataBuffer[NI_MAXHOST], char
 		
 		if (!writeToFile(allDataFileName, allData)) {
 
-			std::cout << "Failed to write to AllSensorData.txt" << std::endl;
+			std::cout << "Failed to write to AllSensorDataServer.txt" << std::endl;
 			return NULL;
 		}
 		else {

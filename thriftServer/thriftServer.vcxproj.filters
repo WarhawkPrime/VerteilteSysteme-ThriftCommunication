@@ -18,6 +18,9 @@
     <ClInclude Include="verbindung_types.h">
       <Filter>header</Filter>
     </ClInclude>
+    <ClInclude Include="..\Zentrale\ServerFileManagement.h">
+      <Filter>header</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="SendSensordataService.cpp">
@@ -33,6 +36,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="..\Zentrale\ServerFileManagement.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />

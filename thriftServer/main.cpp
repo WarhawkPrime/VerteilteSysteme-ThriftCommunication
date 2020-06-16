@@ -5,10 +5,11 @@
 #include <thrift/transport/TTransportUtils.h>
 
 #include "SendSensordataService.h"
+#include "ServerFileManagement.h"
 
 
-#include "ostream"
-#include "fstream"
+#include <ostream>
+#include <fstream>
 
 
 using namespace std;
@@ -31,19 +32,25 @@ int main() {
     ::std::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
     ::std::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
     SendSensordataServiceClient client(protocol);
+    ServerFileManagement* handle;
 
         transport->open();
 
         SensorDataMessage msg;
+  
+        std::ofstream file;
+        
+        file.open(handle->getAll(), ios::app);
 
-        //TO DO: write the data in a file, loop through the methods
+        if (file.is_open()) {
 
-        std::ostream& os = std::cout;   //goes into the console
-
-        client.getData(msg);
-
-        msg.printTo(os);
-
+            std::ostream& os = file;
+            client.getData(msg);
+            msg.printTo(os);
+        }
+        else {
+            std::cout << "Couldn't write to " << handle->getAll() << "!" << std::endl;
+        }
         transport->close();
 
 	return 0;

@@ -40,15 +40,20 @@ public:
     void getData(SensorDataMessage& _return) {
         // Your implementation goes here
 
+        FileManagement* handle = new FileManagement();
+
         //TO DO set the correct data from the FileManager
+        std::string tempData = handle->readLineFromFile(handle->getTemp(), 0, true);
+        std::string windData = handle->readLineFromFile(handle->getAirspd(), 0, true);
+        std::string brightnessData = handle->readLineFromFile(handle->getLux(), 0, true);
+        std::string humidityData = handle->readLineFromFile(handle->getHumidty(), 0, true);
+       
+        _return.newestTempData = tempData;
+        _return.newestWindData = windData;
+        _return.newestBrightnessData = brightnessData;
+        _return.newestHumidityData = humidityData;
 
-        std::string placeholder = "42";
-        _return.newestTempData = placeholder;
-        _return.newestWindData = placeholder;
-        _return.newestBrightnessData = placeholder;
-        _return.newestHumidityData = placeholder;
-
-        printf("getData\n");
+        std::cout << tempData << windData << brightnessData << humidityData << std::endl;
     }
 
 
@@ -70,6 +75,7 @@ public:
         server.serve();
         return 0;
     }
+
 };
 
 

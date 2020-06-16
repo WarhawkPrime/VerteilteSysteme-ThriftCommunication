@@ -18,7 +18,7 @@ void Skynet::start_skynet_with_http() {
 }
 
 int Skynet::start_skynet_with_thrift() {
-	sh->initializeThrift();
+	this->sh->initializeThrift();
 }
 
 Skynet::~Skynet() {
