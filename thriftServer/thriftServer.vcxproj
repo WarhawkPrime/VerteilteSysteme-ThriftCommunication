@@ -35,16 +35,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Zentrale\ServerFileManagement.h" />
     <ClInclude Include="SendSensordataService.h" />
+    <ClInclude Include="ServerFileManagement.h" />
     <ClInclude Include="verbindung_constants.h" />
     <ClInclude Include="verbindung_types.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Zentrale\ServerFileManagement.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SendSensordataService.cpp" />
     <ClCompile Include="SendSensordataService_server.skeleton.cpp" />
+    <ClCompile Include="ServerFileManagement.cpp" />
     <ClCompile Include="verbindung_constants.cpp" />
     <ClCompile Include="verbindung_types.cpp" />
   </ItemGroup>
