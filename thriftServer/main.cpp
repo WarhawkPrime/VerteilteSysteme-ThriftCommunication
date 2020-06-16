@@ -32,7 +32,7 @@ int main() {
     ::std::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
     ::std::shared_ptr<TProtocol> protocol(new TBinaryProtocol(transport));
     SendSensordataServiceClient client(protocol);
-    ServerFileManagement* handle;
+    ServerFileManagement* handle = new ServerFileManagement();
 
         transport->open();
 
@@ -47,11 +47,12 @@ int main() {
             std::ostream& os = file;
             client.getData(msg);
             msg.printTo(os);
+	    std::cout << "Current Data: " <<  handle->readLineFromFile(handle->getAll(), 0, true) << std::endl;
         }
         else {
             std::cout << "Couldn't write to " << handle->getAll() << "!" << std::endl;
         }
         transport->close();
-
+	delete handle;
 	return 0;
 }
