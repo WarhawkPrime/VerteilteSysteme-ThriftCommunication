@@ -17,8 +17,8 @@ void Skynet::start_skynet_with_http() {
 	this->http->createConnection();
 }
 
-void Skynet::start_skynet_with_thrift() {
-	std::cout << "start with thrift" << std::endl;
+int Skynet::start_skynet_with_thrift() {
+	sh->initializeThrift();
 }
 
 Skynet::~Skynet() {

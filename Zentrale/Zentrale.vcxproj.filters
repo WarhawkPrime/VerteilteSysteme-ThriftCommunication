@@ -14,20 +14,20 @@
     <ClCompile Include="FileManagement.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="SendSensordataService.cpp">
+    <ClCompile Include="ThriftServer.cpp">
       <Filter>thrift</Filter>
+    </ClCompile>
+    <ClCompile Include="SendSensordataService.cpp">
+      <Filter>thrift\src</Filter>
     </ClCompile>
     <ClCompile Include="SendSensordataService_server.skeleton.cpp">
-      <Filter>thrift</Filter>
-    </ClCompile>
-    <ClCompile Include="thriftServer.cpp">
-      <Filter>thrift</Filter>
+      <Filter>thrift\src</Filter>
     </ClCompile>
     <ClCompile Include="verbindung_constants.cpp">
-      <Filter>thrift</Filter>
+      <Filter>thrift\src</Filter>
     </ClCompile>
     <ClCompile Include="verbindung_types.cpp">
-      <Filter>thrift</Filter>
+      <Filter>thrift\src</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -43,14 +43,17 @@
     <ClInclude Include="FileManagement.h">
       <Filter>header</Filter>
     </ClInclude>
-    <ClInclude Include="SendSensordataService.h">
+    <ClInclude Include="ThriftServer.h">
       <Filter>thrift</Filter>
+    </ClInclude>
+    <ClInclude Include="SendSensordataService.h">
+      <Filter>thrift\header</Filter>
     </ClInclude>
     <ClInclude Include="verbindung_constants.h">
-      <Filter>thrift</Filter>
+      <Filter>thrift\header</Filter>
     </ClInclude>
     <ClInclude Include="verbindung_types.h">
-      <Filter>thrift</Filter>
+      <Filter>thrift\header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -63,6 +66,12 @@
     <Filter Include="thrift">
       <UniqueIdentifier>{5dd86caf-3328-4259-9f96-906bc3f1a322}</UniqueIdentifier>
     </Filter>
+    <Filter Include="thrift\header">
+      <UniqueIdentifier>{b30f66f2-845e-45c7-9b27-23fd73cc79d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="thrift\src">
+      <UniqueIdentifier>{ac851a22-43d8-4a22-a1f0-d4e1ccd6201e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="runServerScript.txt" />
@@ -71,5 +80,6 @@
     <None Include="Makefile">
       <Filter>thrift</Filter>
     </None>
+    <None Include="verbindung.thrift" />
   </ItemGroup>
 </Project>

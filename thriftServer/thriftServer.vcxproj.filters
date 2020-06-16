@@ -1,0 +1,40 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="header">
+      <UniqueIdentifier>{17d15acb-e089-48c2-bab1-b2247adb9790}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{13ed090f-2ae4-4648-9597-cf718f9525b3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SendSensordataService.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="verbindung_constants.h">
+      <Filter>header</Filter>
+    </ClInclude>
+    <ClInclude Include="verbindung_types.h">
+      <Filter>header</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="SendSensordataService.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="SendSensordataService_server.skeleton.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="verbindung_constants.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="verbindung_types.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Makefile" />
+  </ItemGroup>
+</Project>

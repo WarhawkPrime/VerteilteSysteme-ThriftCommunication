@@ -82,7 +82,7 @@
     <ClCompile Include="SendSensordataService_server.skeleton.cpp" />
     <ClCompile Include="Skynet.cpp" />
     <ClCompile Include="FileManagement.cpp" />
-    <ClCompile Include="thriftServer.cpp" />
+    <ClCompile Include="ThriftServer.cpp" />
     <ClCompile Include="UDP_server.cpp" />
     <ClCompile Include="verbindung_constants.cpp" />
     <ClCompile Include="verbindung_types.cpp" />
@@ -92,6 +92,7 @@
     <ClInclude Include="SendSensordataService.h" />
     <ClInclude Include="Skynet.h" />
     <ClInclude Include="FileManagement.h" />
+    <ClInclude Include="ThriftServer.h" />
     <ClInclude Include="UDP_server.h" />
     <ClInclude Include="verbindung_constants.h" />
     <ClInclude Include="verbindung_types.h" />
@@ -101,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
+    <None Include="verbindung.thrift" />
   </ItemGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Link>
