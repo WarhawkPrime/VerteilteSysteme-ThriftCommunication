@@ -2,7 +2,7 @@
 TARGET	:= main
 
 #other src files and obj definition
-SRC	:= main.cpp SendSensordataService.cpp SendSensordataService_server.skeleton.cpp verbindung_constants.cpp verbindung_types.cpp
+SRC	:= main.cpp SendSensordataService.cpp SendSensordataService_server.skeleton.cpp verbindung_constants.cpp verbindung_types.cpp ServerFileManagement.cpp
 OBJ	:= $(patsubst %.cpp,%.o, $(SRC))
 
 #include directories

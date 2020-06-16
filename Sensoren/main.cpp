@@ -26,7 +26,7 @@ int main(int argc, char* argv[]) {
 		stringID = argv[1];
 	}
 	else {
-		std::cout << "kein Argument übergeben" << std::endl;
+		std::cout << "kein Argument Ã¼bergeben" << std::endl;
 		std::cout << "Argument: " << std::endl;
 		std::cin >> stringID;
 	}
