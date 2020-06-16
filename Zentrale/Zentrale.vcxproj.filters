@@ -11,9 +11,6 @@
     <ClCompile Include="HTTP_Server.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="FileManagement.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="ThriftServer.cpp">
       <Filter>thrift</Filter>
     </ClCompile>
@@ -29,6 +26,9 @@
     <ClCompile Include="verbindung_types.cpp">
       <Filter>thrift\src</Filter>
     </ClCompile>
+    <ClCompile Include="FileManagement.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UDP_server.h">
@@ -38,9 +38,6 @@
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="HTTP_Server.h">
-      <Filter>header</Filter>
-    </ClInclude>
-    <ClInclude Include="FileManagement.h">
       <Filter>header</Filter>
     </ClInclude>
     <ClInclude Include="ThriftServer.h">
@@ -54,6 +51,9 @@
     </ClInclude>
     <ClInclude Include="verbindung_types.h">
       <Filter>thrift\header</Filter>
+    </ClInclude>
+    <ClInclude Include="FileManagement.h">
+      <Filter>header</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

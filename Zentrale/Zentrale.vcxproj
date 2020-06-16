@@ -76,22 +76,22 @@
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
+    <ClCompile Include="FileManagement.cpp" />
     <ClCompile Include="HTTP_Server.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SendSensordataService.cpp" />
     <ClCompile Include="SendSensordataService_server.skeleton.cpp" />
     <ClCompile Include="Skynet.cpp" />
-    <ClCompile Include="FileManagement.cpp" />
     <ClCompile Include="ThriftServer.cpp" />
     <ClCompile Include="UDP_server.cpp" />
     <ClCompile Include="verbindung_constants.cpp" />
     <ClCompile Include="verbindung_types.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="FileManagement.h" />
     <ClInclude Include="HTTP_Server.h" />
     <ClInclude Include="SendSensordataService.h" />
     <ClInclude Include="Skynet.h" />
-    <ClInclude Include="FileManagement.h" />
     <ClInclude Include="ThriftServer.h" />
     <ClInclude Include="UDP_server.h" />
     <ClInclude Include="verbindung_constants.h" />
