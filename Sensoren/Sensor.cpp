@@ -121,7 +121,7 @@ void Sensor::sleep_delay()
 
 	//}
 
-	
+	/*
 	//std::cout << "Clock start" << std::endl;
 	auto start = std::chrono::high_resolution_clock::now();
 	std::this_thread::sleep_for(std::chrono::seconds(10));
@@ -133,9 +133,8 @@ void Sensor::sleep_delay()
 
 	auto end = std::chrono::high_resolution_clock::now();
 	std::chrono::duration<double, std::milli> elapsed = end - start;
-	//std::cout << "Waited " << elapsed.count() << " ms\n";
-	*/
-
+	//std::cout << "Waited " << elapsed.count() << " ms\n";	
+*/
 	//usleep(10000000);
 }
 

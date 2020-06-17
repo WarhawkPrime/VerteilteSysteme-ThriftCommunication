@@ -134,6 +134,9 @@ int HTTP_Server::handleConnection(int sockfd) {
 				std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 				return -1;
 			}
+			else if(num_bytes_read == 0){
+				continue;
+			}
 			else {
 				std::cout << ">------------------------------------------------------------------------<" << std::endl;
 				std::cout << "Received a request of " << num_bytes_read << " Bytes! " << std::endl;
@@ -142,18 +145,35 @@ int HTTP_Server::handleConnection(int sockfd) {
 			}
 		} while (num_bytes_read == MAX_BUFFER);
 
+		if(!checkForCompleteHeader(request)){
+			
+			BAD_REQUEST = true;
+		}
+		else{
 
-		sentData = handleRequest(child_sockfd, request);
-
-		if (!sentData) {
+			sentData = handleRequest(child_sockfd, request);
+			request = "";
+			if (!sentData) {
 			CLOSE_CONN = true;
 		}
+		}
+		
 	}
 	
 	
 	CLOSE_CONN = false;
 	close(child_sockfd);
 	return 0;
+}
+
+// Check for correct header
+bool HTTP_Server::checkForCompleteHeader(std::string request){
+
+	if(request.find("\r\n\r\n") != std::string::npos)
+		return true;
+	else
+		return false;
+
 }
 
 // Receives incoming request and fetches data, drops connection if given connection: close
