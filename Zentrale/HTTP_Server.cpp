@@ -167,7 +167,7 @@ int HTTP_Server::handleRequest(int sockfd, std::string req) {
 	std::string s, delim = "\r\n";
 	int pos, counter = 0;
 
-	std::cout << "req: " << req << std::endl;
+	//std::cout << "req: " << req << std::endl;
 
 	if (!req.empty()) {
 		// Read all values between \r\n delimiters
@@ -301,7 +301,7 @@ std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, req
 
 	if (!s.empty()) {
 
-		std::cout << "s: " << s << std::endl;
+		std::cout << "r.req: " << r.req << std::endl;
 
 		while ((pos = s.find(delim)) != std::string::npos) {
 
@@ -341,6 +341,8 @@ std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, req
 		if (std::atoi(value1.c_str()) == 0) {
 
 			data = fileHandle->readLineFromFile(path, 0, true);
+			std::cout << "data  for value 0 : " << data << std::endl;
+			return data;
 		}
 		// Alle Daten
 		else if (std::atoi(value1.c_str()) == 1) {
@@ -348,21 +350,27 @@ std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, req
 			fileLines = fileHandle->readFile(path);
 
 			if (!fileLines.empty()) {
+				
+				//std::cout << "FileLines are:"  << std::endl;
 
 				for (int i = 0; i < fileLines.size(); i++)
 				{
 					data += fileLines.at(i);
+					//std::cout << fileLines.at(i) << std::endl;
 				}
+				return data;
 			}
 			else {
 				std::cout << "FileLines is empty!" << std::endl;
 
 			}
 		}
-		// Stub: Returns 1. value of given filename
+		//  Returns 1. value of given filename
 		else if (std::atoi(value1.c_str()) == 2) {
 
-			data = fileHandle->readLineFromFile(path, 0, false);
+			data = fileHandle->readLineFromFile(path, 0);
+			std::cout << "data  for value 2 : " << data << std::endl;
+			return data;
 		}
 		else {
 			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
@@ -372,8 +380,6 @@ std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, req
 			BAD_REQUEST = true;
 			return data;
 		}
-
-		return data;
 	}
 	else {
 		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
@@ -388,7 +394,7 @@ std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, req
 std::string HTTP_Server::createResponse(std::string data, request& params) {
 
 	// Variables
-	std::string response;
+	std::string response = "";
 
 
 	// Check if request was valid, if not send back error

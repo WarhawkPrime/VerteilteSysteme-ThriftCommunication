@@ -28,9 +28,6 @@ FileManagement::FileManagement() {
 			}
 			OutFile.close();
 		}
-		else {
-			std::cout << "Found file: " << filenames->at(i) << std::endl;
-		}
 	}
 
 }
