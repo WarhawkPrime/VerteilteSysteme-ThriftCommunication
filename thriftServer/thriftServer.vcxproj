@@ -34,15 +34,32 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="SendSensordataService.h" />
+    <ClInclude Include="ServerFileManagement.h" />
+    <ClInclude Include="verbindung_constants.h" />
+    <ClInclude Include="verbindung_types.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="SendSensordataService.cpp" />
+    <ClCompile Include="SendSensordataService_server.skeleton.cpp" />
+    <ClCompile Include="ServerFileManagement.cpp" />
+    <ClCompile Include="verbindung_constants.cpp" />
+    <ClCompile Include="verbindung_types.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Makefile" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{0b73e352-e903-4a5a-b685-9288c9c32979}</ProjectGuid>
+    <ProjectGuid>{717ce541-02ff-428c-a9a8-f621003619f6}</ProjectGuid>
     <Keyword>Linux</Keyword>
-    <RootNamespace>Zentrale</RootNamespace>
+    <RootNamespace>thriftServer</RootNamespace>
     <MinimumVisualStudioVersion>15.0</MinimumVisualStudioVersion>
     <ApplicationType>Linux</ApplicationType>
     <ApplicationTypeRevision>1.0</ApplicationTypeRevision>
     <TargetLinuxPlatform>Generic</TargetLinuxPlatform>
-    <LinuxProjectType>{D51BCBC9-82E9-4017-911E-C93873C4EA2B}</LinuxProjectType>
+    <LinuxProjectType>{2238F9CD-F817-4ECC-BD14-2524D2669B35}</LinuxProjectType>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'" Label="Configuration">
@@ -59,7 +76,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>Remote_GCC_1_0</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <UseDebugLibraries>false</UseDebugLibraries>
@@ -75,43 +91,7 @@
   <ImportGroup Label="Shared" />
   <ImportGroup Label="PropertySheets" />
   <PropertyGroup Label="UserMacros" />
-  <ItemGroup>
-    <ClCompile Include="FileManagement.cpp" />
-    <ClCompile Include="HTTP_Server.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="SendSensordataService.cpp" />
-    <ClCompile Include="SendSensordataService_server.skeleton.cpp" />
-    <ClCompile Include="Skynet.cpp" />
-    <ClCompile Include="ThriftServer.cpp" />
-    <ClCompile Include="UDP_server.cpp" />
-    <ClCompile Include="verbindung_constants.cpp" />
-    <ClCompile Include="verbindung_types.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="FileManagement.h" />
-    <ClInclude Include="HTTP_Server.h" />
-    <ClInclude Include="SendSensordataService.h" />
-    <ClInclude Include="Skynet.h" />
-    <ClInclude Include="ThriftServer.h" />
-    <ClInclude Include="UDP_server.h" />
-    <ClInclude Include="verbindung_constants.h" />
-    <ClInclude Include="verbindung_types.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="runServerScript.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Makefile" />
-    <None Include="verbindung.thrift" />
-  </ItemGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <Link>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-    </Link>
-    <ClCompile>
-      <AdditionalIncludeDirectories>E:\IDEs\thrift\thrift-0.13.0\lib\cpp\src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-    </ClCompile>
-  </ItemDefinitionGroup>
+  <ItemDefinitionGroup />
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets" />
 </Project>

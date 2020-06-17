@@ -19,6 +19,10 @@
 #include "../Client/TCP_Socket.h"
 #include "../Client/TCP_Socket.cpp"
 
+
+
+
+
 UDP_server* udp;
 HTTP_Server* http;
 FileManagement* fileHandle;

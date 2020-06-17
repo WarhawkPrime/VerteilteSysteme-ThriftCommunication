@@ -3,7 +3,7 @@
 //TCP-Socket PORT 80 !!!!
 
 //TO DO => implementierung von einfachem http-server der den GET Befehl korrekt verarbeiten kann
-//TO DO => http schnittstelle über eine REST-API den Zugriff auf die Sensordaten mit historie (mit jeweils eigener URI) (Unifiorm Resource Identifier)
+//TO DO => http schnittstelle ï¿½ber eine REST-API den Zugriff auf die Sensordaten mit historie (mit jeweils eigener URI) (Unifiorm Resource Identifier)
 //REST API -> Representational State Transfer, Application Programming Interface
 
 /*
@@ -95,7 +95,7 @@ send()	.	.
 //==================== VORGEHEN ===============
 
 /*
-TCP Socket und Client erstellen, dann einfach mit Strings oder ähnlichem die HTTP Anfragen etc schicken
+TCP Socket und Client erstellen, dann einfach mit Strings oder ï¿½hnlichem die HTTP Anfragen etc schicken
 
 */
 
@@ -156,6 +156,7 @@ private:
 	int handleRequest(int sockfd, std::string req);
 	std::string fetchRequestedData(std::vector<std::string> requestParameters, request &r);
 	std::string createResponse(std::string requestedData, request &requestParameters);
+	bool checkForCompleteHeader(std::string request);
 
 	//======================================================================================
 	int createSocket();

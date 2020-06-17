@@ -1,6 +1,6 @@
-#include "FileManagement.h"
+#include "ServerFileManagement.h"
 
-FileManagement::FileManagement() {
+ServerFileManagement::ServerFileManagement() {
 
 	this->init_success = true;
 	this->filenames = new std::vector<std::string>();
@@ -28,33 +28,36 @@ FileManagement::FileManagement() {
 			}
 			OutFile.close();
 		}
+		else {
+			std::cout << "Found file: " << filenames->at(i) << std::endl;
+		}
 	}
 
 }
 
-FileManagement::~FileManagement() {
+ServerFileManagement::~ServerFileManagement() {
 
 
 }
 
-bool FileManagement::f_exists(const std::string& filename) {
+bool ServerFileManagement::f_exists(const std::string& filename) {
 
 	std::ifstream ifile(filename.c_str());
 	return (bool)ifile;
 }
 
-bool FileManagement::f_is_empty(std::ifstream& inFile) {
+bool ServerFileManagement::f_is_empty(std::ifstream& inFile) {
 
 	return (inFile.peek() == std::ifstream::traits_type::eof());
 }
 
-std::string FileManagement::readLineFromFile(const std::string filename, int line) {
+std::string ServerFileManagement::readLineFromFile(const std::string filename, int line) {
 
 	return readLineFromFile(filename, line, false);
 }
 
 
-std::string FileManagement::readLineFromFile(const std::string filename, int line, bool inverted) {
+std::string ServerFileManagement::readLineFromFile(const std::string filename, int line, bool inverted) {
 
 	std::string lineString;
 	std::vector<std::string> lines;
@@ -118,7 +121,7 @@ std::string FileManagement::readLineFromFile(const std::string filename, int lin
 }
 
 
-std::vector<std::string> FileManagement::readFile(const std::string filename) {
+std::vector<std::string> ServerFileManagement::readFile(const std::string filename) {
 
 	std::string lineString;
 	std::vector<std::string> lines;
@@ -148,7 +151,7 @@ std::vector<std::string> FileManagement::readFile(const std::string filename) {
 	}
 }
 
-bool FileManagement::getNextLineNumber(const std::string filename, long& lineId) {
+bool ServerFileManagement::getNextLineNumber(const std::string filename, long& lineId) {
 
 	if (!f_exists(filename)) {
 
@@ -198,7 +201,7 @@ bool FileManagement::getNextLineNumber(const std::string filename, long& lineId)
 	}
 }
 
-std::string* FileManagement::writeBufferToFile(char dataBuffer[NI_MAXHOST], char hostBuffer[MAX_BUFFER], int numBytesReceived) {
+std::string* ServerFileManagement::writeBufferToFile(char dataBuffer[NI_MAXHOST], char hostBuffer[MAX_BUFFER], int numBytesReceived) {
 
 	// Construct string of data to write
 	std::string filename, token, sensorType, data(dataBuffer, numBytesReceived);
@@ -293,7 +296,7 @@ std::string* FileManagement::writeBufferToFile(char dataBuffer[NI_MAXHOST], char
 	}
 }
 
-bool FileManagement::writeToFile(const std::string filename, const std::string data) {
+bool ServerFileManagement::writeToFile(const std::string filename, const std::string data) {
 
 	OutFile.open(filename, std::ios::app);
 

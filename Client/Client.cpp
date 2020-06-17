@@ -59,6 +59,7 @@ void Client::build_header(std::string path, std::string parameter) {
 
 	const char* msg = message.c_str();
 
+	std::cout << "send message: " << std::endl;
 	std::cout << msg << std::endl;
 
 	tcp.send_msg_to(msg);
@@ -85,7 +86,7 @@ void Client::rec_message() {
 
 	std::string received_request;
 	received_request = tcp.rec_msg_fr();
-	std::cout << "rec message; " << received_request << std::endl;
+
 	std::stringstream message_stream;
 	std::string s = message_stream.str();
 
@@ -99,30 +100,29 @@ void Client::rec_message() {
 
 	int linecounter = 0;
 	while (std::getline(message_stream, segment)) {
-		std::cout << std::endl;
 		switch (linecounter)
 		{
 		default:
 			break;
-		case 0: resp.h1 = segment.substr(9); std::cout << "seg0: " << resp.h1 << std::endl;
+		case 0: resp.h1 = segment.substr(9);
 			linecounter++;
 			break;
-		case 1: resp.content_type = segment.substr(14);	std::cout << "seg1: " << resp.content_type << std::endl;
+		case 1: resp.content_type = segment.substr(14);
 			linecounter++;
 			break;
-		case 2: resp.content_length = segment.substr(16);	std::cout << "seg2: " << resp.content_length << std::endl;
+		case 2: resp.content_length = segment.substr(16);
 			linecounter++;
 			break;
-		case 3: resp.connection = segment.substr(12);	std::cout << "seg3: " << resp.connection << std::endl;
+		case 3: resp.connection = segment.substr(12);
 			linecounter++;
 			break;
 		case 4: // trennung von header zu message
-			linecounter++;	std::cout << "seg4: " << segment << std::endl;
+			linecounter++;
 			break;
 		case 5:
-			linecounter++;	std::cout << "seg5: " << segment << std::endl;
+			linecounter++;
 			break;
-		case 6: resp.message = segment;	std::cout << "seg6: " << resp.message << std::endl;
+		case 6: resp.message = segment;
 			linecounter++;
 			break;
 		}
@@ -131,37 +131,13 @@ void Client::rec_message() {
 	std::cout << std::endl;
 	std::cout << "Erhaltende Nachricht: " << std::endl;
 	std::cout << std::endl;
-	std::cout << resp.message << std::endl;
+	std::stringstream message_stream2;
+	message_stream2.str(std::string());
+	message_stream2.str(received_request);
 
-
-	/*
-	int line = 0;
-	std::cout << "Message received: " << segment << std::endl;
-
-	while (std::getline(message_stream, segment, '\n')) {
-		std::cout << "line: " << segment << std::endl;
-		switch (line)
-		{
-		default:
-			break;
-		case 0: resp.h1 = segment.substr(9);
-			line++;
-			break;
-		case 1: resp.content_type = segment.substr(14);
-			line++;
-			break;
-		case 2: resp.content_length = segment.substr(16);
-			line++;
-			break;
-		case 3: //leerstelle
-			line++;
-			break;
-		case 4: resp.message = segment;
-			line++;
-			break;
-		}
+	while (std::getline(message_stream2, segment)) {
+		std::cout << segment << std::endl;
 	}
-	*/
 }
 
 
