@@ -59,6 +59,7 @@ void Client::build_header(std::string path, std::string parameter) {
 
 	const char* msg = message.c_str();
 
+	std::cout << "send message: " << std::endl;
 	std::cout << msg << std::endl;
 
 	tcp.send_msg_to(msg);
@@ -86,8 +87,6 @@ void Client::rec_message() {
 	std::string received_request;
 	received_request = tcp.rec_msg_fr();
 
-	std::cout << received_request << std::endl;
-
 	std::stringstream message_stream;
 	std::string s = message_stream.str();
 
@@ -101,7 +100,6 @@ void Client::rec_message() {
 
 	int linecounter = 0;
 	while (std::getline(message_stream, segment)) {
-		std::cout << std::endl;
 		switch (linecounter)
 		{
 		default:
