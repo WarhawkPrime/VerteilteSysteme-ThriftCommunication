@@ -73,7 +73,7 @@ std::string TCP_Socket::rec_msg_fr()
 	while (num_bytes_read == BUF_SIZE) {
 		num_bytes_read = recv(sockfd, readBuffer, BUF_SIZE, 0);
 
-		std::cout << "buffer: " << readBuffer << std::endl;
+		//std::cout << "buffer: " << readBuffer << std::endl;
 
 		if (num_bytes_read < 0) {
 			perror("Read");
@@ -87,7 +87,7 @@ std::string TCP_Socket::rec_msg_fr()
 	const char* teminate = "\0";
 	rec_message.append(teminate);
 
-	std::cout << rec_message << std::endl;
+	//std::cout << rec_message << std::endl;
 
 	return rec_message;
 }

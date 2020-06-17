@@ -7,6 +7,8 @@
 #include <thread>
 #include <string>
 
+#include "unistd.h"
+
 #include "UDP_Socket.h"
 
 class Sensor
