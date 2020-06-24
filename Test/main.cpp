@@ -13,6 +13,17 @@
 #include "../Zentrale/FileManagement.cpp"
 #include "../Zentrale/HTTP_Server.h"
 #include "../Zentrale/HTTP_Server.cpp"
+#include "../thriftServer/SendSensordataService.h"
+#include "../thriftServer/ServerFileManagement.h"
+#include "../thriftServer/verbindung_constants.h"
+#include "../thriftServer/verbindung_types.h"
+#include "../thriftServer/SendSensordataService.cpp"
+#include "../thriftServer/ServerFileManagement.cpp"
+#include "../thriftServer/verbindung_constants.cpp"
+#include "../thriftServer/verbindung_types.cpp"
+#include "../thriftServer/SendSensordataService_server.skeleton.cpp"
+#include "../thriftServer/ThriftClient.h"
+#include "../thriftServer/ThriftClient.cpp"
 
 #include "../Client/Client.h"
 #include "../Client/Client.cpp"
@@ -20,12 +31,15 @@
 #include "../Client/TCP_Socket.cpp"
 
 
-
+using namespace std;
+using namespace std::chrono;
 
 
 UDP_server* udp;
 HTTP_Server* http;
 FileManagement* fileHandle;
+//ThriftClient* tc;
+
 
 void doTest(bool rec_data) {
 	CHECK(rec_data == true);
@@ -69,6 +83,18 @@ TEST_SUITE("Tests für Funktionale und Nichtfunktionale Anforderungen mit der Zen
 				c.interprete_message();
 				CHECK(c.getResponse().message != "");
 			}
+
+			SUBCASE("Thrift Message") {
+
+				ThriftClient t;
+
+				CHECK(t.startThrift() == true);
+
+			}
+
+
+
+
 		} 
 
 		//Anforderungen, die unspezifisch für das Programm sind und die Qualität der Funktionalen Anforderungen überprüft
@@ -137,6 +163,22 @@ TEST_SUITE("Tests für Funktionale und Nichtfunktionale Anforderungen mit der Zen
 					CHECK(t1 == true);
 					CHECK(t2 == true);
 			}
+
+			SUBCASE("thrift Dauer") {
+
+				ThriftClient t;
+				auto start = high_resolution_clock::now();
+
+				for (int i = 0; i < 10; i++ ) {
+					t.startThrift();
+				}
+
+				auto stop = high_resolution_clock::now();
+				auto duration = duration_cast<microseconds>(stop - start);
+
+				CHECK(duration.count() < 1000000 );
+			}
+
 		}
 	}
 }
