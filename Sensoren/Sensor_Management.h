@@ -36,7 +36,7 @@ public:
 	//Sensor* get_sensor() { return sensor; }
 	
 	//mqtt
-	void set_mqtt_sensor(MQTT_Sensor* newMQTTSensor) { this->mqttSensorensor = newMQTTSensorSensor; }
+	void set_mqtt_sensor(MQTT_Sensor* newMQTTSensor) { this->mqttSensor = newMQTTSensor; }
 	const MQTT_Sensor* get_mqttSensor() { return mqttSensor; }
 
 	int firstTest();

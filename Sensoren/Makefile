@@ -2,7 +2,7 @@
 TARGET	:= main
 
 #other src files and obj definition
-SRC	:= Sensor.cpp Sensor_Management.cpp UDP_Socket.cpp MQTT_Client.cpp  main.cpp
+SRC	:= Sensor.cpp Sensor_Management.cpp UDP_Socket.cpp MQTT_Sensor.cpp  main.cpp
 OBJ	:= $(patsubst %.cpp,%.o, $(SRC))
 
 #include directories

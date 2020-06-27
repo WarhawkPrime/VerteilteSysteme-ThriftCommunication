@@ -1,7 +1,7 @@
 #include "Sensor_Management.h"
 
 void Sensor_Management::set_Sensor_ID(std::string id) {
-	sensor->setID(id);
+	//sensor->setID(id);
 }
 
 
@@ -19,7 +19,7 @@ Sensor_Management::Sensor_Management()
 
 Sensor_Management::~Sensor_Management()
 {
-	sensor = NULL;
+	//sensor = NULL;
 }
 
 //udp

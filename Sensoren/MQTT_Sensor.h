@@ -33,7 +33,6 @@ class MQTT_Sensor {
 	
 		//=============== Constructor ===============
 		
-		MQTT_Sensor() {}
 		~MQTT_Sensor() {}
 		
 		//constructor to initialize the needed values
@@ -89,15 +88,15 @@ class MQTT_Sensor {
 class callback : public virtual mqtt::callback
 {
 public:
-	void connection_lost(const string& cause) override {
-		cout << "\nConnection lost" << endl;
+	void connection_lost(const std::string& cause) override {
+		std::cout << "\nConnection lost" << std::endl;
 		if (!cause.empty())
-			cout << "\tcause: " << cause << endl;
+			std::cout << "\tcause: " << cause << std::endl;
 	}
 
 	void delivery_complete(mqtt::delivery_token_ptr tok) override {
-		cout << "\tDelivery complete for token: "
-			<< (tok ? tok->get_message_id() : -1) << endl;
+		std::cout << "\tDelivery complete for token: "
+			<< (tok ? tok->get_message_id() : -1) << std::endl;
 	}
 };
 
@@ -110,13 +109,13 @@ class action_listener : public virtual mqtt::iaction_listener
 {
 protected:
 	void on_failure(const mqtt::token& tok) override {
-		cout << "\tListener failure for token: "
-			<< tok.get_message_id() << endl;
+		std::cout << "\tListener failure for token: "
+			<< tok.get_message_id() << std::endl;
 	}
 
 	void on_success(const mqtt::token& tok) override {
-		cout << "\tListener success for token: "
-			<< tok.get_message_id() << endl;
+		std::cout << "\tListener success for token: "
+			<< tok.get_message_id() << std::endl;
 	}
 };
 
@@ -127,7 +126,7 @@ protected:
  */
 class delivery_action_listener : public action_listener
 {
-	atomic<bool> done_;
+	std::atomic<bool> done_;
 
 	void on_failure(const mqtt::token& tok) override {
 		action_listener::on_failure(tok);
