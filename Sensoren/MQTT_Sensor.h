@@ -20,6 +20,7 @@ free any memory being used by the client
 #include <atomic>
 #include <chrono>
 #include <cstring>
+#include <random>
 #include "mqtt/async_client.h"
 
 const std::string DFLT_SERVER_ADDRESS	{ "tcp://localhost:1883" };
@@ -55,7 +56,7 @@ class MQTT_Sensor {
 		
 		int send_message();
 		
-		int initialise_client();
+		int initialize_client();
 		
 		//=============== Getter & Setter ===============
 		
