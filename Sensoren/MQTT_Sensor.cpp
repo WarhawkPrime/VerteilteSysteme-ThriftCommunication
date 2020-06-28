@@ -33,14 +33,22 @@ void Sensor::repeater(double lowEnd, double highEnd, int modus)
 {
 	
 	
-	this->initialize_client();
+	std::string	address  = DFLT_SERVER_ADDRESS;
+	std::string client_id = this->client_id;
+
+	std::cout << "Initializing for server '" << address << "'..." << std::endl;
+	mqtt::async_client client(address, clientID);
+
+	callback cb;
+	client.set_callback(cb);
+
+	mqtt::connect_options conopts;
+	mqtt::message willmsg(TOPIC, LWT_PAYLOAD, 1, true);
+	mqtt::will_options will(willmsg);
+	conopts.set_will(will);
+
+	std::cout << "  ...OK" << std::endl;
 	
-	try {
-		std::cout << "\nConnecting..." << std::endl;
-		mqtt::token_ptr conntok = client.connect(conopts);
-		std::cout << "Waiting for the connection..." << std::endl;
-		conntok->wait();
-		std::cout << "  ...OK" << std::endl;
 
 	switch (modus)
 	{
