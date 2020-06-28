@@ -24,6 +24,7 @@ free any memory being used by the client
 
 const std::string DFLT_SERVER_ADDRESS	{ "tcp://localhost:1883" };
 const std::string DFLT_CLIENT_ID		{ "async_publish_Sensor" };
+const std::string PORT = "1883";
 
 
 
@@ -54,6 +55,7 @@ class MQTT_Sensor {
 		
 		int send_message();
 		
+		int initialise_client();
 		
 		//=============== Getter & Setter ===============
 		
@@ -65,6 +67,12 @@ class MQTT_Sensor {
 	
 		const std::string get_client_id () { return client_id; }
 		void set_client_id(std::string client_id) { this->client_id = client_id; }
+		
+		const std::string get_address() { return address; }
+		void set_address(std::string address) { this->address = address; }
+		
+		const mqtt::async_client get client() { return client; }
+		void set_client(mqtt::async_client client) {this->client = client; }
 	
 		
 	private:
