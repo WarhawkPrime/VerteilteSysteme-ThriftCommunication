@@ -1,8 +1,6 @@
 
 #include "MQTT_Sensor.h"
 
-//random added
-
 
 MQTT_Sensor::MQTT_Sensor(double lowEnd, double highEnd, std::string type, int modus, std::string client_id) : 
 				type(type), client_id(client_id)
@@ -11,11 +9,19 @@ MQTT_Sensor::MQTT_Sensor(double lowEnd, double highEnd, std::string type, int mo
 	
 }
 
+/*
 int MQTT_Sensor::initialize_client() {
 	
+	const std::string TOPIC { "hello" };
+	const char* LWT_PAYLOAD = "Last will and testament.";
+
+	std::string address = DFLT_SERVER_ADDRESS;
+	std::string client_id = get_client_id();
+
+
 	this->set_address("tcp://localhost:1883");
 	std::cout << "Initializing for server '" << address << "'..." << std::endl;
-	mqtt::async_client client(this->get_address, this->get_client_id);
+	mqtt::async_client client(get_address(), get_client_id());
 	
 	callback cb;
 	client.set_callback(cb);
@@ -30,15 +36,11 @@ int MQTT_Sensor::initialize_client() {
 	this->set_client(client);
 	
 }
+*/
 
 
 void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus)
 {
-	const string TOPIC { "hello" };
-	const char* LWT_PAYLOAD = "Last will and testament.";
-	
-	std::string	address  = DFLT_SERVER_ADDRESS;
-	std::string client_id = get_client_id ();
 
 	std::cout << "Initializing for server '" << address << "'..." << std::endl;
 	mqtt::async_client client(address, client_id);
@@ -129,14 +131,14 @@ double MQTT_Sensor::random_value(double lowEnd, double highEnd) {
 	return unif(re);
 }
 
-char* Sensor::getTime()
+char* MQTT_Sensor::getTime()
 {
 	time_t t = time(0);
 	char* dt = ctime(&t);
 	return dt;
 }
 
-char* Sensor::build_message()
+char* MQTT_Sensor::build_message()
 {
 	char* message = "0";
 	std::string s_msg = "0";
