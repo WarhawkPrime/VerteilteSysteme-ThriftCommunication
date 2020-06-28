@@ -146,7 +146,7 @@ char* MQTT_Sensor::getTime()
 
 char* MQTT_Sensor::build_message()
 {
-	char* message = "0";
+	//char* message = "0";
 	std::string s_msg = "0";
 
 	//start with id
@@ -170,12 +170,14 @@ char* MQTT_Sensor::build_message()
 	s_msg = s_msg + date_s;
 
 	//umwandlung zum char*
-	int s = udpc.get_buffer_size();
-	char t[s];
-	strcpy(t, s_msg.c_str());
-	message = t;
+	//int s = udpc.get_buffer_size();
+	//char t[s];
+	//strcpy(t, s_msg.c_str());
+	//message = t;
+	const char* c_msg = s_msg.c_str();
+	
 
 	std::cout << s_msg << std::endl;
 
-	return message;
+	return c_msg;
 }
