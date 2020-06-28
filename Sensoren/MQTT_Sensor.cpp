@@ -1,6 +1,9 @@
 
 #include "MQTT_Sensor.h"
 
+//random added
+
+
 MQTT_Sensor::MQTT_Sensor(double lowEnd, double highEnd, std::string type, int modus, std::string client_id) : 
 				type(type), client_id(client_id)
  {

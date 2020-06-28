@@ -28,7 +28,6 @@ const std::string DFLT_CLIENT_ID		{ "async_publish_Sensor" };
 const std::string PORT = "1883";
 
 
-
 class MQTT_Sensor {
 	
 	public:
