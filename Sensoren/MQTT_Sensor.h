@@ -72,8 +72,8 @@ class MQTT_Sensor {
 		const std::string get_address() { return address; }
 		void set_address(std::string address) { this->address = address; }
 		
-		const mqtt::async_client get_client() { return client; }
-		void set_client(mqtt::async_client client) {this->client = client; }
+		//const mqtt::async_client get_client() { return client; }
+		//void set_client(mqtt::async_client client) {this->client = client; }
 	
 		
 	private:
@@ -85,7 +85,7 @@ class MQTT_Sensor {
 		char* now;
 		double data;
 		
-		mqtt::async_client client;
+		//mqtt::async_client client;
 	
 };
 
