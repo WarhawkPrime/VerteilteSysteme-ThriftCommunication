@@ -61,6 +61,17 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus)
 
 	std::cout << "  ...OK" << std::endl;
 	
+	try {
+		std::cout << "\nConnecting..." << endl;
+		mqtt::token_ptr conntok = client.connect(conopts);
+		cout << "Waiting for the connection..." << endl;
+		conntok->wait();
+		cout << "  ...OK" << endl;
+	}
+	catch (const mqtt::exception& exc) {
+		cerr << exc.what() << endl;
+		return 1;
+	}
 
 	switch (modus)
 	{
