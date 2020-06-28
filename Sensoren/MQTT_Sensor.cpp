@@ -42,6 +42,12 @@ int MQTT_Sensor::initialize_client() {
 void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus)
 {
 
+	const std::string TOPIC { "hello" };
+	const char* LWT_PAYLOAD = "Last will and testament.";
+
+	std::string address = DFLT_SERVER_ADDRESS;
+	std::string client_id = get_client_id();
+
 	std::cout << "Initializing for server '" << address << "'..." << std::endl;
 	mqtt::async_client client(address, client_id);
 

@@ -73,6 +73,8 @@ class MQTT_Sensor {
 		
 		//const mqtt::async_client get_client() { return client; }
 		//void set_client(mqtt::async_client client) {this->client = client; }
+		
+		char* get_date() { return now; }
 	
 		
 	private:
