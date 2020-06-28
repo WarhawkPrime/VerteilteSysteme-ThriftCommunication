@@ -144,7 +144,7 @@ char* MQTT_Sensor::getTime()
 	return dt;
 }
 
-char* MQTT_Sensor::build_message()
+const char* MQTT_Sensor::build_message()
 {
 	//char* message = "0";
 	std::string s_msg = "0";
