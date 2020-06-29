@@ -5,25 +5,7 @@
 MQTT_Sensor::MQTT_Sensor(double lowEnd, double highEnd, std::string type, int modus, std::string client_id) : 
 				type(type), client_id(client_id)
  {
-	this->repeater(lowEnd, highEnd, modus);
-	
-	if(type == "temperatursensor") {
-		set_topic("Sensordata/temperatur");
-	}
-	else if(type == "helligkeitssensor") {
-		set_topic("Sensordata/brightness");
-	}
-	else if(type == "windsensor") {
-		set_topic("Sensordata/windspeed");
-	}
-	else if(type == "luftfeuchtigkeitssensor") {
-		set_topic("Sensordata/humidity");
-	}
-	else {
-			std::cerr << "wrong type" << std::endl;
-	}
-	
-	
+	this->repeater(lowEnd, highEnd, modus, type);
 }
 
 /*
@@ -56,13 +38,38 @@ int MQTT_Sensor::initialize_client() {
 */
 
 
-void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus)
+void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus, std::string type)
 {
 
 	
 	const char* LWT_PAYLOAD = "Last will and Testament.";	
-	const std::string TOPIC = get_topic();
+	
+	std::string topic = "default";
+	
 
+	if(type == "temperatursensor") {
+        	topic = "Sensordata/temperatur";
+        }
+        else if(type == "helligkeitssensor") {
+                topic = "Sensordata/brightness";
+        }
+        else if(type == "windsensor") {
+                topic = "Sensordata/windspeed";
+        }
+        else if(type == "luftfeuchtigkeitssensor") {
+                topic = "Sensordata/humidity";
+        }
+        else {
+                        std::cerr << "wrong type" << std::endl;
+        }
+
+	//const std::string TOPIC = { "Sensordata/temperatur" };
+	//const std::string TOPIC = { "Sensordata/brightness" };
+	//const std::string TOPIC = { "Sensordata/windspeed" };
+	//const std::string TOPIC = { "Sensordata/humidity" };
+
+	
+	const std::string TOPIC = { topic };
 	std::string address = DFLT_SERVER_ADDRESS;
 	std::string client_id = get_client_id();
 
@@ -97,18 +104,11 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus)
 		break;
 	case 0:
 	{
-		//this->data = random_value(lowEnd, highEnd);
-		//this->now = getTime();
-		//udpc.send_msg_to(build_message());
 	};
 	break;
 	case 1:					//Manuell
 	{
-		
-		
-		
-		
-		
+
 		std::cout << "Manuell gestartet" << std::endl;
 
 		int input = 0;
@@ -141,18 +141,32 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus)
 	case 2:				//Automatik
 		std::cout << "Automatik gestartet" << std::endl;
 		
-		/*
+		
 		while (true)
 		{
-			//sleep_delay();
-
-			sleep(30);
+		//	sleep_delay();
+			std::this_thread::sleep_for(std::chrono::seconds(60));
 
 			this->data = random_value(lowEnd, highEnd);
-			this->now = getTime();
-			udpc.send_msg_to(build_message());
+                        this->now = getTime();
+
+                        const char* PAYLOAD2 = build_message();
+                        const int QOS = 1;
+                        const auto TIMEOUT = std::chrono::seconds(10);
+                        // Now try with itemized publish.
+
+                        std::cout << "\nSending next message..." << std::endl;
+                        mqtt::delivery_token_ptr pubtok;
+                        pubtok = client.publish(TOPIC, PAYLOAD2, strlen(PAYLOAD2), QOS, false);
+                        std::cout << "  ...with token: " << pubtok->get_message_id() << std::endl;
+                        std::cout << "  ...for message with " << pubtok->get_message()->get_payload().size()
+                                << " bytes" << std::endl;
+                        pubtok->wait_for(TIMEOUT);
+                        std::cout << "  ...OK" << std::endl;
+
+			
 		};
-		*/
+		
 		break;
 		
 	};

@@ -23,9 +23,9 @@ free any memory being used by the client
 #include <random>
 #include "mqtt/async_client.h"
 
-//const std::string DFLT_SERVER_ADDRESS	{ "tcp://localhost:1883" };
-const std::string DFLT_SERVER_ADDRESS { "tcp://test.mosquitto.org:1883" };
-const std::string DFLT_CLIENT_ID		{ "async_publish_Sensor" };
+const std::string DFLT_SERVER_ADDRESS	{ "tcp://localhost:1883" };
+//const std::string DFLT_SERVER_ADDRESS { "tcp://test.mosquitto:1883" };
+//const std::string DFLT_CLIENT_ID		{ "async_publish_Sensor" };
 const std::string PORT = "1883";
 //const std::string TOPIC { "hello" };
 //const char* LWT_PAYLOAD = "Last will and testament.";
@@ -51,7 +51,7 @@ class MQTT_Sensor {
 		char* getTime();
 		
 		//handles how the sendig of the messages should be handled
-		void repeater(double lowEnd, double highEnd, int modus);
+		void repeater(double lowEnd, double highEnd, int modus, std::string type);
 		
 		const char* build_message();
 		
