@@ -42,8 +42,8 @@ int MQTT_Sensor::initialize_client() {
 void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus)
 {
 
-	const std::string TOPIC { "hello" };
-	const char* LWT_PAYLOAD = "Last will and testament.";
+	
+	
 
 	std::string address = DFLT_SERVER_ADDRESS;
 	std::string client_id = get_client_id();
@@ -92,13 +92,8 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus)
 		
 		
 		std::cout << "Manuell gestartet" << std::endl;
-		/*
+
 		int input = 0;
-		
-		
-		
-		
-		
 		
 		while (input == 0)
 		{
@@ -107,7 +102,18 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus)
 			this->data = random_value(lowEnd, highEnd);
 			this->now = getTime();
 			
-			//hier die funktion eifügen die ein Nachricht sendet
+			const char* PAYLOAD2 = build_message();
+			
+			// Now try with itemized publish.
+
+			std::cout << "\nSending next message..." << std::endl;
+			mqtt::delivery_token_ptr pubtok;
+			pubtok = client.publish(TOPIC, PAYLOAD2, strlen(PAYLOAD2), QOS, false);
+			std::cout << "  ...with token: " << pubtok->get_message_id() << std::endl;
+			std::cout << "  ...for message with " << pubtok->get_message()->get_payload().size()
+				<< " bytes" << std::endl;
+			pubtok->wait_for(TIMEOUT);
+			std::cout << "  ...OK" << std::endl;
 			
 		}
 		*/
