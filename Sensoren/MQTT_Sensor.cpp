@@ -7,6 +7,23 @@ MQTT_Sensor::MQTT_Sensor(double lowEnd, double highEnd, std::string type, int mo
  {
 	this->repeater(lowEnd, highEnd, modus);
 	
+	if(type == "temperatursensor") {
+		set_topic("Sensordata/temperatur");
+	}
+	else if(type == "helligkeitssensor") {
+		set_topic("Sensordata/brightness");
+	}
+	else if(type == "windsensor") {
+		set_topic("Sensordata/windspeed");
+	}
+	else if(type == "luftfeuchtigkeitssensor") {
+		set_topic("Sensordata/humidity");
+	}
+	else {
+			std::cerr << "wrong type" << std::endl;
+	}
+	
+	
 }
 
 /*
@@ -44,6 +61,7 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus)
 
 	
 	const char* LWT_PAYLOAD = "Last will and Testament.";	
+	const std::string TOPIC = get_topic();
 
 	std::string address = DFLT_SERVER_ADDRESS;
 	std::string client_id = get_client_id();

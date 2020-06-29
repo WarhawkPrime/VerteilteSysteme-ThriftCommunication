@@ -27,7 +27,7 @@ free any memory being used by the client
 const std::string DFLT_SERVER_ADDRESS { "tcp://test.mosquitto.org:1883" };
 const std::string DFLT_CLIENT_ID		{ "async_publish_Sensor" };
 const std::string PORT = "1883";
-const std::string TOPIC { "hello" };
+//const std::string TOPIC { "hello" };
 //const char* LWT_PAYLOAD = "Last will and testament.";
 
 
@@ -74,6 +74,9 @@ class MQTT_Sensor {
 		const std::string get_address() { return address; }
 		void set_address(std::string address) { this->address = address; }
 		
+		const std::string get_topic() { return this->topic; }
+		void set_topic(std::string topic) { this->topic = topic; }
+		
 		//const mqtt::async_client get_client() { return client; }
 		//void set_client(mqtt::async_client client) {this->client = client; }
 		
@@ -85,6 +88,7 @@ class MQTT_Sensor {
 		std::string type;
 		std::string address;
 		std::string client_id;
+		std::string topic;
 	
 		char* now;
 		double data;
