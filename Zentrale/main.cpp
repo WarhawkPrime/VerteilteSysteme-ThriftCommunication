@@ -1,19 +1,17 @@
-#include <cstdio>
 #include "Skynet.h"
 #include <sys/select.h>
 #include <thread>
-
-
-#include <stdio.h>
-#include <stdlib.h>
+#include <iostream>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
 
+////////////////////////////////////////////////////////////////
 
-int main()
+int main(int argc, char* argv[])
 {
-    
+
+
     int status = 0;
     pid_t pid, wpid;
 
@@ -21,7 +19,6 @@ int main()
     Skynet* skynet = new Skynet();
 
 
-    
     int n = 3;
     for (int id = 0; id < n; id++) {
         if ((pid = fork() == 0)) {
@@ -35,7 +32,7 @@ int main()
             else if (id == 1) {
                 pid = getpid();
                 std::cout << "second child pid: " << pid << std::endl;
-                skynet->start_skynet_with_udp();
+                skynet->start_skynet_with_mqtt();
                 exit(0);
             }
             else if (id == 2) {
@@ -54,4 +51,5 @@ int main()
     
 
     return 0;
+
 }

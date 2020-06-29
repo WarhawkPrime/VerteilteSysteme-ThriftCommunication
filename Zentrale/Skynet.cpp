@@ -5,6 +5,7 @@ Skynet::Skynet() {
 	this->fileHandle = new FileManagement();
 	this->http = new HTTP_Server(this->fileHandle);
 	this->udp = new UDP_server(this->fileHandle);
+	this->mqtt = new MQTT_Server(this->fileHandle);
 }
 
 void Skynet::start_skynet_with_udp() {
@@ -21,8 +22,13 @@ int Skynet::start_skynet_with_thrift() {
 	this->sh->initializeThrift();
 }
 
+void Skynet::start_skynet_with_mqtt(){
+	this->mqtt->connect();
+}
+
 Skynet::~Skynet() {
 	delete this->udp;
 	delete this->http;
+	delete this->mqtt;
 	delete this->fileHandle;
 }
