@@ -309,7 +309,52 @@ bool FileManagement::writeToFile(const std::string filename, const std::string d
 	}
 }
 
-std::string FileManagement::writeMQTTToFile(std::string data, const std::string filename) {
+bool FileManagement::writeMQTTToFile(std::string data, const std::string filename, std::string port) {
 
-	
+	std::string allData;
+	long nextId = -1, nextIdAll = -1;
+
+	// Set port number
+	data.insert(0, ";");
+	data.insert(0, port);
+	data.insert(0, ";");
+
+	// Set line number
+	allData = data;
+	if (getNextLineNumber(filename, nextId)) {
+
+		data.insert(0, std::to_string(nextId));
+	}
+	else {
+		return false;
+	}
+	if (getNextLineNumber(allDataFileName, nextIdAll)) {
+
+		allData.insert(0, std::to_string(nextIdAll));
+	}
+	else {
+		return false;
+	}
+
+	if (writeToFile(filename, data)) {
+
+		std::cout << "Written following data to " << filename << ": " << std::endl << data << std::endl;
+
+		if (!writeToFile(allDataFileName, allData)) {
+
+			std::cout << "Failed to write to AllSensorData.txt" << std::endl;
+			return false;
+		}
+		else {
+			std::cout << "Written following data to " << allDataFileName << ": " << std::endl << allData << std::endl;
+			return true;
+		}
+	}
+	else {
+
+		std::cout << "Failed to write to " << filename << std::endl;
+		return false;
+	}
+
+	return true;
 }

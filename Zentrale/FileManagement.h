@@ -38,7 +38,7 @@ public:
 	std::string readLineFromFile(const std::string filename, int line, bool inverted); // Overload of readLineFromFile(), allows for reverse reading from file
 	std::vector<std::string> readFile(const std::string filename); // Returns entire file content as vector	
 	std::string* writeBufferToFile(char dataBuffer[NI_MAXHOST], char hostBuffer[MAX_BUFFER], int numBytesReceived); // Writes buffer to end of file, sets id automatically
-	std::string writeMQTTToFile(std::string data, const std::string filename);
+	bool writeMQTTToFile(std::string data, const std::string filename, std::string port);
 	std::string getTemp() { return this->tempFileName; };
 	std::string getAirspd() { return this->airSpdFileName; };
 	std::string getHumidty() { return this->hmdtyDataFileName; };
