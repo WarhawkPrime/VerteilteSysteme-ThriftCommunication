@@ -28,7 +28,7 @@ const std::string DFLT_SERVER_ADDRESS { "tcp://test.mosquitto.org:1883" };
 const std::string DFLT_CLIENT_ID		{ "async_publish_Sensor" };
 const std::string PORT = "1883";
 const std::string TOPIC { "hello" };
-const char* LWT_PAYLOAD = "Last will and testament.";
+//const char* LWT_PAYLOAD = "Last will and testament.";
 
 
 class MQTT_Sensor {

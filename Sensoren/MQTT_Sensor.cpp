@@ -43,7 +43,7 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus)
 {
 
 	
-	
+	const char* LWT_PAYLOAD = "Last will and Testament.";	
 
 	std::string address = DFLT_SERVER_ADDRESS;
 	std::string client_id = get_client_id();
@@ -103,7 +103,8 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus)
 			this->now = getTime();
 			
 			const char* PAYLOAD2 = build_message();
-			
+			const int QOS = 1;
+			const auto TIMEOUT = std::chrono::seconds(10);
 			// Now try with itemized publish.
 
 			std::cout << "\nSending next message..." << std::endl;
@@ -116,7 +117,7 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus)
 			std::cout << "  ...OK" << std::endl;
 			
 		}
-		*/
+		
 	};
 	break;
 	case 2:				//Automatik

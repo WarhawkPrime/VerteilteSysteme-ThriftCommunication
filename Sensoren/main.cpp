@@ -14,11 +14,11 @@
 
 #include "mqtt/async_client.h"
 
-const std::string DFLT_ADDRESS {"tcp://localhost:1883"};
-const std::string TOPIC {"data/rand"};
-const int QOS = 1;
-const int MAX_BUFFERED_MSGS = 120;
-const std::string PERSIST_DIR {"data-persist"};
+//const std::string DFLT_ADDRESS {"tcp://localhost:1883"};
+
+//const int QOS = 1;
+//const int MAX_BUFFERED_MSGS = 120;
+//const std::string PERSIST_DIR {"data-persist"};
 
 /*
 	auto start = std::chrono::high_resolution_clock::now();
@@ -31,8 +31,8 @@ const std::string PERSIST_DIR {"data-persist"};
 int main(int argc, char* argv[]) {
 
 
-	std::string address = "localhost";
-	mqtt::async_client cli(address, "", MAX_BUFFERED_MSGS, PERSIST_DIR);
+	//std::string address = "localhost";
+	//mqtt::async_client cli(address, "", MAX_BUFFERED_MSGS, PERSIST_DIR);
 
 	std::string stringID = "0";
 	if (argv[1] != NULL) {
