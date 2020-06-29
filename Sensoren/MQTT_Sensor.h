@@ -24,7 +24,7 @@ free any memory being used by the client
 #include "mqtt/async_client.h"
 
 const std::string DFLT_SERVER_ADDRESS	{ "tcp://localhost:1883" };
-//const std::string DFLT_SERVER_ADDRESS { "tcp://test.mosquitto:1883" };
+//const std::string DFLT_SERVER_ADDRESS { "tcp://test.mosquitto.org:1883" };
 //const std::string DFLT_CLIENT_ID		{ "async_publish_Sensor" };
 const std::string PORT = "1883";
 //const std::string TOPIC { "hello" };
