@@ -308,3 +308,8 @@ bool FileManagement::writeToFile(const std::string filename, const std::string d
 		return false;
 	}
 }
+
+std::string FileManagement::writeMQTTToFile(std::string data, const std::string filename) {
+
+	
+}

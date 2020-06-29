@@ -14,7 +14,7 @@ int MQTT_Server::connect(){
     mqtt::connect_options connectionOpts;
     std::string data;
     mqtt::const_message_ptr message;
-    connectionOpts.set_keep_alive_interval(20);
+    connectionOpts.set_keep_alive_interval(0);
     connectionOpts.set_clean_session(true);
     mqtt::async_client client(SRV_ADDR, CLIENT_ID);
 
@@ -27,7 +27,6 @@ int MQTT_Server::connect(){
         data = msg->get_payload_str();
     }); 
 
-    std::cout << "Message: " << data << std::endl;
 
     // Connect
     try {
@@ -36,14 +35,14 @@ int MQTT_Server::connect(){
         client.connect(connectionOpts, nullptr, cb);
         client.start_consuming();
 
-        while(std::tolower(std::cin.get()) != 'q'){
+        // std::tolower(std::cin.get()) != 'q'
+        while(1){
 
             message = client.consume_message();
-            if(!message)
-                break;
-
-            std::cout << "MSG: " << message->get_payload_str();
+            
+            
         }
+        client.stop_consuming();
     }
     catch (const mqtt::exception&){
 

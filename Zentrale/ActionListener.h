@@ -10,7 +10,7 @@
 // Define server address, topic and name of client
 const std::string SRV_ADDR("tcp://localhost:1883");
 const std::string CLIENT_ID("zentrale");
-const std::string TOPIC("sensors");
+const std::string TOPIC("Sensordata/temperatur");
 
 // Define quality of service and max num of retry attempts on failed connection
 const int QOS = 1;
@@ -96,18 +96,13 @@ class callback : public virtual mqtt::callback, public virtual mqtt::iaction_lis
     void connection_lost(const std::string & cause) override {
 
         std::cout << "Lost connection" << std::endl;
-        std::cout << "Reason: " << cause << std::endl;
         std::cout << "Trying to reconnect..." << std::endl;
         retries = 0;
         reconnect();
     }
 
     // Callback for arriving message
-    void message_arrived(mqtt::const_message_ptr msg) override {
-
-        std::cout << "Received message: " << msg->to_string() << std::endl;
-
-    }
+    void message_arrived(mqtt::const_message_ptr msg) override {}
 
     void delivery_complete(mqtt::delivery_token_ptr token) override {}
 
