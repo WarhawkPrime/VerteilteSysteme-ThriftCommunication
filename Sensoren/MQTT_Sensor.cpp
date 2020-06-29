@@ -124,7 +124,8 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus, std::string
 			const int QOS = 1;
 			const auto TIMEOUT = std::chrono::seconds(10);
 			// Now try with itemized publish.
-
+			
+/*
 			std::cout << "\nSending next message..." << std::endl;
 			mqtt::delivery_token_ptr pubtok;
 			pubtok = client.publish(TOPIC, PAYLOAD2, strlen(PAYLOAD2), QOS, false);
@@ -133,6 +134,18 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus, std::string
 				<< " bytes" << std::endl;
 			pubtok->wait_for(TIMEOUT);
 			std::cout << "  ...OK" << std::endl;
+*/
+
+
+			std::cout << "\nSending message..." << std::endl;
+			mqtt::message_ptr pubmsg = mqtt::make_message(TOPIC, PAYLOAD2);
+			pubmsg->set_qos(QOS);
+			client.publish(pubmsg)->wait_for(TIMEOUT);
+			std::cout << "bytes send:..." << pubmsg->get_payload().size() << std::endl;
+			std::cout << " ...OK" << std::endl;
+
+
+
 			
 		}
 		
