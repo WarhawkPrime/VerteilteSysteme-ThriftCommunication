@@ -125,7 +125,8 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus, std::string
 					this->data = random_value(lowEnd, highEnd);
 								this->now = getTime();
 
-								const char* PAYLOAD2 = build_message();
+								std::string message = build_message();
+								const char* PAYLOAD2 = message.c_str();
 								const int QOS = 1;
 								const auto TIMEOUT = std::chrono::seconds(10);
 								// Now try with itemized publish.
@@ -157,7 +158,7 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus, std::string
 	}
 	catch (const mqtt::exception& exc) {
 		std::cerr << exc.what() << std::endl;
-		return 1;
+		//return 1;
 	}
 		
 }
