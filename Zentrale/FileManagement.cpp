@@ -230,9 +230,9 @@ std::string* FileManagement::writeBufferToFile(char dataBuffer[NI_MAXHOST], char
 	data.insert(0, ";");
 	data.insert(0, hostBuffer);
 	data.insert(0, ";");
-
+	std::cout << ">------------------------------------------------------------------------<" << std::endl;
 	std::cout << "SensorType: " << sensorType << " ID: " << sensorId << std::endl;
-
+	std::cout << ">------------------------------------------------------------------------<" << std::endl;
 	if (sensorType.find("temp") != std::string::npos) {
 
 		filename = tempFileName;
@@ -251,7 +251,9 @@ std::string* FileManagement::writeBufferToFile(char dataBuffer[NI_MAXHOST], char
 	}
 	else {
 		// Error
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		std::cout << " Couldn't find sensor type!" << std::endl;
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		return NULL;
 	}
 
@@ -273,22 +275,27 @@ std::string* FileManagement::writeBufferToFile(char dataBuffer[NI_MAXHOST], char
 	}
 
 	if (writeToFile(filename, data)) {
-
+		std::cout << ">------------------------------------------------------------------------<" << std::endl;
 		std::cout << "Written following data to " << filename << ": " << std::endl << data << std::endl;
+		std::cout << ">------------------------------------------------------------------------<" << std::endl;
 
 		if (!writeToFile(allDataFileName, allData)) {
-
+			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 			std::cout << "Failed to write to AllSensorData.txt" << std::endl;
+			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 			return NULL;
 		}
 		else {
+			std::cout << ">------------------------------------------------------------------------<" << std::endl;
 			std::cout << "Written following data to " << allDataFileName << ": " << std::endl << allData << std::endl;
+			std::cout << ">------------------------------------------------------------------------<" << std::endl;
 			return ret;
 		}
 	}
 	else {
-
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		std::cout << "Failed to write to " << filename << std::endl;
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		return NULL;
 	}
 }
@@ -316,8 +323,6 @@ bool FileManagement::writeMQTTToFile(std::string data, const std::string filenam
 
 	// Set port number
 	data.insert(0, ";");
-	data.insert(0, port);
-	data.insert(0, ";");
 
 	// Set line number
 	allData = data;
@@ -337,22 +342,26 @@ bool FileManagement::writeMQTTToFile(std::string data, const std::string filenam
 	}
 
 	if (writeToFile(filename, data)) {
-
+		std::cout << ">------------------------------------------------------------------------<" << std::endl;
 		std::cout << "Written following data to " << filename << ": " << std::endl << data << std::endl;
+		std::cout << ">------------------------------------------------------------------------<" << std::endl;
 
 		if (!writeToFile(allDataFileName, allData)) {
-
+			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 			std::cout << "Failed to write to AllSensorData.txt" << std::endl;
+			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 			return false;
 		}
 		else {
 			std::cout << "Written following data to " << allDataFileName << ": " << std::endl << allData << std::endl;
+			std::cout << ">------------------------------------------------------------------------<" << std::endl;
 			return true;
 		}
 	}
 	else {
-
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		std::cout << "Failed to write to " << filename << std::endl;
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		return false;
 	}
 

@@ -26,10 +26,11 @@ class action_listener : public virtual mqtt::iaction_listener
     std::string name;
     
     void on_failure(const mqtt::token &token) override {
-        
+        std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
         std::cout << name << " failure";
         if(token.get_message_id() != 0)
             std::cout << "for token: [" << token.get_message_id() << "]" << std::endl;
+        std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
         std::cout << std::endl;
     }
 
@@ -79,8 +80,9 @@ class callback : public virtual mqtt::callback, public virtual mqtt::iaction_lis
             client.connect(connectionOpts, nullptr, *this);
         }
         catch (const mqtt::exception & e){
-
+            std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
             std::cerr << "Error: " << e.what() << std::endl;
+            std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
             exit(1);
         }
     }
@@ -88,7 +90,9 @@ class callback : public virtual mqtt::callback, public virtual mqtt::iaction_lis
     // Reconnection failed
     void on_failure(const mqtt::token & token) override {
 
+        std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
         std::cout << "Failed to connect!" << std::endl;
+        std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
         if(++retries > NUM_RTRYS)
             exit(1);
         reconnect();
@@ -99,21 +103,23 @@ class callback : public virtual mqtt::callback, public virtual mqtt::iaction_lis
 
     // (Re)connection success
     void connected(const std::string & cause) override {
-
+        std::cout << ">-MQTT------------------------------------------------------------------------<" << std::endl;
         std::cout << "Established Connection" << std::endl;
         for(int i = 0; i < 4; i++){
             
             std::cout << "Subscribing to topic: '" << TOPIC[i] << "'" << std::endl;
             client.subscribe(TOPIC[i], QOS, nullptr, listener);
         }
+        std::cout << ">------------------------------------------------------------------------<" << std::endl;
         
     }
 
     // On connection loss, try to reconnect
     void connection_lost(const std::string & cause) override {
-
+        std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
         std::cout << "Lost connection" << std::endl;
         std::cout << "Trying to reconnect..." << std::endl;
+        std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
         retries = 0;
         reconnect();
     }

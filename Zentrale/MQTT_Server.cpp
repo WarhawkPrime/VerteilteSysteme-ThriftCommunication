@@ -23,8 +23,9 @@ int MQTT_Server::connect(){
     callback cb(client, connectionOpts);
     client.set_callback(cb);
     client.set_message_callback([&](mqtt::const_message_ptr msg) {
-
+        std::cout << ">-MQTT------------------------------------------------------------------------<" << std::endl;
         std::cout << "Received message: " << msg->get_payload_str() << std::endl;
+        std::cout << ">------------------------------------------------------------------------<" << std::endl;
         data = msg->get_payload_str();
         topic = msg->get_topic();
     }); 
@@ -32,8 +33,9 @@ int MQTT_Server::connect(){
 
     // Connect
     try {
-        
+        std::cout << ">-MQTT------------------------------------------------------------------------<" << std::endl;
         std::cout << "Connecting..." << std::endl;
+        std::cout << ">------------------------------------------------------------------------<" << std::endl;
         client.connect(connectionOpts, nullptr, cb);
         client.start_consuming();
 
@@ -59,7 +61,9 @@ int MQTT_Server::connect(){
                fileHandle->writeMQTTToFile(data, fileHandle->getHumidty(), "1883");
            }
            else{
+               std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
                std::cout << "Topic error!" << std::endl;
+               std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
                return 1;
            }
             
@@ -67,8 +71,9 @@ int MQTT_Server::connect(){
         client.stop_consuming();
     }
     catch (const mqtt::exception&){
-
+        std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
         std::cerr << "Error: Couldn't connect." << std::endl;
+        std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
         return 1;
     }
 
@@ -80,10 +85,11 @@ int MQTT_Server::connect(){
 int MQTT_Server::disconnect(mqtt::async_client& client){
 
     try {
-
+        std::cout << ">-MQTT------------------------------------------------------------------------<" << std::endl;
         std::cout << "Disconnecting..." << std::flush;
         client.disconnect()->wait();
         std::cout << std::endl << "Done!" <<std::endl;
+        std::cout << ">------------------------------------------------------------------------<" << std::endl;
     }
     catch(const mqtt::exception & e){
 

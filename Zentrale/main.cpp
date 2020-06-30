@@ -15,6 +15,8 @@ int main(int argc, char* argv[])
     int status = 0;
     pid_t pid, wpid;
 
+    std::cout << "Test" << std::endl;
+
     //Father code
     Skynet* skynet = new Skynet();
 
@@ -25,19 +27,25 @@ int main(int argc, char* argv[])
 
             if (id == 0) {
                 pid = getpid();
-                std::cout << "first child http pid: " << pid << std::endl;
+                std::cout << ">-HTTP------------------------------------------------------------------------<" << std::endl;
+                std::cout << "first child pid: " << pid << std::endl;
+               
                 skynet->start_skynet_with_http();
                 exit(0);
             }
             else if (id == 1) {
                 pid = getpid();
+                std::cout << ">-MQTT------------------------------------------------------------------------<" << std::endl;
                 std::cout << "second child pid: " << pid << std::endl;
+                
                 skynet->start_skynet_with_mqtt();
                 exit(0);
             }
             else if (id == 2) {
                 pid = getpid();
+                std::cout << ">-THRIFT------------------------------------------------------------------------<" << std::endl;
                 std::cout << "third child pid: " << pid << std::endl;
+                
                 skynet->start_skynet_with_thrift();
                 exit(0);
             }
