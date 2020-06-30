@@ -200,3 +200,4 @@
 200;localhost;238;50000;luftfeuchtigkeitssensor;83.841760;Wed Jun 17 15:09:11 2020
 201;localhost;238;50000;luftfeuchtigkeitssensor;61.235877;Wed Jun 17 15:09:11 2020
 202;localhost;238;50000;luftfeuchtigkeitssensor;80.543878;Wed Jun 17 15:09:12 2020
+203;1883;204;1883;204;1883;204;1883;204;1883;204;1883;204;1883;

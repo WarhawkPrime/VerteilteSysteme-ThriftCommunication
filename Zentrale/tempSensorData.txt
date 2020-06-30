@@ -25,3 +25,4 @@
 25;localhost;150;50000;temperatursensor;26.030454;Wed Jun 17 15:07:11 2020
 26;localhost;150;50000;temperatursensor;0.565876;Wed Jun 17 15:07:11 2020
 27;localhost;150;50000;temperatursensor;28.345479;Wed Jun 17 15:07:11 2020
+28;1883;29;1883;29;1883;29;1883;

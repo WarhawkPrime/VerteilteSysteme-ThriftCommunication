@@ -1,3 +1,4 @@
+#include "ActionListener.h"
 #include "MQTT_Server.h"
 
 MQTT_Server::MQTT_Server(){}
@@ -12,9 +13,9 @@ MQTT_Server::MQTT_Server(FileManagement* handle){
 int MQTT_Server::connect(){
 
     mqtt::connect_options connectionOpts;
-    std::string data;
+    std::string data, topic;
     mqtt::const_message_ptr message;
-    connectionOpts.set_keep_alive_interval(20);
+    connectionOpts.set_keep_alive_interval(0);
     connectionOpts.set_clean_session(true);
     mqtt::async_client client(SRV_ADDR, CLIENT_ID);
 
@@ -25,9 +26,9 @@ int MQTT_Server::connect(){
 
         std::cout << "Received message: " << msg->get_payload_str() << std::endl;
         data = msg->get_payload_str();
+        topic = msg->get_topic();
     }); 
 
-    std::cout << "Message: " << data << std::endl;
 
     // Connect
     try {
@@ -36,14 +37,34 @@ int MQTT_Server::connect(){
         client.connect(connectionOpts, nullptr, cb);
         client.start_consuming();
 
-        while(std::tolower(std::cin.get()) != 'q'){
+        // std::tolower(std::cin.get()) != 'q'
+        while(1){
 
-            message = client.consume_message();
-            if(!message)
-                break;
+           message = client.consume_message();
 
-            std::cout << "MSG: " << message->get_payload_str();
+           if(topic == "Sensordata/temperatur"){
+               
+               fileHandle->writeMQTTToFile(data, fileHandle->getTemp(), "1883");
+           }
+           else if(topic == "Sensordata/brightness"){
+            
+               fileHandle->writeMQTTToFile(data, fileHandle->getLux(), "1883");
+           }
+           else if(topic == "Sensordata/windspeed"){
+
+                fileHandle->writeMQTTToFile(data, fileHandle->getAirspd(), "1883");
+           }
+           else if(topic == "Sensordata/humidity"){
+            
+               fileHandle->writeMQTTToFile(data, fileHandle->getHumidty(), "1883");
+           }
+           else{
+               std::cout << "Topic error!" << std::endl;
+               return 1;
+           }
+            
         }
+        client.stop_consuming();
     }
     catch (const mqtt::exception&){
 

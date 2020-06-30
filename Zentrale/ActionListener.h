@@ -7,21 +7,24 @@
 #include <chrono>
 #include "mqtt/async_client.h"
 
-// Define server address, topic and name of client
+// Define server address and name of client
 const std::string SRV_ADDR("tcp://localhost:1883");
 const std::string CLIENT_ID("zentrale");
-const std::string TOPIC("sensors");
 
-// Define quality of service and max num of retry attempts on failed connection
-const int QOS = 1;
-const int NUM_RTRYS = 5;
+//const std::string TMPSENSOR("Sensordata/temperatur");
+//const std::string HMDSENSOR("Sensordata/humidity");
+//const std::string ARSSENSOR("Sensordata/windspeed");
+//const std::string LUXSENSOR("Sensordata/brightness");
+
+
+
 
 
 // Define callback functions for success or failure of operations
 class action_listener : public virtual mqtt::iaction_listener
 {
     std::string name;
-
+    
     void on_failure(const mqtt::token &token) override {
         
         std::cout << name << " failure";
@@ -55,6 +58,16 @@ class callback : public virtual mqtt::callback, public virtual mqtt::iaction_lis
     mqtt::async_client & client;
     mqtt::connect_options& connectionOpts;
     action_listener listener;
+    // Define quality of service and max num of retry attempts on failed connection
+    const int QOS = 1;
+    const int NUM_RTRYS = 2;
+    std::string TOPIC[4] = {
+    "Sensordata/temperatur",
+    "Sensordata/humidity",
+    "Sensordata/windspeed",
+    "Sensordata/brightness"
+    };
+
 
 
     // Mannually reconnect to the broker by calling connect again.
@@ -88,27 +101,25 @@ class callback : public virtual mqtt::callback, public virtual mqtt::iaction_lis
     void connected(const std::string & cause) override {
 
         std::cout << "Established Connection" << std::endl;
-        std::cout << "Subscribing to topic: '" << TOPIC << "'" << std::endl;
-        client.subscribe(TOPIC, QOS, nullptr, listener);
+        for(int i = 0; i < 4; i++){
+            
+            std::cout << "Subscribing to topic: '" << TOPIC[i] << "'" << std::endl;
+            client.subscribe(TOPIC[i], QOS, nullptr, listener);
+        }
+        
     }
 
     // On connection loss, try to reconnect
     void connection_lost(const std::string & cause) override {
 
         std::cout << "Lost connection" << std::endl;
-        std::cout << "Reason: " << cause << std::endl;
         std::cout << "Trying to reconnect..." << std::endl;
         retries = 0;
         reconnect();
     }
 
     // Callback for arriving message
-    void message_arrived(mqtt::const_message_ptr msg) override {
-
-        std::cout << "Received message: " << msg->to_string() << std::endl;
-
-    }
-
+    void message_arrived(mqtt::const_message_ptr msg) override {}
     void delivery_complete(mqtt::delivery_token_ptr token) override {}
 
 
