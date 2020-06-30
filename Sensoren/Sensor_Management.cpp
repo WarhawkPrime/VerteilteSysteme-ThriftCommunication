@@ -69,7 +69,7 @@ void Sensor_Management::create_brightnessMQTTSensor(int mod, std::string sid)
 
 void Sensor_Management::create_windMQTTSensor(int mod, std::string sid)
 {
-	MQTT_Sensor* s = new MQTT_Sensor(0, 80, "windsensor", mod, sid);
+	MQTT_Sensor* s = new MQTT_Sensor(0, 32, "windsensor", mod, sid);
 	set_mqtt_sensor(s);
 	
 }

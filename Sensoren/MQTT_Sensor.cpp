@@ -8,35 +8,6 @@ MQTT_Sensor::MQTT_Sensor(double lowEnd, double highEnd, std::string type, int mo
 	this->repeater(lowEnd, highEnd, modus, type);
 }
 
-/*
-int MQTT_Sensor::initialize_client() {
-	
-	const std::string TOPIC { "hello" };
-	const char* LWT_PAYLOAD = "Last will and testament.";
-
-	std::string address = DFLT_SERVER_ADDRESS;
-	std::string client_id = get_client_id();
-
-
-	this->set_address("tcp://localhost:1883");
-	std::cout << "Initializing for server '" << address << "'..." << std::endl;
-	mqtt::async_client client(get_address(), get_client_id());
-	
-	callback cb;
-	client.set_callback(cb);
-	
-	mqtt::connect_options conopts;
-	mqtt::message willmsg(TOPIC, LWT_PAYLOAD, 1, true);
-	mqtt::will_options will(willmsg);
-	conopts.set_will(will);
-
-	std::cout << "  ...OK" << std::endl;
-	
-	this->set_client(client);
-	
-}
-*/
-
 
 void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus, std::string type)
 {
@@ -92,11 +63,6 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus, std::string
 		std::cout << "Waiting for the connection..." << std::endl;
 		conntok->wait();
 		std::cout << "  ...OK" << std::endl;
-	}
-	catch (const mqtt::exception& exc) {
-		std::cerr << exc.what() << std::endl;
-		//return 1;
-	}
 
 	switch (modus)
 	{
@@ -115,17 +81,23 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus, std::string
 		
 		while (input == 0)
 		{
+
+			this->data = random_value(lowEnd, highEnd);
+                        this->now = getTime();
+
+			std::string message = build_message();			
+
+			const char* PAYLOAD2 = message.c_str();
+
 			std::cout << "0 druecken um Nachricht zu senden, eine andere Zahl um das Programm zu beenden" << std::endl;
 			std::cin >> input;
-			this->data = random_value(lowEnd, highEnd);
-			this->now = getTime();
 			
-			const char* PAYLOAD2 = build_message();
+			//const char* PAYLOAD2 = build_message();
 			const int QOS = 1;
 			const auto TIMEOUT = std::chrono::seconds(10);
 			// Now try with itemized publish.
 			
-/*
+
 			std::cout << "\nSending next message..." << std::endl;
 			mqtt::delivery_token_ptr pubtok;
 			pubtok = client.publish(TOPIC, PAYLOAD2, strlen(PAYLOAD2), QOS, false);
@@ -134,21 +106,28 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus, std::string
 				<< " bytes" << std::endl;
 			pubtok->wait_for(TIMEOUT);
 			std::cout << "  ...OK" << std::endl;
-*/
-
-
-			std::cout << "\nSending message..." << std::endl;
-			mqtt::message_ptr pubmsg = mqtt::make_message(TOPIC, PAYLOAD2);
-			pubmsg->set_qos(QOS);
-			client.publish(pubmsg)->wait_for(TIMEOUT);
-			std::cout << "bytes send:..." << pubmsg->get_payload().size() << std::endl;
-			std::cout << " ...OK" << std::endl;
-
-
 
 			
 		}
+
+		auto toks = client.get_pending_delivery_tokens();
+		if (!toks.empty()) {
+			std::cerr << "Error: there are pending delivery tokens!" << std::endl;
+		}
+
+		//disconnect
+		std::cout << "\nDisconnecting..." << std::endl;
+		conntok = client.disconnect();
+		conntok->wait();
+		std::cout << "...OK" << std::endl;
 		
+		}
+        catch (const mqtt::exception& exc) {
+                std::cerr << exc.what() << std::endl;
+                //return 1;
+        }
+
+
 	};
 	break;
 	case 2:				//Automatik
@@ -158,6 +137,8 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus, std::string
 		while (true)
 		{
 		//	sleep_delay();
+
+/*
 			std::this_thread::sleep_for(std::chrono::seconds(60));
 
 			this->data = random_value(lowEnd, highEnd);
@@ -177,7 +158,7 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus, std::string
                         pubtok->wait_for(TIMEOUT);
                         std::cout << "  ...OK" << std::endl;
 
-			
+*/			
 		};
 		
 		break;
@@ -207,24 +188,27 @@ char* MQTT_Sensor::getTime()
 	return dt;
 }
 
-const char* MQTT_Sensor::build_message()
+std::string MQTT_Sensor::build_message()
 {
+	
 	//char* message = "0";
-	std::string s_msg = "0";
+	std::string s_msg = "";
 
 	//start with id
 	std::string id = this->get_client_id();
 	id = id + ";";
 
 	//add port and type
-	std::string port = PORT;
+	std::string port = "1883";
 	port = port + ";";
+
+	//sensor type
 	std::string type_s = get_type();
 	type_s = type_s + ";";
 	s_msg = id + port + type_s;
 
 	//messwerte
-	std::string data_s = std::to_string(get_data());
+	std::string data_s = std::to_string(this->get_data());
 	data_s = data_s + ";";
 	s_msg = s_msg + data_s;
 
@@ -232,15 +216,6 @@ const char* MQTT_Sensor::build_message()
 	std::string date_s = get_date();
 	s_msg = s_msg + date_s;
 
-	//umwandlung zum char*
-	//int s = udpc.get_buffer_size();
-	//char t[s];
-	//strcpy(t, s_msg.c_str());
-	//message = t;
-	const char* c_msg = s_msg.c_str();
 	
-
-	std::cout << s_msg << std::endl;
-
-	return c_msg;
+	return s_msg;
 }

@@ -53,7 +53,7 @@ class MQTT_Sensor {
 		//handles how the sendig of the messages should be handled
 		void repeater(double lowEnd, double highEnd, int modus, std::string type);
 		
-		const char* build_message();
+		std::string build_message();
 		
 		
 		int send_message();
