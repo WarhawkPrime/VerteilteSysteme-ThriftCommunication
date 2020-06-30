@@ -64,106 +64,102 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus, std::string
 		conntok->wait();
 		std::cout << "  ...OK" << std::endl;
 
-	switch (modus)
-	{
-	default: return;
-		break;
-	case 0:
-	{
-	};
-	break;
-	case 1:					//Manuell
-	{
-
-		std::cout << "Manuell gestartet" << std::endl;
-
-		int input = 0;
-		
-		while (input == 0)
+		switch (modus)
 		{
+			default: return;
+				break;
+			case 0:
+			{
+			};
+			break;
+			case 1:					//Manuell
+			{
+				std::cout << "Manuell gestartet" << std::endl;
 
-			this->data = random_value(lowEnd, highEnd);
-                        this->now = getTime();
+				int input = 0;
+				
+				while (input == 0)
+				{
 
-			std::string message = build_message();			
+					this->data = random_value(lowEnd, highEnd);
+								this->now = getTime();
 
-			const char* PAYLOAD2 = message.c_str();
+					std::string message = build_message();			
 
-			std::cout << "0 druecken um Nachricht zu senden, eine andere Zahl um das Programm zu beenden" << std::endl;
-			std::cin >> input;
+					const char* PAYLOAD2 = message.c_str();
+
+					std::cout << "0 druecken um Nachricht zu senden, eine andere Zahl um das Programm zu beenden" << std::endl;
+					std::cin >> input;
+					
+					//const char* PAYLOAD2 = build_message();
+					const int QOS = 1;
+					const auto TIMEOUT = std::chrono::seconds(10);
+					// Now try with itemized publish.
+					
+
+					std::cout << "\nSending next message..." << std::endl;
+					mqtt::delivery_token_ptr pubtok;
+					pubtok = client.publish(TOPIC, PAYLOAD2, strlen(PAYLOAD2), QOS, false);
+					std::cout << "  ...with token: " << pubtok->get_message_id() << std::endl;
+					std::cout << "  ...for message with " << pubtok->get_message()->get_payload().size()
+						<< " bytes" << std::endl;
+					pubtok->wait_for(TIMEOUT);
+					std::cout << "  ...OK" << std::endl;
+
+					
+				}
+			};
+			break;
+			case 2:				//Automatik
+			{
+				std::cout << "Automatik gestartet" << std::endl;
+				
+				
+				while (true)
+				{
+					//	sleep_delay();
+
+		
+					std::this_thread::sleep_for(std::chrono::seconds(60));
+
+					this->data = random_value(lowEnd, highEnd);
+								this->now = getTime();
+
+								const char* PAYLOAD2 = build_message();
+								const int QOS = 1;
+								const auto TIMEOUT = std::chrono::seconds(10);
+								// Now try with itemized publish.
+
+								std::cout << "\nSending next message..." << std::endl;
+								mqtt::delivery_token_ptr pubtok;
+								pubtok = client.publish(TOPIC, PAYLOAD2, strlen(PAYLOAD2), QOS, false);
+								std::cout << "  ...with token: " << pubtok->get_message_id() << std::endl;
+								std::cout << "  ...for message with " << pubtok->get_message()->get_payload().size()
+										<< " bytes" << std::endl;
+								pubtok->wait_for(TIMEOUT);
+								std::cout << "  ...OK" << std::endl;
+
 			
-			//const char* PAYLOAD2 = build_message();
-			const int QOS = 1;
-			const auto TIMEOUT = std::chrono::seconds(10);
-			// Now try with itemized publish.
-			
-
-			std::cout << "\nSending next message..." << std::endl;
-			mqtt::delivery_token_ptr pubtok;
-			pubtok = client.publish(TOPIC, PAYLOAD2, strlen(PAYLOAD2), QOS, false);
-			std::cout << "  ...with token: " << pubtok->get_message_id() << std::endl;
-			std::cout << "  ...for message with " << pubtok->get_message()->get_payload().size()
-				<< " bytes" << std::endl;
-			pubtok->wait_for(TIMEOUT);
-			std::cout << "  ...OK" << std::endl;
-
-			
-		}
-
+				};
+			};	
+			break;		
+		};
+		
 		auto toks = client.get_pending_delivery_tokens();
-		if (!toks.empty()) {
-			std::cerr << "Error: there are pending delivery tokens!" << std::endl;
-		}
+		if (!toks.empty())
+			std::cout << "Error: There are pending delivery tokens!" << std::endl;
 
-		//disconnect
+		// Disconnect
 		std::cout << "\nDisconnecting..." << std::endl;
 		conntok = client.disconnect();
 		conntok->wait();
-		std::cout << "...OK" << std::endl;
+		std::cout << "  ...OK" << std::endl;
+	}
+	catch (const mqtt::exception& exc) {
+		std::cerr << exc.what() << std::endl;
+		return 1;
+	}
 		
-		}
-        catch (const mqtt::exception& exc) {
-                std::cerr << exc.what() << std::endl;
-                //return 1;
-        }
-
-
-	};
-	break;
-	case 2:				//Automatik
-		std::cout << "Automatik gestartet" << std::endl;
-		
-		
-		while (true)
-		{
-		//	sleep_delay();
-
-/*
-			std::this_thread::sleep_for(std::chrono::seconds(60));
-
-			this->data = random_value(lowEnd, highEnd);
-                        this->now = getTime();
-
-                        const char* PAYLOAD2 = build_message();
-                        const int QOS = 1;
-                        const auto TIMEOUT = std::chrono::seconds(10);
-                        // Now try with itemized publish.
-
-                        std::cout << "\nSending next message..." << std::endl;
-                        mqtt::delivery_token_ptr pubtok;
-                        pubtok = client.publish(TOPIC, PAYLOAD2, strlen(PAYLOAD2), QOS, false);
-                        std::cout << "  ...with token: " << pubtok->get_message_id() << std::endl;
-                        std::cout << "  ...for message with " << pubtok->get_message()->get_payload().size()
-                                << " bytes" << std::endl;
-                        pubtok->wait_for(TIMEOUT);
-                        std::cout << "  ...OK" << std::endl;
-
-*/			
-		};
-		
-		break;
-		
-	};
 }
 
 
