@@ -97,7 +97,7 @@ int HTTP_Server::createConnection() {
 
 		// Child
 		if (pid == 0) {
-			std::cout << ">------------------------------------------------------------------------<" << std::endl;
+			std::cout << ">-HTTP------------------------------------------------------------------------<" << std::endl;
 			std::cout << "Process started" << std::endl;
 			std::cout << ">------------------------------------------------------------------------<" << std::endl;
 
@@ -138,7 +138,7 @@ int HTTP_Server::handleConnection(int sockfd) {
 				continue;
 			}
 			else {
-				std::cout << ">------------------------------------------------------------------------<" << std::endl;
+				std::cout << ">-HTTP------------------------------------------------------------------------<" << std::endl;
 				std::cout << "Received a request of " << num_bytes_read << " Bytes! " << std::endl;
 				std::cout << ">------------------------------------------------------------------------<" << std::endl;
 				request += readBuffer;
@@ -321,7 +321,7 @@ std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, req
 
 	if (!s.empty()) {
 
-		std::cout << "r.req: " << r.req << std::endl;
+		//std::cout << "r.req: " << r.req << std::endl;
 
 		while ((pos = s.find(delim)) != std::string::npos) {
 
@@ -330,14 +330,14 @@ std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, req
 			if (count == 0) {
 
 				prefix = a;
-				std::cout << "prefix: " << prefix << std::endl;
+				//std::cout << "prefix: " << prefix << std::endl;
 				s.erase(0, pos + delim.length());
 				count++;
 			}
 			else if (count == 1) {
 
 				host = a;
-				std::cout << "host: " << host << std::endl;
+				//std::cout << "host: " << host << std::endl;
 				s.erase(0, pos + delim.length());
 				count++;
 			}
@@ -347,21 +347,21 @@ std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, req
 		}
 
 		param1 = s;
-		std::cout << "param1: " << param1 << std::endl;
+		//std::cout << "param1: " << param1 << std::endl;
 		param1.erase(0, 2);
 		pos = param1.find("?");
 		path = param1.substr(0, pos);
 		param1.erase(0, pos + 1);
-		std::cout << "path: " << path << std::endl;
+		//std::cout << "path: " << path << std::endl;
 		pos = param1.find("=");
 		value1 = param1.substr(pos + 1, std::string::npos);
-		std::cout << "value1: " << value1 << std::endl;
+		//std::cout << "value1: " << value1 << std::endl;
 
 		// Aktuellster Wert des Sensors
 		if (std::atoi(value1.c_str()) == 0) {
 
 			data = fileHandle->readLineFromFile(path, 0, true);
-			std::cout << "data  for value 0 : " << data << std::endl;
+			//std::cout << "data  for value 0 : " << data << std::endl;
 			return data;
 		}
 		// Alle Daten
@@ -381,7 +381,9 @@ std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, req
 				return data;
 			}
 			else {
+				std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 				std::cout << "FileLines is empty!" << std::endl;
+				std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 
 			}
 		}
@@ -389,7 +391,6 @@ std::string HTTP_Server::fetchRequestedData(std::vector<std::string> params, req
 		else if (std::atoi(value1.c_str()) == 2) {
 
 			data = fileHandle->readLineFromFile(path, 0);
-			std::cout << "data  for value 2 : " << data << std::endl;
 			return data;
 		}
 		else {
@@ -436,8 +437,9 @@ std::string HTTP_Server::createResponse(std::string data, request& params) {
 
 		// Check if data is empty
 		if (data.empty()) {
-
+			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 			std::cout << "Requested data was empty!" << std::endl;
+			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 			response += "Keine Daten vorhanden";
 		}
 		else {
@@ -477,19 +479,21 @@ int HTTP_Server::sendResponse(int sockfd, std::string response) {
 	if ((num_bytes_written = send(child_sockfd, response.c_str(), response.length(), NULL)) < 0) {
 
 		perror("write");
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		std::cout << "Failed to send!" << std::endl;
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		return 0;
 	}
 	else {
 
 		if (num_bytes_written == 0) {
-			std::cout << "num_bytes_written: " << num_bytes_written << std::endl;
+			
 			// Send again
 			num_bytes_written = send(child_sockfd, response.c_str(), response.length(), NULL);
 		}
 		else {
 
-			std::cout << ">------------------------------------------------------------------------<" << std::endl;
+			std::cout << ">-HTTP------------------------------------------------------------------------<" << std::endl;
 			std::cout << "Sent " << num_bytes_written << " bytes to client" << std::endl;
 			std::cout << ">------------------------------------------------------------------------<" << std::endl;
 			std::cout << "Successfully sent following data: " << std::endl << response.c_str() << std::endl;

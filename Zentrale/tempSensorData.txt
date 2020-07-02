@@ -25,3 +25,14 @@
 25;localhost;150;50000;temperatursensor;26.030454;Wed Jun 17 15:07:11 2020
 26;localhost;150;50000;temperatursensor;0.565876;Wed Jun 17 15:07:11 2020
 27;localhost;150;50000;temperatursensor;28.345479;Wed Jun 17 15:07:11 2020
+28;1883;29;1883;29;1883;29;1883;29;1883;28;1883;temperatursensor;23.396237;Tue Jun 30 13:46:41 2020
+29;1883;28;1883;temperatursensor;8.784065;Tue Jun 30 13:47:31 2020
+30;1883;28;1883;temperatursensor;12.178348;Tue Jun 30 13:47:32 2020
+31;1883;28;1883;temperatursensor;10.011119;Tue Jun 30 13:47:32 2020
+32;1883;28;1883;temperatursensor;16.410519;Tue Jun 30 13:48:00 2020
+33;1883;28;1883;temperatursensor;6.614183;Tue Jun 30 13:48:00 2020
+34;1883;28;1883;temperatursensor;14.241998;Tue Jun 30 13:48:01 2020
+35;1883;28;1883;temperatursensor;14.097675;Tue Jun 30 13:48:01 2020
+36;36;1883;temperatursensor;21.189283;Tue Jun 30 15:50:04 2020
+37;36;1883;temperatursensor;28.715549;Tue Jun 30 15:50:05 2020
+38;36;1883;temperatursensor;18.191443;Tue Jun 30 15:50:05 2020

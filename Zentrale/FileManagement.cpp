@@ -230,9 +230,9 @@ std::string* FileManagement::writeBufferToFile(char dataBuffer[NI_MAXHOST], char
 	data.insert(0, ";");
 	data.insert(0, hostBuffer);
 	data.insert(0, ";");
-
+	std::cout << ">------------------------------------------------------------------------<" << std::endl;
 	std::cout << "SensorType: " << sensorType << " ID: " << sensorId << std::endl;
-
+	std::cout << ">------------------------------------------------------------------------<" << std::endl;
 	if (sensorType.find("temp") != std::string::npos) {
 
 		filename = tempFileName;
@@ -251,7 +251,9 @@ std::string* FileManagement::writeBufferToFile(char dataBuffer[NI_MAXHOST], char
 	}
 	else {
 		// Error
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		std::cout << " Couldn't find sensor type!" << std::endl;
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		return NULL;
 	}
 
@@ -273,22 +275,27 @@ std::string* FileManagement::writeBufferToFile(char dataBuffer[NI_MAXHOST], char
 	}
 
 	if (writeToFile(filename, data)) {
-
+		std::cout << ">------------------------------------------------------------------------<" << std::endl;
 		std::cout << "Written following data to " << filename << ": " << std::endl << data << std::endl;
+		std::cout << ">------------------------------------------------------------------------<" << std::endl;
 
 		if (!writeToFile(allDataFileName, allData)) {
-
+			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 			std::cout << "Failed to write to AllSensorData.txt" << std::endl;
+			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 			return NULL;
 		}
 		else {
+			std::cout << ">------------------------------------------------------------------------<" << std::endl;
 			std::cout << "Written following data to " << allDataFileName << ": " << std::endl << allData << std::endl;
+			std::cout << ">------------------------------------------------------------------------<" << std::endl;
 			return ret;
 		}
 	}
 	else {
-
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		std::cout << "Failed to write to " << filename << std::endl;
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
 		return NULL;
 	}
 }
@@ -307,4 +314,56 @@ bool FileManagement::writeToFile(const std::string filename, const std::string d
 
 		return false;
 	}
+}
+
+bool FileManagement::writeMQTTToFile(std::string data, const std::string filename, std::string port) {
+
+	std::string allData;
+	long nextId = -1, nextIdAll = -1;
+
+	// Set port number
+	data.insert(0, ";");
+
+	// Set line number
+	allData = data;
+	if (getNextLineNumber(filename, nextId)) {
+
+		data.insert(0, std::to_string(nextId));
+	}
+	else {
+		return false;
+	}
+	if (getNextLineNumber(allDataFileName, nextIdAll)) {
+
+		allData.insert(0, std::to_string(nextIdAll));
+	}
+	else {
+		return false;
+	}
+
+	if (writeToFile(filename, data)) {
+		std::cout << ">------------------------------------------------------------------------<" << std::endl;
+		std::cout << "Written following data to " << filename << ": " << std::endl << data << std::endl;
+		std::cout << ">------------------------------------------------------------------------<" << std::endl;
+
+		if (!writeToFile(allDataFileName, allData)) {
+			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
+			std::cout << "Failed to write to AllSensorData.txt" << std::endl;
+			std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
+			return false;
+		}
+		else {
+			std::cout << "Written following data to " << allDataFileName << ": " << std::endl << allData << std::endl;
+			std::cout << ">------------------------------------------------------------------------<" << std::endl;
+			return true;
+		}
+	}
+	else {
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
+		std::cout << "Failed to write to " << filename << std::endl;
+		std::cout << ">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx<" << std::endl;
+		return false;
+	}
+
+	return true;
 }

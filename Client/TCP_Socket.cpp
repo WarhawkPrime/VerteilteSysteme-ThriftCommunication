@@ -48,6 +48,7 @@ void TCP_Socket::send_msg_to(const char* msg)
 	int bytes_sent = 0;
 
 	len = strlen(msg);
+	
 	bytes_sent = send(sockfd, msg, strlen(msg), 0);
 
 	if (bytes_sent < 0) {

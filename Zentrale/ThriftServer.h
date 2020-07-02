@@ -42,7 +42,7 @@ public:
 
         FileManagement* handle = new FileManagement();
 
-        //TO DO set the correct data from the FileManager
+        //Read data from files
         std::string tempData = handle->readLineFromFile(handle->getTemp(), 0, true);
         std::string windData = handle->readLineFromFile(handle->getAirspd(), 0, true);
         std::string brightnessData = handle->readLineFromFile(handle->getLux(), 0, true);
@@ -52,8 +52,18 @@ public:
         _return.newestWindData = windData;
         _return.newestBrightnessData = brightnessData;
         _return.newestHumidityData = humidityData;
+        std::cout << ">-THRIFT------------------------------------------------------------------------<" << std::endl;
+        std::cout << tempData << std::endl; 
+        std::cout << ">------------------------------------------------------------------------<" << std::endl;
+        std::cout << windData << std::endl;
+        std::cout << ">------------------------------------------------------------------------<" << std::endl;
+        std::cout << brightnessData << std::endl;
+        std::cout << ">------------------------------------------------------------------------<" << std::endl;
+        std::cout << humidityData << std::endl;
+        std::cout << ">------------------------------------------------------------------------<" << std::endl;
 
-        std::cout << tempData << windData << brightnessData << humidityData << std::endl;
+
+
     }
 
 
