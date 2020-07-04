@@ -30,7 +30,7 @@ int main() {
     //::std::shared_ptr<TTransportFactory> transportFactory(new TBufferedTransportFactory());
     //::std::shared_ptr<TProtocolFactory> protocolFactory(new TBinaryProtocolFactory());
 
-    ThriftClient* tc;
-    tc->startThrift();
+   	ThriftClient tc;
+   	tc.startThrift();
 	return 0;
 }

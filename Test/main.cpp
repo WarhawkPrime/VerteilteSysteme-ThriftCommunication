@@ -7,6 +7,8 @@
 #include "../Sensoren/Sensor.cpp"
 #include "../Sensoren/UDP_Socket.h"
 #include "../Sensoren/UDP_Socket.cpp"
+#include "../Sensoren/MQTT_Sensor.h"
+#include "../Sensoren/MQTT_Sensor.cpp"
 #include "../Zentrale/UDP_server.h"
 #include "../Zentrale/UDP_server.cpp"
 #include "../Zentrale/FileManagement.h"
@@ -41,14 +43,15 @@ FileManagement* fileHandle;
 //ThriftClient* tc;
 
 
-void doTest(bool rec_data) {
-	CHECK(rec_data == true);
-};
+//void doTest(bool rec_data) {
+//	CHECK(rec_data == true);
+//};
 
 void i() {
 	fileHandle = new FileManagement();
 	udp = new UDP_server(fileHandle);
 	http = new HTTP_Server(fileHandle);
+
 }
 
 TEST_SUITE("Tests für Funktionale und Nichtfunktionale Anforderungen mit der Zentrale am laufen" * doctest::description("Test mit Zentrale")) 
@@ -62,12 +65,14 @@ TEST_SUITE("Tests für Funktionale und Nichtfunktionale Anforderungen mit der Zen
 		//Anforderungen, deren Umsetzung direkt der Zweckbestimmung des Produkts dienen
 		SUBCASE("Funktionale Tests")
 		{
+			/*
 			SUBCASE("Kommt die Nachricht an der Zentrale an") {
 				Sensor_Management sm;
 				sm.create_temperatureSensor(0, "8");
 
 				CHECK(udp->get_statusVar() == 0);
 			}
+			*/
 
 			SUBCASE("HTTP REQUEST and RESPONSE") {
 				Client c;
@@ -92,6 +97,16 @@ TEST_SUITE("Tests für Funktionale und Nichtfunktionale Anforderungen mit der Zen
 
 			}
 
+			SUBCASE("MQTT") {
+
+				//Sensor_Management sm;
+				//sm.create_windMQTTSensor(0, "8");
+				//sm.get_mqttSensor()->repeater(0,8,0);
+				MQTT_Sensor* ms = new MQTT_Sensor(0,"8");
+				
+				CHECK(ms->repeater(0,8,0, "windsensor");				
+			}
+
 
 
 
@@ -100,6 +115,7 @@ TEST_SUITE("Tests für Funktionale und Nichtfunktionale Anforderungen mit der Zen
 		//Anforderungen, die unspezifisch für das Programm sind und die Qualität der Funktionalen Anforderungen überprüft
 		SUBCASE("Nichtfunktionale Tests")
 		{
+			/*
 			SUBCASE("Paketverlust 1 %")
 			{
 				int counter;
@@ -162,8 +178,9 @@ TEST_SUITE("Tests für Funktionale und Nichtfunktionale Anforderungen mit der Zen
 
 					CHECK(t1 == true);
 					CHECK(t2 == true);
-			}
-
+			*/
+			
+			
 			SUBCASE("thrift Dauer") {
 
 				ThriftClient t;
@@ -179,6 +196,15 @@ TEST_SUITE("Tests für Funktionale und Nichtfunktionale Anforderungen mit der Zen
 				CHECK(duration.count() < 1000000 );
 			}
 
-		}
-	}
+/*
+			SUBCASE("MQTT Quality") {
+			
+				MQTT_Sensor* ms = new MQTT_Sensor(0,"8");
+                                ms->repeater(0,8,0, "windsensor");	
+
+				bool t = true;
+				CHECK(t == true);
+			}
+*/	
+	}	
 }

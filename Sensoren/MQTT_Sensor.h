@@ -42,6 +42,7 @@ class MQTT_Sensor {
 		//constructor to initialize the needed values
 		MQTT_Sensor(double lowEnd, double highEnd, std::string type, int modus, std::string client_id);
 		
+		MQTT_Sensor(std::string type, std::string client_id) {}		
 		
 		//=============== Methods ===============
 		
@@ -51,7 +52,7 @@ class MQTT_Sensor {
 		char* getTime();
 		
 		//handles how the sendig of the messages should be handled
-		void repeater(double lowEnd, double highEnd, int modus, std::string type);
+		bool repeater(double lowEnd, double highEnd, int modus, std::string type);
 		
 		std::string build_message();
 		

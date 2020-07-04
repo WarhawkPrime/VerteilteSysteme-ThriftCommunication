@@ -1,5 +1,7 @@
 #include "ThriftClient.h"
 
+
+
 bool ThriftClient::startThrift() {
     ::std::shared_ptr<TTransport> socket(new TSocket("127.0.0.1", 9090));
     ::std::shared_ptr<TTransport> transport(new TBufferedTransport(socket));
@@ -33,3 +35,4 @@ bool ThriftClient::startThrift() {
     delete handle;
     return check;
 }
+

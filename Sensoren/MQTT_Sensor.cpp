@@ -9,7 +9,7 @@ MQTT_Sensor::MQTT_Sensor(double lowEnd, double highEnd, std::string type, int mo
 }
 
 
-void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus, std::string type)
+bool MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus, std::string type)
 {
 
 	
@@ -66,10 +66,34 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus, std::string
 
 		switch (modus)
 		{
-			default: return;
+			default: return false;
 				break;
 			case 0:
 			{
+				this->data = random_value(lowEnd, highEnd);
+                                                                this->now = getTime();
+
+                                        std::string message = build_message();
+
+                                        const char* PAYLOAD2 = message.c_str();
+
+                                        //const char* PAYLOAD2 = build_message();
+                                        const int QOS = 1;
+                                        const auto TIMEOUT = std::chrono::seconds(10);
+                                        // Now try with itemized publish.
+
+
+                                        std::cout << "\nSending next message..." << std::endl;
+                                        mqtt::delivery_token_ptr pubtok;
+                                        pubtok = client.publish(TOPIC, PAYLOAD2, strlen(PAYLOAD2), QOS, false);
+                                        std::cout << "  ...with token: " << pubtok->get_message_id() << std::endl;
+                                        std::cout << "  ...for message with " << pubtok->get_message()->get_payload().size()
+                                                << " bytes" << std::endl;
+                                        pubtok->wait_for(TIMEOUT);
+                                        std::cout << "  ...OK" << std::endl;
+					//return true;
+
+
 			};
 			break;
 			case 1:					//Manuell
@@ -108,6 +132,7 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus, std::string
 
 					
 				}
+			//return true;
 			};
 			break;
 			case 2:				//Automatik
@@ -142,6 +167,7 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus, std::string
 
 			
 				};
+			//return true;
 			};	
 			break;		
 		};
@@ -155,10 +181,13 @@ void MQTT_Sensor::repeater(double lowEnd, double highEnd, int modus, std::string
 		conntok = client.disconnect();
 		conntok->wait();
 		std::cout << "  ...OK" << std::endl;
+
+
+		return true;
 	}
 	catch (const mqtt::exception& exc) {
 		std::cerr << exc.what() << std::endl;
-		//return 1;
+		return false;
 	}
 		
 }
