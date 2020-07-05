@@ -199,11 +199,44 @@ TEST_SUITE("Tests für Funktionale und Nichtfunktionale Anforderungen mit der Zen
 	
 				SUBCASE("MQTT Quality") {
 				
-					MQTT_Sensor* ms = new MQTT_Sensor(0,"8");
-									ms->repeater(0,8,0, "windsensor");	
-
-					bool t = true;
-					CHECK(t == true);
+				// create multiple Sensors and every Sensor should send multiple data records.
+				// the Server should ensure, that every message is at least once received
+				
+					int sensorDataCount = 10;
+				
+					MQTT_Sensor* st = new MQTT_Sensor(0,"8");
+					MQTT_Sensor* sl = new MQTT_Sensor(0,"16");
+					MQTT_Sensor* sw = new MQTT_Sensor(0,"32");
+					MQTT_Sensor* sh = new MQTT_Sensor(0,"64");
+					
+					
+					bool checkBool = true;
+					//insgesamt 40 Nachrichten werden gesendet
+					
+					auto start = high_resolution_clock::now();
+					
+						for(int c = 0; c <= sensorDataCount; c++;) {
+							
+								if(st->repeater(0,8,0, "temperatursensor") ==  false) {
+										checkBool = false;
+								} 
+								if(s1->repeater(0,16,0, "helligkeitssensor") == false) {
+										checkBool = false;
+								}
+								if(sw->repeater(0,32,0, "windsensor") == false) {
+										checkBool = false;
+								}
+								if(sh->repeater(0,64,0, "luftfeuchtigkeitssensor") == false) {
+										checkBool = false;
+								}
+						}
+					
+					auto stop = high_resolution_clock::now();
+					auto duration = duration_cast<microseconds>(stop - start);
+					
+					CHECK(duration.count() < 1000000 );
+					CHECK(checkBool == true);
+					
 				}
 		
 			}
